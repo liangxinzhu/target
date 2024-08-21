@@ -4,6 +4,11 @@ metadata:
   name: pulsar-admin
 spec:
   containers:
-    - image: apachepulsar/pulsar:latest
+    - args:
+        - -c
+        - bin/pulsar-admin
+      command:
+        - /bin/sh
+      image: apachepulsar/pulsar:latest
       name: pulsar-admin
 
