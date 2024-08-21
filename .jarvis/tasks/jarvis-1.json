@@ -13,17 +13,18 @@
                     "volumeID"
                 ],
                 "properties": {
+                    "volumeID": {
+                        "type": "string"
+                    },
                     "fsType": {
                         "type": "string"
                     },
                     "partition": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "readOnly": {
                         "type": "boolean"
-                    },
-                    "volumeID": {
-                        "type": "string"
                     }
                 }
             },
@@ -65,12 +66,12 @@
                     "type"
                 ],
                 "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/AppArmorProfileType"
+                    },
                     "localhostProfile": {
                         "type": "string",
                         "nullable": true
-                    },
-                    "type": {
-                        "$ref": "#/components/schemas/AppArmorProfileType"
                     }
                 }
             },
@@ -84,26 +85,26 @@
                     "diskURI"
                 ],
                 "properties": {
-                    "cachingMode": {
-                        "type": "string",
-                        "nullable": true
-                    },
                     "diskName": {
                         "type": "string"
                     },
                     "diskURI": {
                         "type": "string"
                     },
-                    "fsType": {
+                    "cachingMode": {
                         "type": "string",
                         "nullable": true
                     },
-                    "kind": {
+                    "fsType": {
                         "type": "string",
                         "nullable": true
                     },
                     "readOnly": {
                         "type": "boolean",
+                        "nullable": true
+                    },
+                    "kind": {
+                        "type": "string",
                         "nullable": true
                     }
                 }
@@ -115,14 +116,14 @@
                     "shareName"
                 ],
                 "properties": {
-                    "readOnly": {
-                        "type": "boolean"
-                    },
                     "secretName": {
                         "type": "string"
                     },
                     "shareName": {
                         "type": "string"
+                    },
+                    "readOnly": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -135,9 +136,19 @@
                     "driver": {
                         "type": "string"
                     },
+                    "readOnly": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
                     "fsType": {
                         "type": "string",
                         "nullable": true
+                    },
+                    "volumeAttributes": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
                     },
                     "nodePublishSecretRef": {
                         "type": "object",
@@ -147,16 +158,6 @@
                             }
                         ],
                         "nullable": true
-                    },
-                    "readOnly": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
-                    "volumeAttributes": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "string"
-                        }
                     }
                 }
             },
@@ -195,8 +196,8 @@
                     "path": {
                         "type": "string"
                     },
-                    "readOnly": {
-                        "type": "boolean"
+                    "user": {
+                        "type": "string"
                     },
                     "secretFile": {
                         "type": "string"
@@ -210,8 +211,8 @@
                         ],
                         "nullable": true
                     },
-                    "user": {
-                        "type": "string"
+                    "readOnly": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -221,6 +222,9 @@
                     "volumeID"
                 ],
                 "properties": {
+                    "volumeID": {
+                        "type": "string"
+                    },
                     "fsType": {
                         "type": "string"
                     },
@@ -235,9 +239,6 @@
                             }
                         ],
                         "nullable": true
-                    },
-                    "volumeID": {
-                        "type": "string"
                     }
                 }
             },
@@ -260,6 +261,14 @@
                     "path"
                 ],
                 "properties": {
+                    "name": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "signerName": {
+                        "type": "string",
+                        "nullable": true
+                    },
                     "labelSelector": {
                         "type": "object",
                         "allOf": [
@@ -269,20 +278,12 @@
                         ],
                         "nullable": true
                     },
-                    "name": {
-                        "type": "string",
-                        "nullable": true
-                    },
                     "optional": {
                         "type": "boolean",
                         "nullable": true
                     },
                     "path": {
                         "type": "string"
-                    },
-                    "signerName": {
-                        "type": "string",
-                        "nullable": true
                     }
                 }
             },
@@ -348,17 +349,17 @@
             "ConfigMapVolumeSource": {
                 "type": "object",
                 "properties": {
-                    "defaultMode": {
-                        "type": "integer",
-                        "minimum": -2147483648,
-                        "maximum": 2147483647,
-                        "nullable": true
-                    },
                     "items": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/KeyToPath"
                         }
+                    },
+                    "defaultMode": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647,
+                        "nullable": true
                     },
                     "optional": {
                         "type": "boolean",
@@ -377,11 +378,11 @@
                     "name"
                 ],
                 "properties": {
-                    "args": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
+                    "name": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
                     },
                     "command": {
                         "type": "array",
@@ -389,10 +390,19 @@
                             "type": "string"
                         }
                     },
-                    "env": {
+                    "args": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/EnvVar"
+                            "type": "string"
+                        }
+                    },
+                    "workingDir": {
+                        "type": "string"
+                    },
+                    "ports": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContainerPort"
                         }
                     },
                     "envFrom": {
@@ -401,20 +411,36 @@
                             "$ref": "#/components/schemas/EnvFromSource"
                         }
                     },
-                    "image": {
-                        "type": "string"
+                    "env": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EnvVar"
+                        }
                     },
-                    "imagePullPolicy": {
-                        "$ref": "#/components/schemas/PullPolicy"
+                    "resources": {
+                        "$ref": "#/components/schemas/ResourceRequirements"
                     },
-                    "lifecycle": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Lifecycle"
-                            }
-                        ],
+                    "resizePolicy": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContainerResizePolicy"
+                        }
+                    },
+                    "restartPolicy": {
+                        "type": "string",
                         "nullable": true
+                    },
+                    "volumeMounts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/VolumeMount"
+                        }
+                    },
+                    "volumeDevices": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/VolumeDevice"
+                        }
                     },
                     "livenessProbe": {
                         "type": "object",
@@ -425,42 +451,11 @@
                         ],
                         "nullable": true
                     },
-                    "name": {
-                        "type": "string"
-                    },
-                    "ports": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerPort"
-                        }
-                    },
                     "readinessProbe": {
                         "type": "object",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/Probe"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "resizePolicy": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerResizePolicy"
-                        }
-                    },
-                    "resources": {
-                        "$ref": "#/components/schemas/ResourceRequirements"
-                    },
-                    "restartPolicy": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "securityContext": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/SecurityContext"
                             }
                         ],
                         "nullable": true
@@ -474,11 +469,14 @@
                         ],
                         "nullable": true
                     },
-                    "stdin": {
-                        "type": "boolean"
-                    },
-                    "stdinOnce": {
-                        "type": "boolean"
+                    "lifecycle": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Lifecycle"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "terminationMessagePath": {
                         "type": "string"
@@ -486,23 +484,26 @@
                     "terminationMessagePolicy": {
                         "$ref": "#/components/schemas/TerminationMessagePolicy"
                     },
-                    "tty": {
+                    "imagePullPolicy": {
+                        "$ref": "#/components/schemas/PullPolicy"
+                    },
+                    "securityContext": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SecurityContext"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "stdin": {
                         "type": "boolean"
                     },
-                    "volumeDevices": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/VolumeDevice"
-                        }
+                    "stdinOnce": {
+                        "type": "boolean"
                     },
-                    "volumeMounts": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/VolumeMount"
-                        }
-                    },
-                    "workingDir": {
-                        "type": "string"
+                    "tty": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -512,20 +513,22 @@
                     "containerPort"
                 ],
                 "properties": {
-                    "containerPort": {
-                        "type": "integer"
-                    },
-                    "hostIP": {
-                        "type": "string"
-                    },
-                    "hostPort": {
-                        "type": "integer"
-                    },
                     "name": {
                         "type": "string"
                     },
+                    "hostPort": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "containerPort": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
                     "protocol": {
                         "$ref": "#/components/schemas/Protocol"
+                    },
+                    "hostIP": {
+                        "type": "string"
                     }
                 }
             },
@@ -547,6 +550,15 @@
             "ContainerState": {
                 "type": "object",
                 "properties": {
+                    "waiting": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ContainerStateWaiting"
+                            }
+                        ],
+                        "nullable": true
+                    },
                     "running": {
                         "type": "object",
                         "allOf": [
@@ -561,15 +573,6 @@
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/ContainerStateTerminated"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "waiting": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ContainerStateWaiting"
                             }
                         ],
                         "nullable": true
@@ -590,36 +593,38 @@
                     "exitCode"
                 ],
                 "properties": {
-                    "containerID": {
-                        "type": "string"
-                    },
                     "exitCode": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int32"
                     },
-                    "finishedAt": {
-                        "$ref": "#/components/schemas/Time"
-                    },
-                    "message": {
-                        "type": "string"
+                    "signal": {
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "reason": {
                         "type": "string"
                     },
-                    "signal": {
-                        "type": "integer"
+                    "message": {
+                        "type": "string"
                     },
                     "startedAt": {
                         "$ref": "#/components/schemas/Time"
+                    },
+                    "finishedAt": {
+                        "$ref": "#/components/schemas/Time"
+                    },
+                    "containerID": {
+                        "type": "string"
                     }
                 }
             },
             "ContainerStateWaiting": {
                 "type": "object",
                 "properties": {
-                    "message": {
+                    "reason": {
                         "type": "string"
                     },
-                    "reason": {
+                    "message": {
                         "type": "string"
                     }
                 }
@@ -627,18 +632,28 @@
             "ContainerStatus": {
                 "type": "object",
                 "required": [
-                    "image",
-                    "imageID",
                     "name",
                     "ready",
-                    "restartCount"
+                    "restartCount",
+                    "image",
+                    "imageID"
                 ],
                 "properties": {
-                    "allocatedResources": {
-                        "$ref": "#/components/schemas/ResourceList"
-                    },
-                    "containerID": {
+                    "name": {
                         "type": "string"
+                    },
+                    "state": {
+                        "$ref": "#/components/schemas/ContainerState"
+                    },
+                    "lastState": {
+                        "$ref": "#/components/schemas/ContainerState"
+                    },
+                    "ready": {
+                        "type": "boolean"
+                    },
+                    "restartCount": {
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "image": {
                         "type": "string"
@@ -646,14 +661,15 @@
                     "imageID": {
                         "type": "string"
                     },
-                    "lastState": {
-                        "$ref": "#/components/schemas/ContainerState"
-                    },
-                    "name": {
+                    "containerID": {
                         "type": "string"
                     },
-                    "ready": {
-                        "type": "boolean"
+                    "started": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "allocatedResources": {
+                        "$ref": "#/components/schemas/ResourceList"
                     },
                     "resources": {
                         "type": "object",
@@ -663,16 +679,6 @@
                             }
                         ],
                         "nullable": true
-                    },
-                    "restartCount": {
-                        "type": "integer"
-                    },
-                    "started": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
-                    "state": {
-                        "$ref": "#/components/schemas/ContainerState"
                     },
                     "volumeMounts": {
                         "type": "array",
@@ -702,6 +708,9 @@
                     "path"
                 ],
                 "properties": {
+                    "path": {
+                        "type": "string"
+                    },
                     "fieldRef": {
                         "type": "object",
                         "allOf": [
@@ -711,15 +720,6 @@
                         ],
                         "nullable": true
                     },
-                    "mode": {
-                        "type": "integer",
-                        "minimum": -2147483648,
-                        "maximum": 2147483647,
-                        "nullable": true
-                    },
-                    "path": {
-                        "type": "string"
-                    },
                     "resourceFieldRef": {
                         "type": "object",
                         "allOf": [
@@ -728,23 +728,29 @@
                             }
                         ],
                         "nullable": true
+                    },
+                    "mode": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647,
+                        "nullable": true
                     }
                 }
             },
             "DownwardAPIVolumeSource": {
                 "type": "object",
                 "properties": {
-                    "defaultMode": {
-                        "type": "integer",
-                        "minimum": -2147483648,
-                        "maximum": 2147483647,
-                        "nullable": true
-                    },
                     "items": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/DownwardAPIVolumeFile"
                         }
+                    },
+                    "defaultMode": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647,
+                        "nullable": true
                     }
                 }
             },
@@ -767,6 +773,9 @@
             "EnvFromSource": {
                 "type": "object",
                 "properties": {
+                    "prefix": {
+                        "type": "string"
+                    },
                     "configMapRef": {
                         "type": "object",
                         "allOf": [
@@ -775,9 +784,6 @@
                             }
                         ],
                         "nullable": true
-                    },
-                    "prefix": {
-                        "type": "string"
                     },
                     "secretRef": {
                         "type": "object",
@@ -816,15 +822,6 @@
             "EnvVarSource": {
                 "type": "object",
                 "properties": {
-                    "configMapKeyRef": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ConfigMapKeySelector"
-                            }
-                        ],
-                        "nullable": true
-                    },
                     "fieldRef": {
                         "type": "object",
                         "allOf": [
@@ -839,6 +836,15 @@
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/ResourceFieldSelector"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "configMapKeyRef": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ConfigMapKeySelector"
                             }
                         ],
                         "nullable": true
@@ -873,11 +879,11 @@
                     "name"
                 ],
                 "properties": {
-                    "args": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
+                    "name": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
                     },
                     "command": {
                         "type": "array",
@@ -885,10 +891,19 @@
                             "type": "string"
                         }
                     },
-                    "env": {
+                    "args": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/EnvVar"
+                            "type": "string"
+                        }
+                    },
+                    "workingDir": {
+                        "type": "string"
+                    },
+                    "ports": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContainerPort"
                         }
                     },
                     "envFrom": {
@@ -897,20 +912,36 @@
                             "$ref": "#/components/schemas/EnvFromSource"
                         }
                     },
-                    "image": {
-                        "type": "string"
+                    "env": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EnvVar"
+                        }
                     },
-                    "imagePullPolicy": {
-                        "$ref": "#/components/schemas/PullPolicy"
+                    "resources": {
+                        "$ref": "#/components/schemas/ResourceRequirements"
                     },
-                    "lifecycle": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Lifecycle"
-                            }
-                        ],
+                    "resizePolicy": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContainerResizePolicy"
+                        }
+                    },
+                    "restartPolicy": {
+                        "type": "string",
                         "nullable": true
+                    },
+                    "volumeMounts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/VolumeMount"
+                        }
+                    },
+                    "volumeDevices": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/VolumeDevice"
+                        }
                     },
                     "livenessProbe": {
                         "type": "object",
@@ -921,42 +952,11 @@
                         ],
                         "nullable": true
                     },
-                    "name": {
-                        "type": "string"
-                    },
-                    "ports": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerPort"
-                        }
-                    },
                     "readinessProbe": {
                         "type": "object",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/Probe"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "resizePolicy": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerResizePolicy"
-                        }
-                    },
-                    "resources": {
-                        "$ref": "#/components/schemas/ResourceRequirements"
-                    },
-                    "restartPolicy": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "securityContext": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/SecurityContext"
                             }
                         ],
                         "nullable": true
@@ -970,11 +970,14 @@
                         ],
                         "nullable": true
                     },
-                    "stdin": {
-                        "type": "boolean"
-                    },
-                    "stdinOnce": {
-                        "type": "boolean"
+                    "lifecycle": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Lifecycle"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "terminationMessagePath": {
                         "type": "string"
@@ -982,23 +985,26 @@
                     "terminationMessagePolicy": {
                         "$ref": "#/components/schemas/TerminationMessagePolicy"
                     },
-                    "tty": {
+                    "imagePullPolicy": {
+                        "$ref": "#/components/schemas/PullPolicy"
+                    },
+                    "securityContext": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SecurityContext"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "stdin": {
                         "type": "boolean"
                     },
-                    "volumeDevices": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/VolumeDevice"
-                        }
+                    "stdinOnce": {
+                        "type": "boolean"
                     },
-                    "volumeMounts": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/VolumeMount"
-                        }
-                    },
-                    "workingDir": {
-                        "type": "string"
+                    "tty": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -1030,8 +1036,11 @@
             "FCVolumeSource": {
                 "type": "object",
                 "properties": {
-                    "fsType": {
-                        "type": "string"
+                    "targetWWNs": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     },
                     "lun": {
                         "type": "integer",
@@ -1039,14 +1048,11 @@
                         "maximum": 2147483647,
                         "nullable": true
                     },
+                    "fsType": {
+                        "type": "string"
+                    },
                     "readOnly": {
                         "type": "boolean"
-                    },
-                    "targetWWNs": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
                     },
                     "wwids": {
                         "type": "array",
@@ -1069,15 +1075,6 @@
                     "fsType": {
                         "type": "string"
                     },
-                    "options": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "string"
-                        }
-                    },
-                    "readOnly": {
-                        "type": "boolean"
-                    },
                     "secretRef": {
                         "type": "object",
                         "allOf": [
@@ -1086,6 +1083,15 @@
                             }
                         ],
                         "nullable": true
+                    },
+                    "readOnly": {
+                        "type": "boolean"
+                    },
+                    "options": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -1106,14 +1112,15 @@
                     "pdName"
                 ],
                 "properties": {
+                    "pdName": {
+                        "type": "string"
+                    },
                     "fsType": {
                         "type": "string"
                     },
                     "partition": {
-                        "type": "integer"
-                    },
-                    "pdName": {
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "readOnly": {
                         "type": "boolean"
@@ -1127,7 +1134,8 @@
                 ],
                 "properties": {
                     "port": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "service": {
                         "type": "string",
@@ -1141,13 +1149,13 @@
                     "repository"
                 ],
                 "properties": {
-                    "directory": {
-                        "type": "string"
-                    },
                     "repository": {
                         "type": "string"
                     },
                     "revision": {
+                        "type": "string"
+                    },
+                    "directory": {
                         "type": "string"
                     }
                 }
@@ -1176,23 +1184,23 @@
                     "port"
                 ],
                 "properties": {
-                    "host": {
-                        "type": "string"
-                    },
-                    "httpHeaders": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/HTTPHeader"
-                        }
-                    },
                     "path": {
                         "type": "string"
                     },
                     "port": {
                         "$ref": "#/components/schemas/IntOrString"
                     },
+                    "host": {
+                        "type": "string"
+                    },
                     "scheme": {
                         "$ref": "#/components/schemas/URIScheme"
+                    },
+                    "httpHeaders": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HTTPHeader"
+                        }
                     }
                 }
             },
@@ -1214,14 +1222,14 @@
             "HostAlias": {
                 "type": "object",
                 "properties": {
+                    "ip": {
+                        "type": "string"
+                    },
                     "hostnames": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
-                    },
-                    "ip": {
-                        "type": "string"
                     }
                 }
             },
@@ -1251,32 +1259,29 @@
             "ISCSIVolumeSource": {
                 "type": "object",
                 "required": [
+                    "targetPortal",
                     "iqn",
-                    "lun",
-                    "targetPortal"
+                    "lun"
                 ],
                 "properties": {
-                    "chapAuthDiscovery": {
-                        "type": "boolean"
-                    },
-                    "chapAuthSession": {
-                        "type": "boolean"
-                    },
-                    "fsType": {
+                    "targetPortal": {
                         "type": "string"
-                    },
-                    "initiatorName": {
-                        "type": "string",
-                        "nullable": true
                     },
                     "iqn": {
                         "type": "string"
                     },
+                    "lun": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
                     "iscsiInterface": {
                         "type": "string"
                     },
-                    "lun": {
-                        "type": "integer"
+                    "fsType": {
+                        "type": "string"
+                    },
+                    "readOnly": {
+                        "type": "boolean"
                     },
                     "portals": {
                         "type": "array",
@@ -1284,7 +1289,10 @@
                             "type": "string"
                         }
                     },
-                    "readOnly": {
+                    "chapAuthDiscovery": {
+                        "type": "boolean"
+                    },
+                    "chapAuthSession": {
                         "type": "boolean"
                     },
                     "secretRef": {
@@ -1296,8 +1304,9 @@
                         ],
                         "nullable": true
                     },
-                    "targetPortal": {
-                        "type": "string"
+                    "initiatorName": {
+                        "type": "string",
+                        "nullable": true
                     }
                 }
             },
@@ -1342,30 +1351,30 @@
                     "key": {
                         "type": "string"
                     },
+                    "path": {
+                        "type": "string"
+                    },
                     "mode": {
                         "type": "integer",
                         "minimum": -2147483648,
                         "maximum": 2147483647,
                         "nullable": true
-                    },
-                    "path": {
-                        "type": "string"
                     }
                 }
             },
             "LabelSelector": {
                 "type": "object",
                 "properties": {
-                    "matchExpressions": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/LabelSelectorRequirement"
-                        }
-                    },
                     "matchLabels": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "string"
+                        }
+                    },
+                    "matchExpressions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LabelSelectorRequirement"
                         }
                     }
                 }
@@ -1438,20 +1447,20 @@
                         ],
                         "nullable": true
                     },
-                    "sleep": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/SleepAction"
-                            }
-                        ],
-                        "nullable": true
-                    },
                     "tcpSocket": {
                         "type": "object",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/TCPSocketAction"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "sleep": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SleepAction"
                             }
                         ],
                         "nullable": true
@@ -1469,8 +1478,22 @@
             "ManagedFieldsEntry": {
                 "type": "object",
                 "properties": {
+                    "manager": {
+                        "type": "string"
+                    },
+                    "operation": {
+                        "$ref": "#/components/schemas/ManagedFieldsOperationType"
+                    },
                     "apiVersion": {
                         "type": "string"
+                    },
+                    "time": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Time"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "fieldsType": {
                         "type": "string"
@@ -1483,22 +1506,8 @@
                         ],
                         "nullable": true
                     },
-                    "manager": {
-                        "type": "string"
-                    },
-                    "operation": {
-                        "$ref": "#/components/schemas/ManagedFieldsOperationType"
-                    },
                     "subresource": {
                         "type": "string"
-                    },
-                    "time": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Time"
-                            }
-                        ],
-                        "nullable": true
                     }
                 }
             },
@@ -1508,30 +1517,24 @@
             "NFSVolumeSource": {
                 "type": "object",
                 "required": [
-                    "path",
-                    "server"
+                    "server",
+                    "path"
                 ],
                 "properties": {
+                    "server": {
+                        "type": "string"
+                    },
                     "path": {
                         "type": "string"
                     },
                     "readOnly": {
                         "type": "boolean"
-                    },
-                    "server": {
-                        "type": "string"
                     }
                 }
             },
             "NodeAffinity": {
                 "type": "object",
                 "properties": {
-                    "preferredDuringSchedulingIgnoredDuringExecution": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/PreferredSchedulingTerm"
-                        }
-                    },
                     "requiredDuringSchedulingIgnoredDuringExecution": {
                         "type": "object",
                         "allOf": [
@@ -1540,6 +1543,12 @@
                             }
                         ],
                         "nullable": true
+                    },
+                    "preferredDuringSchedulingIgnoredDuringExecution": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PreferredSchedulingTerm"
+                        }
                     }
                 }
             },
@@ -1618,20 +1627,30 @@
             "ObjectMeta": {
                 "type": "object",
                 "properties": {
-                    "annotations": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "string"
-                        }
+                    "name": {
+                        "type": "string"
+                    },
+                    "generateName": {
+                        "type": "string"
+                    },
+                    "namespace": {
+                        "type": "string"
+                    },
+                    "selfLink": {
+                        "type": "string"
+                    },
+                    "uid": {
+                        "$ref": "#/components/schemas/UID"
+                    },
+                    "resourceVersion": {
+                        "type": "string"
+                    },
+                    "generation": {
+                        "type": "integer",
+                        "format": "int64"
                     },
                     "creationTimestamp": {
                         "$ref": "#/components/schemas/Time"
-                    },
-                    "deletionGracePeriodSeconds": {
-                        "type": "integer",
-                        "minimum": -9223372036854775808,
-                        "maximum": 9223372036854775807,
-                        "nullable": true
                     },
                     "deletionTimestamp": {
                         "allOf": [
@@ -1641,21 +1660,33 @@
                         ],
                         "nullable": true
                     },
-                    "finalizers": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "generateName": {
-                        "type": "string"
-                    },
-                    "generation": {
-                        "type": "integer"
+                    "deletionGracePeriodSeconds": {
+                        "type": "integer",
+                        "minimum": -9223372036854775808,
+                        "maximum": 9223372036854775807,
+                        "nullable": true
                     },
                     "labels": {
                         "type": "object",
                         "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "annotations": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "ownerReferences": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OwnerReference"
+                        }
+                    },
+                    "finalizers": {
+                        "type": "array",
+                        "items": {
                             "type": "string"
                         }
                     },
@@ -1664,27 +1695,6 @@
                         "items": {
                             "$ref": "#/components/schemas/ManagedFieldsEntry"
                         }
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "namespace": {
-                        "type": "string"
-                    },
-                    "ownerReferences": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/OwnerReference"
-                        }
-                    },
-                    "resourceVersion": {
-                        "type": "string"
-                    },
-                    "selfLink": {
-                        "type": "string"
-                    },
-                    "uid": {
-                        "$ref": "#/components/schemas/UID"
                     }
                 }
             },
@@ -1700,14 +1710,6 @@
                     "apiVersion": {
                         "type": "string"
                     },
-                    "blockOwnerDeletion": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
-                    "controller": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
                     "kind": {
                         "type": "string"
                     },
@@ -1716,6 +1718,14 @@
                     },
                     "uid": {
                         "$ref": "#/components/schemas/UID"
+                    },
+                    "controller": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "blockOwnerDeletion": {
+                        "type": "boolean",
+                        "nullable": true
                     }
                 }
             },
@@ -1730,6 +1740,29 @@
                         "items": {
                             "$ref": "#/components/schemas/PersistentVolumeAccessMode"
                         }
+                    },
+                    "selector": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/LabelSelector"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "resources": {
+                        "$ref": "#/components/schemas/VolumeResourceRequirements"
+                    },
+                    "volumeName": {
+                        "type": "string"
+                    },
+                    "storageClassName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "volumeMode": {
+                        "type": "string",
+                        "nullable": true
                     },
                     "dataSource": {
                         "type": "object",
@@ -1749,32 +1782,9 @@
                         ],
                         "nullable": true
                     },
-                    "resources": {
-                        "$ref": "#/components/schemas/VolumeResourceRequirements"
-                    },
-                    "selector": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/LabelSelector"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "storageClassName": {
-                        "type": "string",
-                        "nullable": true
-                    },
                     "volumeAttributesClassName": {
                         "type": "string",
                         "nullable": true
-                    },
-                    "volumeMode": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "volumeName": {
-                        "type": "string"
                     }
                 }
             },
@@ -1812,10 +1822,10 @@
                     "pdID"
                 ],
                 "properties": {
-                    "fsType": {
+                    "pdID": {
                         "type": "string"
                     },
-                    "pdID": {
+                    "fsType": {
                         "type": "string"
                     }
                 }
@@ -1857,7 +1867,9 @@
                     "metadata": {
                         "type": "object",
                         "required": [
-                            "name"
+                            "name",
+                            "namespace",
+                            "labels"
                         ],
                         "properties": {
                             "name": {
@@ -1865,6 +1877,33 @@
                                 "enum": [
                                     "pulsar-admin"
                                 ]
+                            },
+                            "namespace": {
+                                "type": "string",
+                                "enum": [
+                                    "default"
+                                ]
+                            },
+                            "labels": {
+                                "type": "object",
+                                "required": [
+                                    "app",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "app": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pulsar"
+                                        ]
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "enum": [
+                                            "admin"
+                                        ]
+                                    }
+                                }
                             }
                         }
                     },
@@ -1880,21 +1919,22 @@
                                     {
                                         "type": "object",
                                         "required": [
-                                            "image",
                                             "name",
-                                            "ports"
+                                            "image",
+                                            "ports",
+                                            "env"
                                         ],
                                         "properties": {
-                                            "image": {
-                                                "type": "string",
-                                                "enum": [
-                                                    "apachepulsar/pulsar:latest"
-                                                ]
-                                            },
                                             "name": {
                                                 "type": "string",
                                                 "enum": [
                                                     "pulsar-admin"
+                                                ]
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "apachepulsar/pulsar:latest"
                                                 ]
                                             },
                                             "ports": {
@@ -1920,17 +1960,55 @@
                                                         "containerPort": 8080
                                                     }
                                                 ]
+                                            },
+                                            "env": {
+                                                "type": "array",
+                                                "items": [
+                                                    {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "name",
+                                                            "value"
+                                                        ],
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "PULSAR_MEM"
+                                                                ]
+                                                            },
+                                                            "value": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "-Xmx512m"
+                                                                ]
+                                                            }
+                                                        }
+                                                    }
+                                                ],
+                                                "default": [
+                                                    {
+                                                        "name": "PULSAR_MEM",
+                                                        "value": "-Xmx512m"
+                                                    }
+                                                ]
                                             }
                                         }
                                     }
                                 ],
                                 "default": [
                                     {
-                                        "image": "apachepulsar/pulsar:latest",
                                         "name": "pulsar-admin",
+                                        "image": "apachepulsar/pulsar:latest",
                                         "ports": [
                                             {
                                                 "containerPort": 8080
+                                            }
+                                        ],
+                                        "env": [
+                                            {
+                                                "name": "PULSAR_MEM",
+                                                "value": "-Xmx512m"
                                             }
                                         ]
                                     }
@@ -1956,16 +2034,16 @@
             "PodAffinity": {
                 "type": "object",
                 "properties": {
-                    "preferredDuringSchedulingIgnoredDuringExecution": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/WeightedPodAffinityTerm"
-                        }
-                    },
                     "requiredDuringSchedulingIgnoredDuringExecution": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/PodAffinityTerm"
+                        }
+                    },
+                    "preferredDuringSchedulingIgnoredDuringExecution": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/WeightedPodAffinityTerm"
                         }
                     }
                 }
@@ -1985,6 +2063,24 @@
                         ],
                         "nullable": true
                     },
+                    "namespaces": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "topologyKey": {
+                        "type": "string"
+                    },
+                    "namespaceSelector": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/LabelSelector"
+                            }
+                        ],
+                        "nullable": true
+                    },
                     "matchLabelKeys": {
                         "type": "array",
                         "items": {
@@ -1996,40 +2092,22 @@
                         "items": {
                             "type": "string"
                         }
-                    },
-                    "namespaceSelector": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/LabelSelector"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "namespaces": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "topologyKey": {
-                        "type": "string"
                     }
                 }
             },
             "PodAntiAffinity": {
                 "type": "object",
                 "properties": {
-                    "preferredDuringSchedulingIgnoredDuringExecution": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/WeightedPodAffinityTerm"
-                        }
-                    },
                     "requiredDuringSchedulingIgnoredDuringExecution": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/PodAffinityTerm"
+                        }
+                    },
+                    "preferredDuringSchedulingIgnoredDuringExecution": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/WeightedPodAffinityTerm"
                         }
                     }
                 }
@@ -2037,27 +2115,27 @@
             "PodCondition": {
                 "type": "object",
                 "required": [
-                    "status",
-                    "type"
+                    "type",
+                    "status"
                 ],
                 "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/PodConditionType"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ConditionStatus"
+                    },
                     "lastProbeTime": {
                         "$ref": "#/components/schemas/Time"
                     },
                     "lastTransitionTime": {
                         "$ref": "#/components/schemas/Time"
                     },
-                    "message": {
-                        "type": "string"
-                    },
                     "reason": {
                         "type": "string"
                     },
-                    "status": {
-                        "$ref": "#/components/schemas/ConditionStatus"
-                    },
-                    "type": {
-                        "$ref": "#/components/schemas/PodConditionType"
+                    "message": {
+                        "type": "string"
                     }
                 }
             },
@@ -2073,16 +2151,16 @@
                             "type": "string"
                         }
                     },
-                    "options": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/PodDNSConfigOption"
-                        }
-                    },
                     "searches": {
                         "type": "array",
                         "items": {
                             "type": "string"
+                        }
+                    },
+                    "options": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PodDNSConfigOption"
                         }
                     }
                 }
@@ -2181,23 +2259,28 @@
             "PodSecurityContext": {
                 "type": "object",
                 "properties": {
-                    "appArmorProfile": {
+                    "seLinuxOptions": {
                         "type": "object",
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/AppArmorProfile"
+                                "$ref": "#/components/schemas/SELinuxOptions"
                             }
                         ],
                         "nullable": true
                     },
-                    "fsGroup": {
+                    "windowsOptions": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/WindowsSecurityContextOptions"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "runAsUser": {
                         "type": "integer",
                         "minimum": -9223372036854775808,
                         "maximum": 9223372036854775807,
-                        "nullable": true
-                    },
-                    "fsGroupChangePolicy": {
-                        "type": "string",
                         "nullable": true
                     },
                     "runAsGroup": {
@@ -2210,19 +2293,27 @@
                         "type": "boolean",
                         "nullable": true
                     },
-                    "runAsUser": {
+                    "supplementalGroups": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    "fsGroup": {
                         "type": "integer",
                         "minimum": -9223372036854775808,
                         "maximum": 9223372036854775807,
                         "nullable": true
                     },
-                    "seLinuxOptions": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/SELinuxOptions"
-                            }
-                        ],
+                    "sysctls": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Sysctl"
+                        }
+                    },
+                    "fsGroupChangePolicy": {
+                        "type": "string",
                         "nullable": true
                     },
                     "seccompProfile": {
@@ -2234,23 +2325,11 @@
                         ],
                         "nullable": true
                     },
-                    "supplementalGroups": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
-                    },
-                    "sysctls": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Sysctl"
-                        }
-                    },
-                    "windowsOptions": {
+                    "appArmorProfile": {
                         "type": "object",
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/WindowsSecurityContextOptions"
+                                "$ref": "#/components/schemas/AppArmorProfile"
                             }
                         ],
                         "nullable": true
@@ -2263,79 +2342,10 @@
                     "containers"
                 ],
                 "properties": {
-                    "activeDeadlineSeconds": {
-                        "type": "integer",
-                        "minimum": -9223372036854775808,
-                        "maximum": 9223372036854775807,
-                        "nullable": true
-                    },
-                    "affinity": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Affinity"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "automountServiceAccountToken": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
-                    "containers": {
+                    "volumes": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/Container"
-                        }
-                    },
-                    "dnsConfig": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/PodDNSConfig"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "dnsPolicy": {
-                        "$ref": "#/components/schemas/DNSPolicy"
-                    },
-                    "enableServiceLinks": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
-                    "ephemeralContainers": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/EphemeralContainer"
-                        }
-                    },
-                    "hostAliases": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/HostAlias"
-                        }
-                    },
-                    "hostIPC": {
-                        "type": "boolean"
-                    },
-                    "hostNetwork": {
-                        "type": "boolean"
-                    },
-                    "hostPID": {
-                        "type": "boolean"
-                    },
-                    "hostUsers": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
-                    "hostname": {
-                        "type": "string"
-                    },
-                    "imagePullSecrets": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/LocalObjectReference"
+                            "$ref": "#/components/schemas/Volume"
                         }
                     },
                     "initContainers": {
@@ -2344,8 +2354,35 @@
                             "$ref": "#/components/schemas/Container"
                         }
                     },
-                    "nodeName": {
-                        "type": "string"
+                    "containers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Container"
+                        }
+                    },
+                    "ephemeralContainers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EphemeralContainer"
+                        }
+                    },
+                    "restartPolicy": {
+                        "$ref": "#/components/schemas/RestartPolicy"
+                    },
+                    "terminationGracePeriodSeconds": {
+                        "type": "integer",
+                        "minimum": -9223372036854775808,
+                        "maximum": 9223372036854775807,
+                        "nullable": true
+                    },
+                    "activeDeadlineSeconds": {
+                        "type": "integer",
+                        "minimum": -9223372036854775808,
+                        "maximum": 9223372036854775807,
+                        "nullable": true
+                    },
+                    "dnsPolicy": {
+                        "$ref": "#/components/schemas/DNSPolicy"
                     },
                     "nodeSelector": {
                         "type": "object",
@@ -2353,58 +2390,31 @@
                             "type": "string"
                         }
                     },
-                    "os": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/PodOS"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "overhead": {
-                        "$ref": "#/components/schemas/ResourceList"
-                    },
-                    "preemptionPolicy": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "priority": {
-                        "type": "integer",
-                        "minimum": -2147483648,
-                        "maximum": 2147483647,
-                        "nullable": true
-                    },
-                    "priorityClassName": {
+                    "serviceAccountName": {
                         "type": "string"
                     },
-                    "readinessGates": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/PodReadinessGate"
-                        }
-                    },
-                    "resourceClaims": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/PodResourceClaim"
-                        }
-                    },
-                    "restartPolicy": {
-                        "$ref": "#/components/schemas/RestartPolicy"
-                    },
-                    "runtimeClassName": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "schedulerName": {
+                    "serviceAccount": {
                         "type": "string"
                     },
-                    "schedulingGates": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/PodSchedulingGate"
-                        }
+                    "automountServiceAccountToken": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "nodeName": {
+                        "type": "string"
+                    },
+                    "hostNetwork": {
+                        "type": "boolean"
+                    },
+                    "hostPID": {
+                        "type": "boolean"
+                    },
+                    "hostIPC": {
+                        "type": "boolean"
+                    },
+                    "shareProcessNamespace": {
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "securityContext": {
                         "type": "object",
@@ -2415,28 +2425,29 @@
                         ],
                         "nullable": true
                     },
-                    "serviceAccount": {
+                    "imagePullSecrets": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LocalObjectReference"
+                        }
+                    },
+                    "hostname": {
                         "type": "string"
-                    },
-                    "serviceAccountName": {
-                        "type": "string"
-                    },
-                    "setHostnameAsFQDN": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
-                    "shareProcessNamespace": {
-                        "type": "boolean",
-                        "nullable": true
                     },
                     "subdomain": {
                         "type": "string"
                     },
-                    "terminationGracePeriodSeconds": {
-                        "type": "integer",
-                        "minimum": -9223372036854775808,
-                        "maximum": 9223372036854775807,
+                    "affinity": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Affinity"
+                            }
+                        ],
                         "nullable": true
+                    },
+                    "schedulerName": {
+                        "type": "string"
                     },
                     "tolerations": {
                         "type": "array",
@@ -2444,16 +2455,84 @@
                             "$ref": "#/components/schemas/Toleration"
                         }
                     },
+                    "hostAliases": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HostAlias"
+                        }
+                    },
+                    "priorityClassName": {
+                        "type": "string"
+                    },
+                    "priority": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647,
+                        "nullable": true
+                    },
+                    "dnsConfig": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PodDNSConfig"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "readinessGates": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PodReadinessGate"
+                        }
+                    },
+                    "runtimeClassName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "enableServiceLinks": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "preemptionPolicy": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "overhead": {
+                        "$ref": "#/components/schemas/ResourceList"
+                    },
                     "topologySpreadConstraints": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/TopologySpreadConstraint"
                         }
                     },
-                    "volumes": {
+                    "setHostnameAsFQDN": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "os": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PodOS"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "hostUsers": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "schedulingGates": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/Volume"
+                            "$ref": "#/components/schemas/PodSchedulingGate"
+                        }
+                    },
+                    "resourceClaims": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PodResourceClaim"
                         }
                     }
                 }
@@ -2461,23 +2540,23 @@
             "PodStatus": {
                 "type": "object",
                 "properties": {
+                    "phase": {
+                        "$ref": "#/components/schemas/PodPhase"
+                    },
                     "conditions": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/PodCondition"
                         }
                     },
-                    "containerStatuses": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerStatus"
-                        }
+                    "message": {
+                        "type": "string"
                     },
-                    "ephemeralContainerStatuses": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerStatus"
-                        }
+                    "reason": {
+                        "type": "string"
+                    },
+                    "nominatedNodeName": {
+                        "type": "string"
                     },
                     "hostIP": {
                         "type": "string"
@@ -2488,21 +2567,6 @@
                             "$ref": "#/components/schemas/HostIP"
                         }
                     },
-                    "initContainerStatuses": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerStatus"
-                        }
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "nominatedNodeName": {
-                        "type": "string"
-                    },
-                    "phase": {
-                        "$ref": "#/components/schemas/PodPhase"
-                    },
                     "podIP": {
                         "type": "string"
                     },
@@ -2512,11 +2576,34 @@
                             "$ref": "#/components/schemas/PodIP"
                         }
                     },
+                    "startTime": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Time"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "initContainerStatuses": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContainerStatus"
+                        }
+                    },
+                    "containerStatuses": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContainerStatus"
+                        }
+                    },
                     "qosClass": {
                         "$ref": "#/components/schemas/PodQOSClass"
                     },
-                    "reason": {
-                        "type": "string"
+                    "ephemeralContainerStatuses": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContainerStatus"
+                        }
                     },
                     "resize": {
                         "$ref": "#/components/schemas/PodResizeStatus"
@@ -2526,14 +2613,6 @@
                         "items": {
                             "$ref": "#/components/schemas/PodResourceClaimStatus"
                         }
-                    },
-                    "startTime": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Time"
-                            }
-                        ],
-                        "nullable": true
                     }
                 }
             },
@@ -2543,55 +2622,61 @@
                     "volumeID"
                 ],
                 "properties": {
+                    "volumeID": {
+                        "type": "string"
+                    },
                     "fsType": {
                         "type": "string"
                     },
                     "readOnly": {
                         "type": "boolean"
-                    },
-                    "volumeID": {
-                        "type": "string"
                     }
                 }
             },
             "PreferredSchedulingTerm": {
                 "type": "object",
                 "required": [
-                    "preference",
-                    "weight"
+                    "weight",
+                    "preference"
                 ],
                 "properties": {
+                    "weight": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
                     "preference": {
                         "$ref": "#/components/schemas/NodeSelectorTerm"
-                    },
-                    "weight": {
-                        "type": "integer"
                     }
                 }
             },
             "Probe": {
                 "type": "object",
                 "properties": {
-                    "failureThreshold": {
-                        "type": "integer"
-                    },
                     "initialDelaySeconds": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "timeoutSeconds": {
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "periodSeconds": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "successThreshold": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "failureThreshold": {
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "terminationGracePeriodSeconds": {
                         "type": "integer",
                         "minimum": -9223372036854775808,
                         "maximum": 9223372036854775807,
                         "nullable": true
-                    },
-                    "timeoutSeconds": {
-                        "type": "integer"
                     }
                 },
                 "allOf": [
@@ -2608,15 +2693,6 @@
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/ExecAction"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "grpc": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/GRPCAction"
                             }
                         ],
                         "nullable": true
@@ -2638,23 +2714,32 @@
                             }
                         ],
                         "nullable": true
+                    },
+                    "grpc": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/GRPCAction"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },
             "ProjectedVolumeSource": {
                 "type": "object",
                 "properties": {
-                    "defaultMode": {
-                        "type": "integer",
-                        "minimum": -2147483648,
-                        "maximum": 2147483647,
-                        "nullable": true
-                    },
                     "sources": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/VolumeProjection"
                         }
+                    },
+                    "defaultMode": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647,
+                        "nullable": true
                     }
                 }
             },
@@ -2672,22 +2757,22 @@
                     "volume"
                 ],
                 "properties": {
-                    "group": {
+                    "registry": {
+                        "type": "string"
+                    },
+                    "volume": {
                         "type": "string"
                     },
                     "readOnly": {
                         "type": "boolean"
                     },
-                    "registry": {
-                        "type": "string"
-                    },
-                    "tenant": {
-                        "type": "string"
-                    },
                     "user": {
                         "type": "string"
                     },
-                    "volume": {
+                    "group": {
+                        "type": "string"
+                    },
+                    "tenant": {
                         "type": "string"
                     }
                 }
@@ -2695,30 +2780,30 @@
             "RBDVolumeSource": {
                 "type": "object",
                 "required": [
-                    "image",
-                    "monitors"
+                    "monitors",
+                    "image"
                 ],
                 "properties": {
-                    "fsType": {
-                        "type": "string"
-                    },
-                    "image": {
-                        "type": "string"
-                    },
-                    "keyring": {
-                        "type": "string"
-                    },
                     "monitors": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
                     },
+                    "image": {
+                        "type": "string"
+                    },
+                    "fsType": {
+                        "type": "string"
+                    },
                     "pool": {
                         "type": "string"
                     },
-                    "readOnly": {
-                        "type": "boolean"
+                    "user": {
+                        "type": "string"
+                    },
+                    "keyring": {
+                        "type": "string"
                     },
                     "secretRef": {
                         "type": "object",
@@ -2729,8 +2814,8 @@
                         ],
                         "nullable": true
                     },
-                    "user": {
-                        "type": "string"
+                    "readOnly": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -2754,11 +2839,11 @@
                     "containerName": {
                         "type": "string"
                     },
-                    "divisor": {
-                        "$ref": "#/components/schemas/Quantity"
-                    },
                     "resource": {
                         "type": "string"
+                    },
+                    "divisor": {
+                        "$ref": "#/components/schemas/Quantity"
                     }
                 }
             },
@@ -2774,17 +2859,17 @@
             "ResourceRequirements": {
                 "type": "object",
                 "properties": {
-                    "claims": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ResourceClaim"
-                        }
-                    },
                     "limits": {
                         "$ref": "#/components/schemas/ResourceList"
                     },
                     "requests": {
                         "$ref": "#/components/schemas/ResourceList"
+                    },
+                    "claims": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ResourceClaim"
+                        }
                     }
                 }
             },
@@ -2797,7 +2882,7 @@
             "SELinuxOptions": {
                 "type": "object",
                 "properties": {
-                    "level": {
+                    "user": {
                         "type": "string"
                     },
                     "role": {
@@ -2806,7 +2891,7 @@
                     "type": {
                         "type": "string"
                     },
-                    "user": {
+                    "level": {
                         "type": "string"
                     }
                 }
@@ -2818,17 +2903,11 @@
                     "system"
                 ],
                 "properties": {
-                    "fsType": {
-                        "type": "string"
-                    },
                     "gateway": {
                         "type": "string"
                     },
-                    "protectionDomain": {
+                    "system": {
                         "type": "string"
-                    },
-                    "readOnly": {
-                        "type": "boolean"
                     },
                     "secretRef": {
                         "type": "object",
@@ -2842,17 +2921,23 @@
                     "sslEnabled": {
                         "type": "boolean"
                     },
-                    "storageMode": {
+                    "protectionDomain": {
                         "type": "string"
                     },
                     "storagePool": {
                         "type": "string"
                     },
-                    "system": {
+                    "storageMode": {
                         "type": "string"
                     },
                     "volumeName": {
                         "type": "string"
+                    },
+                    "fsType": {
+                        "type": "string"
+                    },
+                    "readOnly": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -2862,12 +2947,12 @@
                     "type"
                 ],
                 "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/SeccompProfileType"
+                    },
                     "localhostProfile": {
                         "type": "string",
                         "nullable": true
-                    },
-                    "type": {
-                        "$ref": "#/components/schemas/SeccompProfileType"
                     }
                 }
             },
@@ -2933,11 +3018,8 @@
             "SecretVolumeSource": {
                 "type": "object",
                 "properties": {
-                    "defaultMode": {
-                        "type": "integer",
-                        "minimum": -2147483648,
-                        "maximum": 2147483647,
-                        "nullable": true
+                    "secretName": {
+                        "type": "string"
                     },
                     "items": {
                         "type": "array",
@@ -2945,31 +3027,21 @@
                             "$ref": "#/components/schemas/KeyToPath"
                         }
                     },
+                    "defaultMode": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647,
+                        "nullable": true
+                    },
                     "optional": {
                         "type": "boolean",
                         "nullable": true
-                    },
-                    "secretName": {
-                        "type": "string"
                     }
                 }
             },
             "SecurityContext": {
                 "type": "object",
                 "properties": {
-                    "allowPrivilegeEscalation": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
-                    "appArmorProfile": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/AppArmorProfile"
-                            }
-                        ],
-                        "nullable": true
-                    },
                     "capabilities": {
                         "type": "object",
                         "allOf": [
@@ -2983,12 +3055,28 @@
                         "type": "boolean",
                         "nullable": true
                     },
-                    "procMount": {
-                        "type": "string",
+                    "seLinuxOptions": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SELinuxOptions"
+                            }
+                        ],
                         "nullable": true
                     },
-                    "readOnlyRootFilesystem": {
-                        "type": "boolean",
+                    "windowsOptions": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/WindowsSecurityContextOptions"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "runAsUser": {
+                        "type": "integer",
+                        "minimum": -9223372036854775808,
+                        "maximum": 9223372036854775807,
                         "nullable": true
                     },
                     "runAsGroup": {
@@ -3001,19 +3089,16 @@
                         "type": "boolean",
                         "nullable": true
                     },
-                    "runAsUser": {
-                        "type": "integer",
-                        "minimum": -9223372036854775808,
-                        "maximum": 9223372036854775807,
+                    "readOnlyRootFilesystem": {
+                        "type": "boolean",
                         "nullable": true
                     },
-                    "seLinuxOptions": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/SELinuxOptions"
-                            }
-                        ],
+                    "allowPrivilegeEscalation": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "procMount": {
+                        "type": "string",
                         "nullable": true
                     },
                     "seccompProfile": {
@@ -3025,11 +3110,11 @@
                         ],
                         "nullable": true
                     },
-                    "windowsOptions": {
+                    "appArmorProfile": {
                         "type": "object",
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/WindowsSecurityContextOptions"
+                                "$ref": "#/components/schemas/AppArmorProfile"
                             }
                         ],
                         "nullable": true
@@ -3063,7 +3148,8 @@
                 ],
                 "properties": {
                     "seconds": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int64"
                     }
                 }
             },
@@ -3073,6 +3159,12 @@
             "StorageOSVolumeSource": {
                 "type": "object",
                 "properties": {
+                    "volumeName": {
+                        "type": "string"
+                    },
+                    "volumeNamespace": {
+                        "type": "string"
+                    },
                     "fsType": {
                         "type": "string"
                     },
@@ -3087,12 +3179,6 @@
                             }
                         ],
                         "nullable": true
-                    },
-                    "volumeName": {
-                        "type": "string"
-                    },
-                    "volumeNamespace": {
-                        "type": "string"
                     }
                 }
             },
@@ -3117,11 +3203,11 @@
                     "port"
                 ],
                 "properties": {
-                    "host": {
-                        "type": "string"
-                    },
                     "port": {
                         "$ref": "#/components/schemas/IntOrString"
+                    },
+                    "host": {
+                        "type": "string"
                     }
                 }
             },
@@ -3135,23 +3221,23 @@
             "Toleration": {
                 "type": "object",
                 "properties": {
-                    "effect": {
-                        "$ref": "#/components/schemas/TaintEffect"
-                    },
                     "key": {
                         "type": "string"
                     },
                     "operator": {
                         "$ref": "#/components/schemas/TolerationOperator"
                     },
+                    "value": {
+                        "type": "string"
+                    },
+                    "effect": {
+                        "$ref": "#/components/schemas/TaintEffect"
+                    },
                     "tolerationSeconds": {
                         "type": "integer",
                         "minimum": -9223372036854775808,
                         "maximum": 9223372036854775807,
                         "nullable": true
-                    },
-                    "value": {
-                        "type": "string"
                     }
                 }
             },
@@ -3166,6 +3252,16 @@
                     "whenUnsatisfiable"
                 ],
                 "properties": {
+                    "maxSkew": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "topologyKey": {
+                        "type": "string"
+                    },
+                    "whenUnsatisfiable": {
+                        "$ref": "#/components/schemas/UnsatisfiableConstraintAction"
+                    },
                     "labelSelector": {
                         "type": "object",
                         "allOf": [
@@ -3174,15 +3270,6 @@
                             }
                         ],
                         "nullable": true
-                    },
-                    "matchLabelKeys": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "maxSkew": {
-                        "type": "integer"
                     },
                     "minDomains": {
                         "type": "integer",
@@ -3198,21 +3285,21 @@
                         "type": "string",
                         "nullable": true
                     },
-                    "topologyKey": {
-                        "type": "string"
-                    },
-                    "whenUnsatisfiable": {
-                        "$ref": "#/components/schemas/UnsatisfiableConstraintAction"
+                    "matchLabelKeys": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     }
                 }
             },
             "TypeMeta": {
                 "type": "object",
                 "properties": {
-                    "apiVersion": {
+                    "kind": {
                         "type": "string"
                     },
-                    "kind": {
+                    "apiVersion": {
                         "type": "string"
                     }
                 }
@@ -3289,14 +3376,14 @@
             "VolumeDevice": {
                 "type": "object",
                 "required": [
-                    "devicePath",
-                    "name"
+                    "name",
+                    "devicePath"
                 ],
                 "properties": {
-                    "devicePath": {
+                    "name": {
                         "type": "string"
                     },
-                    "name": {
+                    "devicePath": {
                         "type": "string"
                     }
                 }
@@ -3304,17 +3391,10 @@
             "VolumeMount": {
                 "type": "object",
                 "required": [
-                    "mountPath",
-                    "name"
+                    "name",
+                    "mountPath"
                 ],
                 "properties": {
-                    "mountPath": {
-                        "type": "string"
-                    },
-                    "mountPropagation": {
-                        "type": "string",
-                        "nullable": true
-                    },
                     "name": {
                         "type": "string"
                     },
@@ -3325,8 +3405,15 @@
                         "type": "string",
                         "nullable": true
                     },
+                    "mountPath": {
+                        "type": "string"
+                    },
                     "subPath": {
                         "type": "string"
+                    },
+                    "mountPropagation": {
+                        "type": "string",
+                        "nullable": true
                     },
                     "subPathExpr": {
                         "type": "string"
@@ -3336,14 +3423,14 @@
             "VolumeMountStatus": {
                 "type": "object",
                 "required": [
-                    "mountPath",
-                    "name"
+                    "name",
+                    "mountPath"
                 ],
                 "properties": {
-                    "mountPath": {
+                    "name": {
                         "type": "string"
                     },
-                    "name": {
+                    "mountPath": {
                         "type": "string"
                     },
                     "readOnly": {
@@ -3358,20 +3445,11 @@
             "VolumeProjection": {
                 "type": "object",
                 "properties": {
-                    "clusterTrustBundle": {
+                    "secret": {
                         "type": "object",
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/ClusterTrustBundleProjection"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "configMap": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ConfigMapProjection"
+                                "$ref": "#/components/schemas/SecretProjection"
                             }
                         ],
                         "nullable": true
@@ -3385,11 +3463,11 @@
                         ],
                         "nullable": true
                     },
-                    "secret": {
+                    "configMap": {
                         "type": "object",
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/SecretProjection"
+                                "$ref": "#/components/schemas/ConfigMapProjection"
                             }
                         ],
                         "nullable": true
@@ -3399,6 +3477,15 @@
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/ServiceAccountTokenProjection"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "clusterTrustBundle": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ClusterTrustBundleProjection"
                             }
                         ],
                         "nullable": true
@@ -3419,74 +3506,11 @@
             "VolumeSource": {
                 "type": "object",
                 "properties": {
-                    "awsElasticBlockStore": {
+                    "hostPath": {
                         "type": "object",
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/AWSElasticBlockStoreVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "azureDisk": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/AzureDiskVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "azureFile": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/AzureFileVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "cephfs": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/CephFSVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "cinder": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/CinderVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "configMap": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ConfigMapVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "csi": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/CSIVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "downwardAPI": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/DownwardAPIVolumeSource"
+                                "$ref": "#/components/schemas/HostPathVolumeSource"
                             }
                         ],
                         "nullable": true
@@ -3500,47 +3524,20 @@
                         ],
                         "nullable": true
                     },
-                    "ephemeral": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/EphemeralVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "fc": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/FCVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "flexVolume": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/FlexVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "flocker": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/FlockerVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
                     "gcePersistentDisk": {
                         "type": "object",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/GCEPersistentDiskVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "awsElasticBlockStore": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AWSElasticBlockStoreVolumeSource"
                             }
                         ],
                         "nullable": true
@@ -3554,29 +3551,11 @@
                         ],
                         "nullable": true
                     },
-                    "glusterfs": {
+                    "secret": {
                         "type": "object",
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/GlusterfsVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "hostPath": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/HostPathVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "iscsi": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ISCSIVolumeSource"
+                                "$ref": "#/components/schemas/SecretVolumeSource"
                             }
                         ],
                         "nullable": true
@@ -3590,47 +3569,29 @@
                         ],
                         "nullable": true
                     },
+                    "iscsi": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ISCSIVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "glusterfs": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/GlusterfsVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
                     "persistentVolumeClaim": {
                         "type": "object",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/PersistentVolumeClaimVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "photonPersistentDisk": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/PhotonPersistentDiskVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "portworxVolume": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/PortworxVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "projected": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ProjectedVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "quobyte": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/QuobyteVolumeSource"
                             }
                         ],
                         "nullable": true
@@ -3644,20 +3605,137 @@
                         ],
                         "nullable": true
                     },
+                    "flexVolume": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/FlexVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "cinder": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/CinderVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "cephfs": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/CephFSVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "flocker": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/FlockerVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "downwardAPI": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/DownwardAPIVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "fc": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/FCVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "azureFile": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AzureFileVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "configMap": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ConfigMapVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "vsphereVolume": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/VsphereVirtualDiskVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "quobyte": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/QuobyteVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "azureDisk": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AzureDiskVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "photonPersistentDisk": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PhotonPersistentDiskVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "projected": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ProjectedVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "portworxVolume": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PortworxVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
                     "scaleIO": {
                         "type": "object",
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/ScaleIOVolumeSource"
-                            }
-                        ],
-                        "nullable": true
-                    },
-                    "secret": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/SecretVolumeSource"
                             }
                         ],
                         "nullable": true
@@ -3671,11 +3749,20 @@
                         ],
                         "nullable": true
                     },
-                    "vsphereVolume": {
+                    "csi": {
                         "type": "object",
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/VsphereVirtualDiskVolumeSource"
+                                "$ref": "#/components/schemas/CSIVolumeSource"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "ephemeral": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/EphemeralVolumeSource"
                             }
                         ],
                         "nullable": true
@@ -3688,16 +3775,16 @@
                     "volumePath"
                 ],
                 "properties": {
-                    "fsType": {
+                    "volumePath": {
                         "type": "string"
                     },
-                    "storagePolicyID": {
+                    "fsType": {
                         "type": "string"
                     },
                     "storagePolicyName": {
                         "type": "string"
                     },
-                    "volumePath": {
+                    "storagePolicyID": {
                         "type": "string"
                     }
                 }
@@ -3705,35 +3792,36 @@
             "WeightedPodAffinityTerm": {
                 "type": "object",
                 "required": [
-                    "podAffinityTerm",
-                    "weight"
+                    "weight",
+                    "podAffinityTerm"
                 ],
                 "properties": {
+                    "weight": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
                     "podAffinityTerm": {
                         "$ref": "#/components/schemas/PodAffinityTerm"
-                    },
-                    "weight": {
-                        "type": "integer"
                     }
                 }
             },
             "WindowsSecurityContextOptions": {
                 "type": "object",
                 "properties": {
+                    "gmsaCredentialSpecName": {
+                        "type": "string",
+                        "nullable": true
+                    },
                     "gmsaCredentialSpec": {
                         "type": "string",
                         "nullable": true
                     },
-                    "gmsaCredentialSpecName": {
+                    "runAsUserName": {
                         "type": "string",
                         "nullable": true
                     },
                     "hostProcess": {
                         "type": "boolean",
-                        "nullable": true
-                    },
-                    "runAsUserName": {
-                        "type": "string",
                         "nullable": true
                     }
                 }
