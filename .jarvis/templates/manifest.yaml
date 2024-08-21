@@ -4,27 +4,40 @@ metadata:
   name: pulsar-admin
 spec:
   containers:
-    - args:
+    - command:
+        - /bin/sh
         - -c
-        - bin/pulsar-admin
-      command:
-        - /bin/bash
+        - /pulsar/bin/pulsar-admin ${webServiceUrl} --admin-url ${brokerServiceUrl}
       env:
         - name: webServiceUrl
           valueFrom:
             configMapKeyRef:
-              key: webServiceUrl
-              name: pulsar-config
+              key: WEB_SERVICE_URL
+              name: pulsar-admin-config
         - name: brokerServiceUrl
           valueFrom:
             configMapKeyRef:
-              key: brokerServiceUrl
-              name: pulsar-config
+              key: BROKER_SERVICE_URL
+              name: pulsar-admin-config
       image: apachepulsar/pulsar:latest
       name: pulsar-admin
       resources:
         limits:
-          memory: 512Mi
+          memory: 1Gi
         requests:
-          memory: 256Mi
+          memory: 512Mi
+  initContainers:
+    - command:
+        - /bin/sh
+        - -c
+        - source /pulsar/conf/envfile
+      image: alpine
+      name: init-config
+      volumeMounts:
+        - mountPath: /pulsar/conf
+          name: config-volume
+  volumes:
+    - configMap:
+        name: pulsar-admin-config
+      name: config-volume
 
