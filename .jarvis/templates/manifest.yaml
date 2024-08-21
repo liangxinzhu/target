@@ -6,16 +6,20 @@ spec:
   containers:
     - args:
         - bin/pulsar-admin
-        - some-arguments
       command:
-        - /bin/bash
+        - sh
         - -c
       env:
-        - name: PULSAR_ADMIN_CONFIG
+        - name: webServiceUrl
           valueFrom:
             configMapKeyRef:
-              key: config-key
-              name: pulsar-admin-config
+              key: webServiceUrl
+              name: pulsar-config
+        - name: brokerServiceUrl
+          valueFrom:
+            configMapKeyRef:
+              key: brokerServiceUrl
+              name: pulsar-config
       image: apachepulsar/pulsar:latest
-      name: pulsar-admin-container
+      name: pulsar-admin
 
