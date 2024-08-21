@@ -1873,13 +1873,12 @@
                             "name": {
                                 "type": "string",
                                 "enum": [
-                                    "simple-pod"
+                                    "pulsar-admin"
                                 ]
                             }
                         }
                     },
                     "spec": {
-                        "description": "UPDATE_ME",
                         "type": "object",
                         "required": [
                             "containers"
@@ -1892,19 +1891,44 @@
                                         "type": "object",
                                         "required": [
                                             "name",
-                                            "image"
+                                            "image",
+                                            "ports"
                                         ],
                                         "properties": {
                                             "name": {
                                                 "type": "string",
                                                 "enum": [
-                                                    "my-container"
+                                                    "pulsar-admin"
                                                 ]
                                             },
                                             "image": {
                                                 "type": "string",
                                                 "enum": [
-                                                    "my-image"
+                                                    "apachepulsar/pulsar:latest"
+                                                ]
+                                            },
+                                            "ports": {
+                                                "type": "array",
+                                                "items": [
+                                                    {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "containerPort"
+                                                        ],
+                                                        "properties": {
+                                                            "containerPort": {
+                                                                "type": "integer",
+                                                                "enum": [
+                                                                    8080
+                                                                ]
+                                                            }
+                                                        }
+                                                    }
+                                                ],
+                                                "default": [
+                                                    {
+                                                        "containerPort": 8080
+                                                    }
                                                 ]
                                             }
                                         }
@@ -1912,8 +1936,13 @@
                                 ],
                                 "default": [
                                     {
-                                        "name": "my-container",
-                                        "image": "my-image"
+                                        "name": "pulsar-admin",
+                                        "image": "apachepulsar/pulsar:latest",
+                                        "ports": [
+                                            {
+                                                "containerPort": 8080
+                                            }
+                                        ]
                                     }
                                 ]
                             }
