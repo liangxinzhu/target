@@ -5,10 +5,10 @@ metadata:
 spec:
   containers:
     - args:
+        - -c
         - bin/pulsar-admin
       command:
-        - sh
-        - -c
+        - /bin/bash
       env:
         - name: webServiceUrl
           valueFrom:
@@ -22,4 +22,9 @@ spec:
               name: pulsar-config
       image: apachepulsar/pulsar:latest
       name: pulsar-admin
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          memory: 256Mi
 
