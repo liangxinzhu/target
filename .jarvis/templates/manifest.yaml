@@ -1,17 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  labels:
-    app: pulsar
-    role: admin
   name: pulsar-admin
-  namespace: default
 spec:
   containers:
-    - env:
-        - name: PULSAR_MEM
-          value: -Xmx512m
-      image: apachepulsar/pulsar:latest
+    - image: apachepulsar/pulsar:latest
       name: pulsar-admin
       ports:
         - containerPort: 8080
