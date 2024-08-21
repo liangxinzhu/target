@@ -5,10 +5,18 @@ metadata:
 spec:
   containers:
     - args:
-        - -c
-        - bin/pulsar-admin
+        - functions
+        - list
       command:
-        - /bin/sh
+        - bin/pulsar-admin
+      env:
+        - name: PULSAR_ADMIN_URL
+          value: http://pulsar-admin.default.svc.cluster.local:8080
+        - name: PULSAR_ADMIN_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: authToken
+              name: pulsar-admin-secret
       image: apachepulsar/pulsar:latest
       name: pulsar-admin
 
