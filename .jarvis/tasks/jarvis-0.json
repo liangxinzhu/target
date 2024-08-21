@@ -1873,7 +1873,7 @@
                             "name": {
                                 "type": "string",
                                 "enum": [
-                                    "pulsar-admin"
+                                    "example-pod"
                                 ]
                             }
                         }
@@ -1892,43 +1892,54 @@
                                         "required": [
                                             "name",
                                             "image",
-                                            "ports"
+                                            "command"
                                         ],
                                         "properties": {
                                             "name": {
                                                 "type": "string",
                                                 "enum": [
-                                                    "pulsar-admin"
+                                                    "example-container"
                                                 ]
                                             },
                                             "image": {
                                                 "type": "string",
                                                 "enum": [
-                                                    "apachepulsar/pulsar:latest"
+                                                    "nginx"
                                                 ]
                                             },
-                                            "ports": {
+                                            "command": {
                                                 "type": "array",
                                                 "items": [
                                                     {
-                                                        "type": "object",
-                                                        "required": [
-                                                            "containerPort"
-                                                        ],
-                                                        "properties": {
-                                                            "containerPort": {
-                                                                "type": "integer",
-                                                                "enum": [
-                                                                    8080
-                                                                ]
-                                                            }
-                                                        }
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "/bin/sh"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "-c"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "echo Hello, World!"
+                                                        ]
                                                     }
                                                 ],
+                                                "enum": [
+                                                    [
+                                                        "/bin/sh",
+                                                        "-c",
+                                                        "echo Hello, World!"
+                                                    ]
+                                                ],
                                                 "default": [
-                                                    {
-                                                        "containerPort": 8080
-                                                    }
+                                                    "/bin/sh",
+                                                    "-c",
+                                                    "echo Hello, World!"
                                                 ]
                                             }
                                         }
@@ -1936,12 +1947,12 @@
                                 ],
                                 "default": [
                                     {
-                                        "name": "pulsar-admin",
-                                        "image": "apachepulsar/pulsar:latest",
-                                        "ports": [
-                                            {
-                                                "containerPort": 8080
-                                            }
+                                        "name": "example-container",
+                                        "image": "nginx",
+                                        "command": [
+                                            "/bin/sh",
+                                            "-c",
+                                            "echo Hello, World!"
                                         ]
                                     }
                                 ]
