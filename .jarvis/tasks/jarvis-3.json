@@ -1873,12 +1873,13 @@
                             "name": {
                                 "type": "string",
                                 "enum": [
-                                    "pulsar-admin"
+                                    "simple-pod"
                                 ]
                             }
                         }
                     },
                     "spec": {
+                        "description": "UPDATE_ME",
                         "type": "object",
                         "required": [
                             "containers"
@@ -1891,44 +1892,19 @@
                                         "type": "object",
                                         "required": [
                                             "name",
-                                            "image",
-                                            "ports"
+                                            "image"
                                         ],
                                         "properties": {
                                             "name": {
                                                 "type": "string",
                                                 "enum": [
-                                                    "pulsar-admin"
+                                                    "my-container"
                                                 ]
                                             },
                                             "image": {
                                                 "type": "string",
                                                 "enum": [
-                                                    "apachepulsar/pulsar:2.8.0"
-                                                ]
-                                            },
-                                            "ports": {
-                                                "type": "array",
-                                                "items": [
-                                                    {
-                                                        "type": "object",
-                                                        "required": [
-                                                            "containerPort"
-                                                        ],
-                                                        "properties": {
-                                                            "containerPort": {
-                                                                "type": "integer",
-                                                                "enum": [
-                                                                    8080
-                                                                ]
-                                                            }
-                                                        }
-                                                    }
-                                                ],
-                                                "default": [
-                                                    {
-                                                        "containerPort": 8080
-                                                    }
+                                                    "my-image"
                                                 ]
                                             }
                                         }
@@ -1936,13 +1912,8 @@
                                 ],
                                 "default": [
                                     {
-                                        "name": "pulsar-admin",
-                                        "image": "apachepulsar/pulsar:2.8.0",
-                                        "ports": [
-                                            {
-                                                "containerPort": 8080
-                                            }
-                                        ]
+                                        "name": "my-container",
+                                        "image": "my-image"
                                     }
                                 ]
                             }
