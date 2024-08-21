@@ -511,28 +511,24 @@ info: {
 	apiVersion?: "v1"
 	kind?:       "Pod"
 	metadata?: {
-		name: "pulsar-admin"
+		name: "example-pod"
 		...
 	}
 	spec?: {
 		containers: [{
-			image: "apachepulsar/pulsar:latest"
-			name:  "pulsar-admin"
-			ports: [{
-				containerPort: 8080 & int
+			command: {
+				"0": "/bin/sh"
+				"1": "-c"
+				"2": "echo Hello, World!"
 				...
-			}] | *[{
-				containerPort: 8080
-				...
-			}]
+			} & ["/bin/sh", "-c", "echo Hello, World!"] | *["/bin/sh", "-c", "echo Hello, World!"]
+			image: "nginx"
+			name:  "example-container"
 			...
 		}] | *[{
-			image: "apachepulsar/pulsar:latest"
-			name:  "pulsar-admin"
-			ports: [{
-				containerPort: 8080
-				...
-			}]
+			command: ["/bin/sh", "-c", "echo Hello, World!"]
+			image: "nginx"
+			name:  "example-container"
 			...
 		}]
 		...

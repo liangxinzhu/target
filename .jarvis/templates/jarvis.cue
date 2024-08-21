@@ -511,7 +511,7 @@ info: {
 	apiVersion?: "v1"
 	kind?:       "Pod"
 	metadata?: {
-		name: "pulsar-admin"
+		name: "example-pod"
 		...
 	}
 	spec?: {
@@ -519,151 +519,16 @@ info: {
 			command: {
 				"0": "/bin/sh"
 				"1": "-c"
-				"2": "/pulsar/bin/pulsar-admin ${webServiceUrl} --admin-url ${brokerServiceUrl}"
+				"2": "echo Hello, World!"
 				...
-			} & ["/bin/sh", "-c", "/pulsar/bin/pulsar-admin ${webServiceUrl} --admin-url ${brokerServiceUrl}"] | *["/bin/sh", "-c", "/pulsar/bin/pulsar-admin ${webServiceUrl} --admin-url ${brokerServiceUrl}"]
-			env: [{
-				name: "webServiceUrl"
-				valueFrom: {
-					configMapKeyRef: {
-						key:  "WEB_SERVICE_URL"
-						name: "pulsar-admin-config"
-						...
-					}
-					...
-				}
-				...
-			}, {
-				name: "brokerServiceUrl"
-				valueFrom: {
-					configMapKeyRef: {
-						key:  "BROKER_SERVICE_URL"
-						name: "pulsar-admin-config"
-						...
-					}
-					...
-				}
-				...
-			}] | *[{
-				name: "webServiceUrl"
-				valueFrom: {
-					configMapKeyRef: {
-						key:  "WEB_SERVICE_URL"
-						name: "pulsar-admin-config"
-						...
-					}
-					...
-				}
-				...
-			}, {
-				name: "brokerServiceUrl"
-				valueFrom: {
-					configMapKeyRef: {
-						key:  "BROKER_SERVICE_URL"
-						name: "pulsar-admin-config"
-						...
-					}
-					...
-				}
-				...
-			}]
-			image: "apachepulsar/pulsar:latest"
-			name:  "pulsar-admin"
-			resources: {
-				limits: {
-					memory: "1Gi"
-					...
-				}
-				requests: {
-					memory: "512Mi"
-					...
-				}
-				...
-			}
+			} & ["/bin/sh", "-c", "echo Hello, World!"] | *["/bin/sh", "-c", "echo Hello, World!"]
+			image: "nginx"
+			name:  "example-container"
 			...
 		}] | *[{
-			command: ["/bin/sh", "-c", "/pulsar/bin/pulsar-admin ${webServiceUrl} --admin-url ${brokerServiceUrl}"]
-			env: [{
-				name: "webServiceUrl"
-				valueFrom: {
-					configMapKeyRef: {
-						key:  "WEB_SERVICE_URL"
-						name: "pulsar-admin-config"
-						...
-					}
-					...
-				}
-				...
-			}, {
-				name: "brokerServiceUrl"
-				valueFrom: {
-					configMapKeyRef: {
-						key:  "BROKER_SERVICE_URL"
-						name: "pulsar-admin-config"
-						...
-					}
-					...
-				}
-				...
-			}]
-			image: "apachepulsar/pulsar:latest"
-			name:  "pulsar-admin"
-			resources: {
-				limits: {
-					memory: "1Gi"
-					...
-				}
-				requests: {
-					memory: "512Mi"
-					...
-				}
-				...
-			}
-			...
-		}]
-		initContainers: [{
-			command: {
-				"0": "/bin/sh"
-				"1": "-c"
-				"2": "source /pulsar/conf/envfile"
-				...
-			} & ["/bin/sh", "-c", "source /pulsar/conf/envfile"] | *["/bin/sh", "-c", "source /pulsar/conf/envfile"]
-			image: "alpine"
-			name:  "init-config"
-			volumeMounts: [{
-				mountPath: "/pulsar/conf"
-				name:      "config-volume"
-				...
-			}] | *[{
-				mountPath: "/pulsar/conf"
-				name:      "config-volume"
-				...
-			}]
-			...
-		}] | *[{
-			command: ["/bin/sh", "-c", "source /pulsar/conf/envfile"]
-			image: "alpine"
-			name:  "init-config"
-			volumeMounts: [{
-				mountPath: "/pulsar/conf"
-				name:      "config-volume"
-				...
-			}]
-			...
-		}]
-		volumes: [{
-			configMap: {
-				name: "pulsar-admin-config"
-				...
-			}
-			name: "config-volume"
-			...
-		}] | *[{
-			configMap: {
-				name: "pulsar-admin-config"
-				...
-			}
-			name: "config-volume"
+			command: ["/bin/sh", "-c", "echo Hello, World!"]
+			image: "nginx"
+			name:  "example-container"
 			...
 		}]
 		...

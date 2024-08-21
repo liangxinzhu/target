@@ -87,6 +87,10 @@ schema("VolumeSource") :-
     input("properties","hostPath","nullable",true),
     input("properties","hostPath","allOf",0,"$ref","#/components/schemas/HostPathVolumeSource"),
     input("properties","hostPath","type","object").
+schema("TypeMeta") :-
+    input("type","object"),
+    input("properties","kind","type","string"),
+    input("properties","apiVersion","type","string").
 schema("SecurityContext") :-
     input("type","object"),
     input("properties","appArmorProfile","nullable",true),
@@ -122,14 +126,35 @@ schema("SecurityContext") :-
     input("properties","capabilities","nullable",true),
     input("properties","capabilities","allOf",0,"$ref","#/components/schemas/Capabilities"),
     input("properties","capabilities","type","object").
-schema("TypedLocalObjectReference") :-
+schema("PersistentVolumeClaimSpec") :-
     input("type","object"),
-    input("properties","kind","type","string"),
-    input("properties","name","type","string"),
-    input("properties","apiGroup","nullable",true),
-    input("properties","apiGroup","type","string"),
-    input("required",1,"name"),
-    input("required",0,"kind").
+    input("properties","volumeAttributesClassName","nullable",true),
+    input("properties","volumeAttributesClassName","type","string"),
+    input("properties","dataSourceRef","nullable",true),
+    input("properties","dataSourceRef","allOf",0,"$ref","#/components/schemas/TypedObjectReference"),
+    input("properties","dataSourceRef","type","object"),
+    input("properties","dataSource","nullable",true),
+    input("properties","dataSource","allOf",0,"$ref","#/components/schemas/TypedLocalObjectReference"),
+    input("properties","dataSource","type","object"),
+    input("properties","volumeMode","nullable",true),
+    input("properties","volumeMode","type","string"),
+    input("properties","storageClassName","nullable",true),
+    input("properties","storageClassName","type","string"),
+    input("properties","volumeName","type","string"),
+    input("properties","resources","$ref","#/components/schemas/VolumeResourceRequirements"),
+    input("properties","selector","nullable",true),
+    input("properties","selector","allOf",0,"$ref","#/components/schemas/LabelSelector"),
+    input("properties","selector","type","object"),
+    input("properties","accessModes","items","$ref","#/components/schemas/PersistentVolumeAccessMode"),
+    input("properties","accessModes","type","array").
+schema("PodDNSConfig") :-
+    input("type","object"),
+    input("properties","options","items","$ref","#/components/schemas/PodDNSConfigOption"),
+    input("properties","options","type","array"),
+    input("properties","searches","items","type","string"),
+    input("properties","searches","type","array"),
+    input("properties","nameservers","items","type","string"),
+    input("properties","nameservers","type","array").
 schema("PodSpec") :-
     input("type","object"),
     input("properties","securityContext","nullable",true),
@@ -208,31 +233,28 @@ schema("PodSpec") :-
     input("properties","volumes","items","$ref","#/components/schemas/Volume"),
     input("properties","volumes","type","array"),
     input("required",0,"containers").
-schema("NodeSelector") :-
-    input("type","object"),
-    input("properties","nodeSelectorTerms","items","$ref","#/components/schemas/NodeSelectorTerm"),
-    input("properties","nodeSelectorTerms","type","array"),
-    input("required",0,"nodeSelectorTerms").
-schema("QuobyteVolumeSource") :-
+schema("RBDVolumeSource") :-
     input("properties","readOnly","type","boolean"),
+    input("properties","fsType","type","string"),
     input("type","object"),
+    input("properties","secretRef","nullable",true),
+    input("properties","secretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
+    input("properties","secretRef","type","object"),
     input("properties","user","type","string"),
-    input("properties","tenant","type","string"),
-    input("properties","group","type","string"),
-    input("properties","volume","type","string"),
-    input("properties","registry","type","string"),
-    input("required",1,"volume"),
-    input("required",0,"registry").
-schema("PodDNSConfigOption") :-
-    input("type","object"),
-    input("properties","name","type","string"),
-    input("properties","value","type","string"),
-    input("properties","value","nullable",true).
-schema("PersistentVolumeClaimVolumeSource") :-
+    input("properties","monitors","items","type","string"),
+    input("properties","monitors","type","array"),
+    input("required",0,"monitors"),
+    input("properties","image","type","string"),
+    input("properties","keyring","type","string"),
+    input("properties","pool","type","string"),
+    input("required",1,"image").
+schema("NFSVolumeSource") :-
     input("properties","readOnly","type","boolean"),
     input("type","object"),
-    input("properties","claimName","type","string"),
-    input("required",0,"claimName").
+    input("properties","path","type","string"),
+    input("required",1,"path"),
+    input("properties","server","type","string"),
+    input("required",0,"server").
 schema("KeyToPath") :-
     input("type","object"),
     input("properties","path","type","string"),
@@ -243,12 +265,13 @@ schema("KeyToPath") :-
     input("properties","mode","type","integer"),
     input("required",1,"path"),
     input("required",0,"key").
-schema("GitRepoVolumeSource") :-
+schema("GlusterfsVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
     input("type","object"),
-    input("properties","directory","type","string"),
-    input("properties","revision","type","string"),
-    input("properties","repository","type","string"),
-    input("required",0,"repository").
+    input("properties","path","type","string"),
+    input("properties","endpoints","type","string"),
+    input("required",1,"path"),
+    input("required",0,"endpoints").
 schema("ExecAction") :-
     input("type","object"),
     input("properties","command","items","type","string"),
@@ -261,10 +284,20 @@ schema("AWSElasticBlockStoreVolumeSource") :-
     input("properties","volumeID","type","string"),
     input("required",0,"volumeID"),
     input("type","object").
-schema("DownwardAPIProjection") :-
+schema("DownwardAPIVolumeFile") :-
     input("type","object"),
-    input("properties","items","type","array"),
-    input("properties","items","items","$ref","#/components/schemas/DownwardAPIVolumeFile").
+    input("properties","path","type","string"),
+    input("required",0,"path"),
+    input("properties","mode","nullable",true),
+    input("properties","mode","maximum","int(\"2147483647\")"),
+    input("properties","mode","minimum","int(\"-2147483648\")"),
+    input("properties","mode","type","integer"),
+    input("properties","resourceFieldRef","nullable",true),
+    input("properties","resourceFieldRef","allOf",0,"$ref","#/components/schemas/ResourceFieldSelector"),
+    input("properties","resourceFieldRef","type","object"),
+    input("properties","fieldRef","nullable",true),
+    input("properties","fieldRef","allOf",0,"$ref","#/components/schemas/ObjectFieldSelector"),
+    input("properties","fieldRef","type","object").
 schema("ContainerPort") :-
     input("type","object"),
     input("properties","name","type","string"),
@@ -275,141 +308,32 @@ schema("ContainerPort") :-
     input("properties","hostPort","format","int32"),
     input("properties","hostPort","type","integer"),
     input("required",0,"containerPort").
-schema("CephFSVolumeSource") :-
-    input("properties","readOnly","type","boolean"),
-    input("type","object"),
-    input("properties","secretRef","nullable",true),
-    input("properties","secretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("properties","secretRef","type","object"),
-    input("properties","secretFile","type","string"),
-    input("properties","user","type","string"),
-    input("properties","path","type","string"),
-    input("properties","monitors","items","type","string"),
-    input("properties","monitors","type","array"),
-    input("required",0,"monitors").
-schema("WindowsSecurityContextOptions") :-
-    input("type","object"),
-    input("properties","hostProcess","nullable",true),
-    input("properties","hostProcess","type","boolean"),
-    input("properties","runAsUserName","nullable",true),
-    input("properties","runAsUserName","type","string"),
-    input("properties","gmsaCredentialSpec","nullable",true),
-    input("properties","gmsaCredentialSpec","type","string"),
-    input("properties","gmsaCredentialSpecName","nullable",true),
-    input("properties","gmsaCredentialSpecName","type","string").
-schema("VolumeDevice") :-
-    input("type","object"),
-    input("properties","name","type","string"),
-    input("required",0,"name"),
-    input("properties","devicePath","type","string"),
-    input("required",1,"devicePath").
-schema("StorageOSVolumeSource") :-
+schema("CinderVolumeSource") :-
     input("properties","readOnly","type","boolean"),
     input("properties","fsType","type","string"),
+    input("properties","volumeID","type","string"),
+    input("required",0,"volumeID"),
     input("type","object"),
     input("properties","secretRef","nullable",true),
     input("properties","secretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("properties","secretRef","type","object"),
-    input("properties","volumeName","type","string"),
-    input("properties","volumeNamespace","type","string").
-schema("ResourceRequirements") :-
+    input("properties","secretRef","type","object").
+schema("WeightedPodAffinityTerm") :-
     input("type","object"),
-    input("properties","claims","items","$ref","#/components/schemas/ResourceClaim"),
-    input("properties","claims","type","array"),
-    input("properties","requests","$ref","#/components/schemas/ResourceList"),
-    input("properties","limits","$ref","#/components/schemas/ResourceList").
-schema("LifecycleHandler") :-
-    input("type","object"),
-    input("properties","sleep","nullable",true),
-    input("properties","sleep","allOf",0,"$ref","#/components/schemas/SleepAction"),
-    input("properties","sleep","type","object"),
-    input("properties","tcpSocket","nullable",true),
-    input("properties","tcpSocket","allOf",0,"$ref","#/components/schemas/TCPSocketAction"),
-    input("properties","tcpSocket","type","object"),
-    input("properties","httpGet","nullable",true),
-    input("properties","httpGet","allOf",0,"$ref","#/components/schemas/HTTPGetAction"),
-    input("properties","httpGet","type","object"),
-    input("properties","exec","nullable",true),
-    input("properties","exec","allOf",0,"$ref","#/components/schemas/ExecAction"),
-    input("properties","exec","type","object").
-schema("PreferredSchedulingTerm") :-
-    input("type","object"),
-    input("properties","preference","$ref","#/components/schemas/NodeSelectorTerm"),
     input("properties","weight","format","int32"),
     input("properties","weight","type","integer"),
-    input("required",1,"preference"),
-    input("required",0,"weight").
-schema("PodOS") :-
+    input("required",0,"weight"),
+    input("properties","podAffinityTerm","$ref","#/components/schemas/PodAffinityTerm"),
+    input("required",1,"podAffinityTerm").
+schema("TypedObjectReference") :-
     input("type","object"),
-    input("required",0,"name"),
-    input("properties","name","$ref","#/components/schemas/OSName").
-schema("PhotonPersistentDiskVolumeSource") :-
-    input("properties","fsType","type","string"),
-    input("type","object"),
-    input("properties","pdID","type","string"),
-    input("required",0,"pdID").
-schema("NodeSelectorTerm") :-
-    input("type","object"),
-    input("properties","matchExpressions","type","array"),
-    input("properties","matchFields","items","$ref","#/components/schemas/NodeSelectorRequirement"),
-    input("properties","matchFields","type","array"),
-    input("properties","matchExpressions","items","$ref","#/components/schemas/NodeSelectorRequirement").
-schema("PodIP") :-
-    input("type","object"),
-    input("properties","ip","type","string").
-schema("HostIP") :-
-    input("type","object"),
-    input("properties","ip","type","string").
-schema("FlockerVolumeSource") :-
-    input("type","object"),
-    input("properties","datasetUUID","type","string"),
-    input("properties","datasetName","type","string").
-schema("EnvVarSource") :-
-    input("type","object"),
-    input("properties","resourceFieldRef","nullable",true),
-    input("properties","resourceFieldRef","allOf",0,"$ref","#/components/schemas/ResourceFieldSelector"),
-    input("properties","resourceFieldRef","type","object"),
-    input("properties","fieldRef","nullable",true),
-    input("properties","fieldRef","allOf",0,"$ref","#/components/schemas/ObjectFieldSelector"),
-    input("properties","fieldRef","type","object"),
-    input("properties","secretKeyRef","nullable",true),
-    input("properties","secretKeyRef","allOf",0,"$ref","#/components/schemas/SecretKeySelector"),
-    input("properties","secretKeyRef","type","object"),
-    input("properties","configMapKeyRef","nullable",true),
-    input("properties","configMapKeyRef","allOf",0,"$ref","#/components/schemas/ConfigMapKeySelector"),
-    input("properties","configMapKeyRef","type","object").
-schema("AppArmorProfile") :-
-    input("type","object"),
-    input("properties","localhostProfile","nullable",true),
-    input("properties","localhostProfile","type","string"),
-    input("properties","type","$ref","#/components/schemas/AppArmorProfileType"),
-    input("required",0,"type").
-schema("ContainerStateTerminated") :-
-    input("type","object"),
-    input("properties","startedAt","$ref","#/components/schemas/Time"),
-    input("properties","containerID","type","string"),
-    input("properties","finishedAt","$ref","#/components/schemas/Time"),
-    input("properties","message","type","string"),
-    input("properties","reason","type","string"),
-    input("properties","signal","format","int32"),
-    input("properties","signal","type","integer"),
-    input("properties","exitCode","format","int32"),
-    input("properties","exitCode","type","integer"),
-    input("required",0,"exitCode").
-schema("SecretKeySelector") :-
-    input("type","object"),
-    input("properties","optional","nullable",true),
-    input("properties","optional","type","boolean"),
-    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("allOf",1,"required",0,"key"),
-    input("properties","key","type","string").
-schema("ConfigMapKeySelector") :-
-    input("type","object"),
-    input("properties","optional","nullable",true),
-    input("properties","optional","type","boolean"),
-    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("allOf",1,"required",0,"key"),
-    input("properties","key","type","string").
+    input("properties","kind","type","string"),
+    input("properties","name","type","string"),
+    input("properties","namespace","type","string"),
+    input("properties","apiGroup","nullable",true),
+    input("properties","apiGroup","type","string"),
+    input("required",1,"name"),
+    input("required",0,"kind"),
+    input("properties","namespace","nullable",true).
 schema("ServiceAccountTokenProjection") :-
     input("type","object"),
     input("properties","path","type","string"),
@@ -419,6 +343,11 @@ schema("ServiceAccountTokenProjection") :-
     input("properties","expirationSeconds","minimum","int(\"-9223372036854775808\")"),
     input("properties","expirationSeconds","type","integer"),
     input("properties","audience","type","string").
+schema("PersistentVolumeClaimVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
+    input("type","object"),
+    input("properties","claimName","type","string"),
+    input("required",0,"claimName").
 schema("PodStatus") :-
     input("type","object"),
     input("properties","hostIP","type","string"),
@@ -445,50 +374,30 @@ schema("PodStatus") :-
     input("properties","conditions","items","$ref","#/components/schemas/PodCondition"),
     input("properties","conditions","type","array"),
     input("properties","phase","$ref","#/components/schemas/PodPhase").
-schema("TypedObjectReference") :-
-    input("type","object"),
-    input("properties","kind","type","string"),
-    input("properties","name","type","string"),
-    input("properties","namespace","type","string"),
-    input("properties","apiGroup","nullable",true),
-    input("properties","apiGroup","type","string"),
-    input("required",1,"name"),
-    input("required",0,"kind"),
-    input("properties","namespace","nullable",true).
-schema("NodeAffinity") :-
-    input("type","object"),
-    input("properties","preferredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/PreferredSchedulingTerm"),
-    input("properties","preferredDuringSchedulingIgnoredDuringExecution","type","array"),
-    input("properties","requiredDuringSchedulingIgnoredDuringExecution","nullable",true),
-    input("properties","requiredDuringSchedulingIgnoredDuringExecution","allOf",0,"$ref","#/components/schemas/NodeSelector"),
-    input("properties","requiredDuringSchedulingIgnoredDuringExecution","type","object").
 schema("ResourceFieldSelector") :-
     input("type","object"),
     input("properties","divisor","$ref","#/components/schemas/Quantity"),
     input("properties","resource","type","string"),
     input("properties","containerName","type","string"),
     input("required",0,"resource").
-schema("PodDNSConfig") :-
+schema("PodDNSConfigOption") :-
     input("type","object"),
-    input("properties","options","items","$ref","#/components/schemas/PodDNSConfigOption"),
-    input("properties","options","type","array"),
-    input("properties","searches","items","type","string"),
-    input("properties","searches","type","array"),
-    input("properties","nameservers","items","type","string"),
-    input("properties","nameservers","type","array").
-schema("PersistentVolumeClaimTemplate") :-
+    input("properties","name","type","string"),
+    input("properties","value","type","string"),
+    input("properties","value","nullable",true).
+schema("NodeSelector") :-
     input("type","object"),
-    input("properties","spec","$ref","#/components/schemas/PersistentVolumeClaimSpec"),
-    input("properties","metadata","$ref","#/components/schemas/ObjectMeta"),
-    input("required",0,"spec").
-schema("IntOrString").
-schema("Quantity").
-schema("LabelSelector") :-
+    input("properties","nodeSelectorTerms","items","$ref","#/components/schemas/NodeSelectorTerm"),
+    input("properties","nodeSelectorTerms","type","array"),
+    input("required",0,"nodeSelectorTerms").
+schema("LabelSelectorRequirement") :-
     input("type","object"),
-    input("properties","matchExpressions","items","$ref","#/components/schemas/LabelSelectorRequirement"),
-    input("properties","matchExpressions","type","array"),
-    input("properties","matchLabels","additionalProperties","type","string"),
-    input("properties","matchLabels","type","object").
+    input("properties","key","type","string"),
+    input("required",0,"key"),
+    input("properties","values","items","type","string"),
+    input("properties","values","type","array"),
+    input("properties","operator","$ref","#/components/schemas/LabelSelectorOperator"),
+    input("required",1,"operator").
 schema("HTTPGetAction") :-
     input("type","object"),
     input("properties","path","type","string"),
@@ -498,8 +407,120 @@ schema("HTTPGetAction") :-
     input("properties","scheme","$ref","#/components/schemas/URIScheme"),
     input("properties","host","type","string"),
     input("properties","port","$ref","#/components/schemas/IntOrString").
-schema("Time").
-schema("FieldsV1").
+schema("FCVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
+    input("properties","fsType","type","string"),
+    input("type","object"),
+    input("properties","wwids","items","type","string"),
+    input("properties","wwids","type","array"),
+    input("properties","lun","nullable",true),
+    input("properties","lun","maximum","int(\"2147483647\")"),
+    input("properties","lun","minimum","int(\"-2147483648\")"),
+    input("properties","lun","type","integer"),
+    input("properties","targetWWNs","items","type","string"),
+    input("properties","targetWWNs","type","array").
+schema("AppArmorProfile") :-
+    input("type","object"),
+    input("properties","localhostProfile","nullable",true),
+    input("properties","localhostProfile","type","string"),
+    input("properties","type","$ref","#/components/schemas/AppArmorProfileType"),
+    input("required",0,"type").
+schema("DownwardAPIVolumeSource") :-
+    input("type","object"),
+    input("properties","items","type","array"),
+    input("properties","defaultMode","nullable",true),
+    input("properties","defaultMode","maximum","int(\"2147483647\")"),
+    input("properties","defaultMode","minimum","int(\"-2147483648\")"),
+    input("properties","defaultMode","type","integer"),
+    input("properties","items","items","$ref","#/components/schemas/DownwardAPIVolumeFile").
+schema("ContainerResizePolicy") :-
+    input("type","object"),
+    input("properties","restartPolicy","$ref","#/components/schemas/ResourceResizeRestartPolicy"),
+    input("properties","resourceName","$ref","#/components/schemas/ResourceName"),
+    input("required",1,"restartPolicy"),
+    input("required",0,"resourceName").
+schema("ClaimSource") :-
+    input("type","object"),
+    input("properties","resourceClaimTemplateName","nullable",true),
+    input("properties","resourceClaimTemplateName","type","string"),
+    input("properties","resourceClaimName","nullable",true),
+    input("properties","resourceClaimName","type","string").
+schema("VolumeDevice") :-
+    input("type","object"),
+    input("properties","name","type","string"),
+    input("required",0,"name"),
+    input("properties","devicePath","type","string"),
+    input("required",1,"devicePath").
+schema("TCPSocketAction") :-
+    input("type","object"),
+    input("required",0,"port"),
+    input("properties","host","type","string"),
+    input("properties","port","$ref","#/components/schemas/IntOrString").
+schema("SELinuxOptions") :-
+    input("type","object"),
+    input("properties","user","type","string"),
+    input("properties","type","type","string"),
+    input("properties","level","type","string"),
+    input("properties","role","type","string").
+schema("Lifecycle") :-
+    input("type","object"),
+    input("properties","preStop","nullable",true),
+    input("properties","preStop","allOf",0,"$ref","#/components/schemas/LifecycleHandler"),
+    input("properties","preStop","type","object"),
+    input("properties","postStart","nullable",true),
+    input("properties","postStart","allOf",0,"$ref","#/components/schemas/LifecycleHandler"),
+    input("properties","postStart","type","object").
+schema("PodReadinessGate") :-
+    input("type","object"),
+    input("properties","conditionType","$ref","#/components/schemas/PodConditionType"),
+    input("required",0,"conditionType").
+schema("PreferredSchedulingTerm") :-
+    input("type","object"),
+    input("properties","preference","$ref","#/components/schemas/NodeSelectorTerm"),
+    input("properties","weight","format","int32"),
+    input("properties","weight","type","integer"),
+    input("required",1,"preference"),
+    input("required",0,"weight").
+schema("Pod") :-
+    input("type","object"),
+    input("properties","metadata","$ref","#/components/schemas/ObjectMeta"),
+    input("allOf",0,"$ref","#/components/schemas/TypeMeta"),
+    input("properties","status","$ref","#/components/schemas/PodStatus"),
+    input("properties","spec","$ref","#/components/schemas/PodSpec").
+schema("NodeSelectorTerm") :-
+    input("type","object"),
+    input("properties","matchExpressions","type","array"),
+    input("properties","matchFields","items","$ref","#/components/schemas/NodeSelectorRequirement"),
+    input("properties","matchFields","type","array"),
+    input("properties","matchExpressions","items","$ref","#/components/schemas/NodeSelectorRequirement").
+schema("HostPathVolumeSource") :-
+    input("type","object"),
+    input("properties","path","type","string"),
+    input("required",0,"path"),
+    input("properties","type","nullable",true),
+    input("properties","type","type","string").
+schema("GCEPersistentDiskVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
+    input("properties","partition","format","int32"),
+    input("properties","partition","type","integer"),
+    input("properties","fsType","type","string"),
+    input("type","object"),
+    input("properties","pdName","type","string"),
+    input("required",0,"pdName").
+schema("EnvVarSource") :-
+    input("type","object"),
+    input("properties","resourceFieldRef","nullable",true),
+    input("properties","resourceFieldRef","allOf",0,"$ref","#/components/schemas/ResourceFieldSelector"),
+    input("properties","resourceFieldRef","type","object"),
+    input("properties","fieldRef","nullable",true),
+    input("properties","fieldRef","allOf",0,"$ref","#/components/schemas/ObjectFieldSelector"),
+    input("properties","fieldRef","type","object"),
+    input("properties","secretKeyRef","nullable",true),
+    input("properties","secretKeyRef","allOf",0,"$ref","#/components/schemas/SecretKeySelector"),
+    input("properties","secretKeyRef","type","object"),
+    input("properties","configMapKeyRef","nullable",true),
+    input("properties","configMapKeyRef","allOf",0,"$ref","#/components/schemas/ConfigMapKeySelector"),
+    input("properties","configMapKeyRef","type","object").
 schema("Affinity") :-
     input("type","object"),
     input("properties","podAntiAffinity","nullable",true),
@@ -511,37 +532,32 @@ schema("Affinity") :-
     input("properties","nodeAffinity","nullable",true),
     input("properties","nodeAffinity","allOf",0,"$ref","#/components/schemas/NodeAffinity"),
     input("properties","nodeAffinity","type","object").
-schema("EmptyDirVolumeSource") :-
+schema("ContainerStateTerminated") :-
     input("type","object"),
-    input("properties","sizeLimit","nullable",true),
-    input("properties","sizeLimit","allOf",0,"$ref","#/components/schemas/Quantity"),
-    input("properties","medium","$ref","#/components/schemas/StorageMedium").
-schema("ContainerResizePolicy") :-
+    input("properties","startedAt","$ref","#/components/schemas/Time"),
+    input("properties","containerID","type","string"),
+    input("properties","finishedAt","$ref","#/components/schemas/Time"),
+    input("properties","message","type","string"),
+    input("properties","reason","type","string"),
+    input("properties","signal","format","int32"),
+    input("properties","signal","type","integer"),
+    input("properties","exitCode","format","int32"),
+    input("properties","exitCode","type","integer"),
+    input("required",0,"exitCode").
+schema("SecretProjection") :-
     input("type","object"),
-    input("properties","restartPolicy","$ref","#/components/schemas/ResourceResizeRestartPolicy"),
-    input("properties","resourceName","$ref","#/components/schemas/ResourceName"),
-    input("required",1,"restartPolicy"),
-    input("required",0,"resourceName").
-schema("ClusterTrustBundleProjection") :-
-    input("type","object"),
-    input("properties","path","type","string"),
     input("properties","optional","nullable",true),
     input("properties","optional","type","boolean"),
-    input("properties","labelSelector","nullable",true),
-    input("properties","labelSelector","allOf",0,"$ref","#/components/schemas/LabelSelector"),
-    input("properties","labelSelector","type","object"),
-    input("properties","signerName","nullable",true),
-    input("properties","signerName","type","string"),
-    input("properties","name","nullable",true),
-    input("properties","name","type","string"),
-    input("required",0,"path").
-schema("WeightedPodAffinityTerm") :-
+    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
+    input("properties","items","items","$ref","#/components/schemas/KeyToPath"),
+    input("properties","items","type","array").
+schema("ConfigMapProjection") :-
     input("type","object"),
-    input("properties","weight","format","int32"),
-    input("properties","weight","type","integer"),
-    input("required",0,"weight"),
-    input("properties","podAffinityTerm","$ref","#/components/schemas/PodAffinityTerm"),
-    input("required",1,"podAffinityTerm").
+    input("properties","optional","nullable",true),
+    input("properties","optional","type","boolean"),
+    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
+    input("properties","items","items","$ref","#/components/schemas/KeyToPath"),
+    input("properties","items","type","array").
 schema("VolumeMountStatus") :-
     input("properties","readOnly","type","boolean"),
     input("type","object"),
@@ -551,6 +567,161 @@ schema("VolumeMountStatus") :-
     input("properties","recursiveReadOnly","nullable",true),
     input("properties","recursiveReadOnly","type","string"),
     input("required",1,"mountPath").
+schema("PodAntiAffinity") :-
+    input("type","object"),
+    input("properties","preferredDuringSchedulingIgnoredDuringExecution","type","array"),
+    input("properties","preferredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/WeightedPodAffinityTerm"),
+    input("properties","requiredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/PodAffinityTerm"),
+    input("properties","requiredDuringSchedulingIgnoredDuringExecution","type","array").
+schema("PodResourceClaimStatus") :-
+    input("type","object"),
+    input("properties","resourceClaimName","nullable",true),
+    input("properties","resourceClaimName","type","string"),
+    input("properties","name","type","string"),
+    input("required",0,"name").
+schema("ObjectMeta") :-
+    input("type","object"),
+    input("properties","name","type","string"),
+    input("properties","managedFields","items","$ref","#/components/schemas/ManagedFieldsEntry"),
+    input("properties","managedFields","type","array"),
+    input("properties","finalizers","items","type","string"),
+    input("properties","finalizers","type","array"),
+    input("properties","ownerReferences","items","$ref","#/components/schemas/OwnerReference"),
+    input("properties","ownerReferences","type","array"),
+    input("properties","annotations","additionalProperties","type","string"),
+    input("properties","annotations","type","object"),
+    input("properties","labels","additionalProperties","type","string"),
+    input("properties","labels","type","object"),
+    input("properties","deletionGracePeriodSeconds","nullable",true),
+    input("properties","deletionGracePeriodSeconds","maximum","int(\"9223372036854775807\")"),
+    input("properties","deletionGracePeriodSeconds","minimum","int(\"-9223372036854775808\")"),
+    input("properties","deletionGracePeriodSeconds","type","integer"),
+    input("properties","deletionTimestamp","nullable",true),
+    input("properties","deletionTimestamp","allOf",0,"$ref","#/components/schemas/Time"),
+    input("properties","creationTimestamp","$ref","#/components/schemas/Time"),
+    input("properties","generation","format","int64"),
+    input("properties","generation","type","integer"),
+    input("properties","resourceVersion","type","string"),
+    input("properties","uid","$ref","#/components/schemas/UID"),
+    input("properties","selfLink","type","string"),
+    input("properties","namespace","type","string"),
+    input("properties","generateName","type","string").
+schema("PodAffinity") :-
+    input("type","object"),
+    input("properties","preferredDuringSchedulingIgnoredDuringExecution","type","array"),
+    input("properties","preferredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/WeightedPodAffinityTerm"),
+    input("properties","requiredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/PodAffinityTerm"),
+    input("properties","requiredDuringSchedulingIgnoredDuringExecution","type","array").
+schema("Toleration") :-
+    input("type","object"),
+    input("properties","key","type","string"),
+    input("properties","value","type","string"),
+    input("properties","tolerationSeconds","nullable",true),
+    input("properties","tolerationSeconds","maximum","int(\"9223372036854775807\")"),
+    input("properties","tolerationSeconds","minimum","int(\"-9223372036854775808\")"),
+    input("properties","tolerationSeconds","type","integer"),
+    input("properties","effect","$ref","#/components/schemas/TaintEffect"),
+    input("properties","operator","$ref","#/components/schemas/TolerationOperator").
+schema("ScaleIOVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
+    input("properties","fsType","type","string"),
+    input("type","object"),
+    input("properties","secretRef","nullable",true),
+    input("properties","secretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
+    input("properties","secretRef","type","object"),
+    input("properties","volumeName","type","string"),
+    input("properties","storageMode","type","string"),
+    input("properties","storagePool","type","string"),
+    input("properties","protectionDomain","type","string"),
+    input("properties","sslEnabled","type","boolean"),
+    input("properties","system","type","string"),
+    input("properties","gateway","type","string"),
+    input("required",1,"system"),
+    input("required",0,"gateway").
+schema("ProbeHandler") :-
+    input("type","object"),
+    input("properties","tcpSocket","nullable",true),
+    input("properties","tcpSocket","allOf",0,"$ref","#/components/schemas/TCPSocketAction"),
+    input("properties","tcpSocket","type","object"),
+    input("properties","httpGet","nullable",true),
+    input("properties","httpGet","allOf",0,"$ref","#/components/schemas/HTTPGetAction"),
+    input("properties","httpGet","type","object"),
+    input("properties","exec","nullable",true),
+    input("properties","exec","allOf",0,"$ref","#/components/schemas/ExecAction"),
+    input("properties","exec","type","object"),
+    input("properties","grpc","nullable",true),
+    input("properties","grpc","allOf",0,"$ref","#/components/schemas/GRPCAction"),
+    input("properties","grpc","type","object").
+schema("LocalObjectReference") :-
+    input("type","object"),
+    input("properties","name","type","string").
+schema("PodIP") :-
+    input("type","object"),
+    input("properties","ip","type","string").
+schema("HostIP") :-
+    input("type","object"),
+    input("properties","ip","type","string").
+schema("FlockerVolumeSource") :-
+    input("type","object"),
+    input("properties","datasetUUID","type","string"),
+    input("properties","datasetName","type","string").
+schema("AzureDiskVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
+    input("properties","fsType","type","string"),
+    input("type","object"),
+    input("properties","kind","nullable",true),
+    input("properties","kind","type","string"),
+    input("properties","readOnly","nullable",true),
+    input("properties","fsType","nullable",true),
+    input("properties","cachingMode","nullable",true),
+    input("properties","cachingMode","type","string"),
+    input("properties","diskURI","type","string"),
+    input("properties","diskName","type","string"),
+    input("required",1,"diskURI"),
+    input("required",0,"diskName").
+schema("ContainerStateWaiting") :-
+    input("type","object"),
+    input("properties","message","type","string"),
+    input("properties","reason","type","string").
+schema("EnvVar") :-
+    input("type","object"),
+    input("properties","name","type","string"),
+    input("required",0,"name"),
+    input("properties","valueFrom","nullable",true),
+    input("properties","valueFrom","allOf",0,"$ref","#/components/schemas/EnvVarSource"),
+    input("properties","valueFrom","type","object"),
+    input("properties","value","type","string").
+schema("SecretKeySelector") :-
+    input("type","object"),
+    input("properties","optional","nullable",true),
+    input("properties","optional","type","boolean"),
+    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
+    input("allOf",1,"required",0,"key"),
+    input("properties","key","type","string").
+schema("ConfigMapKeySelector") :-
+    input("type","object"),
+    input("properties","optional","nullable",true),
+    input("properties","optional","type","boolean"),
+    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
+    input("allOf",1,"required",0,"key"),
+    input("properties","key","type","string").
+schema("VolumeProjection") :-
+    input("type","object"),
+    input("properties","clusterTrustBundle","nullable",true),
+    input("properties","clusterTrustBundle","allOf",0,"$ref","#/components/schemas/ClusterTrustBundleProjection"),
+    input("properties","clusterTrustBundle","type","object"),
+    input("properties","serviceAccountToken","nullable",true),
+    input("properties","serviceAccountToken","allOf",0,"$ref","#/components/schemas/ServiceAccountTokenProjection"),
+    input("properties","serviceAccountToken","type","object"),
+    input("properties","configMap","nullable",true),
+    input("properties","configMap","allOf",0,"$ref","#/components/schemas/ConfigMapProjection"),
+    input("properties","configMap","type","object"),
+    input("properties","downwardAPI","nullable",true),
+    input("properties","downwardAPI","allOf",0,"$ref","#/components/schemas/DownwardAPIProjection"),
+    input("properties","downwardAPI","type","object"),
+    input("properties","secret","nullable",true),
+    input("properties","secret","allOf",0,"$ref","#/components/schemas/SecretProjection"),
+    input("properties","secret","type","object").
 schema("TopologySpreadConstraint") :-
     input("type","object"),
     input("properties","labelSelector","nullable",true),
@@ -573,142 +744,6 @@ schema("TopologySpreadConstraint") :-
     input("required",2,"whenUnsatisfiable"),
     input("required",1,"topologyKey"),
     input("required",0,"maxSkew").
-schema("Probe") :-
-    input("type","object"),
-    input("properties","terminationGracePeriodSeconds","nullable",true),
-    input("properties","terminationGracePeriodSeconds","maximum","int(\"9223372036854775807\")"),
-    input("properties","terminationGracePeriodSeconds","minimum","int(\"-9223372036854775808\")"),
-    input("properties","terminationGracePeriodSeconds","type","integer"),
-    input("allOf",0,"$ref","#/components/schemas/ProbeHandler"),
-    input("properties","failureThreshold","format","int32"),
-    input("properties","failureThreshold","type","integer"),
-    input("properties","successThreshold","format","int32"),
-    input("properties","successThreshold","type","integer"),
-    input("properties","periodSeconds","format","int32"),
-    input("properties","periodSeconds","type","integer"),
-    input("properties","timeoutSeconds","format","int32"),
-    input("properties","timeoutSeconds","type","integer"),
-    input("properties","initialDelaySeconds","format","int32"),
-    input("properties","initialDelaySeconds","type","integer").
-schema("SELinuxOptions") :-
-    input("type","object"),
-    input("properties","user","type","string"),
-    input("properties","type","type","string"),
-    input("properties","level","type","string"),
-    input("properties","role","type","string").
-schema("PodResourceClaim") :-
-    input("type","object"),
-    input("properties","name","type","string"),
-    input("required",0,"name"),
-    input("properties","source","$ref","#/components/schemas/ClaimSource").
-schema("Pod") :-
-    input("type","object"),
-    input("properties","metadata","$ref","#/components/schemas/ObjectMeta"),
-    input("allOf",0,"$ref","#/components/schemas/TypeMeta"),
-    input("properties","status","$ref","#/components/schemas/PodStatus"),
-    input("properties","spec","$ref","#/components/schemas/PodSpec").
-schema("LabelSelectorRequirement") :-
-    input("type","object"),
-    input("properties","key","type","string"),
-    input("required",0,"key"),
-    input("properties","values","items","type","string"),
-    input("properties","values","type","array"),
-    input("properties","operator","$ref","#/components/schemas/LabelSelectorOperator"),
-    input("required",1,"operator").
-schema("NodeSelectorRequirement") :-
-    input("type","object"),
-    input("properties","key","type","string"),
-    input("required",0,"key"),
-    input("properties","values","items","type","string"),
-    input("properties","values","type","array"),
-    input("required",1,"operator"),
-    input("properties","operator","$ref","#/components/schemas/NodeSelectorOperator").
-schema("Sysctl") :-
-    input("type","object"),
-    input("properties","name","type","string"),
-    input("required",0,"name"),
-    input("properties","value","type","string"),
-    input("required",1,"value").
-schema("HTTPHeader") :-
-    input("type","object"),
-    input("properties","name","type","string"),
-    input("required",0,"name"),
-    input("properties","value","type","string"),
-    input("required",1,"value").
-schema("FCVolumeSource") :-
-    input("properties","readOnly","type","boolean"),
-    input("properties","fsType","type","string"),
-    input("type","object"),
-    input("properties","wwids","items","type","string"),
-    input("properties","wwids","type","array"),
-    input("properties","lun","nullable",true),
-    input("properties","lun","maximum","int(\"2147483647\")"),
-    input("properties","lun","minimum","int(\"-2147483648\")"),
-    input("properties","lun","type","integer"),
-    input("properties","targetWWNs","items","type","string"),
-    input("properties","targetWWNs","type","array").
-schema("AzureDiskVolumeSource") :-
-    input("properties","readOnly","type","boolean"),
-    input("properties","fsType","type","string"),
-    input("type","object"),
-    input("properties","kind","nullable",true),
-    input("properties","kind","type","string"),
-    input("properties","readOnly","nullable",true),
-    input("properties","fsType","nullable",true),
-    input("properties","cachingMode","nullable",true),
-    input("properties","cachingMode","type","string"),
-    input("properties","diskURI","type","string"),
-    input("properties","diskName","type","string"),
-    input("required",1,"diskURI"),
-    input("required",0,"diskName").
-schema("DownwardAPIVolumeSource") :-
-    input("type","object"),
-    input("properties","items","type","array"),
-    input("properties","defaultMode","nullable",true),
-    input("properties","defaultMode","maximum","int(\"2147483647\")"),
-    input("properties","defaultMode","minimum","int(\"-2147483648\")"),
-    input("properties","defaultMode","type","integer"),
-    input("properties","items","items","$ref","#/components/schemas/DownwardAPIVolumeFile").
-schema("ContainerState") :-
-    input("type","object"),
-    input("properties","terminated","nullable",true),
-    input("properties","terminated","allOf",0,"$ref","#/components/schemas/ContainerStateTerminated"),
-    input("properties","terminated","type","object"),
-    input("properties","running","nullable",true),
-    input("properties","running","allOf",0,"$ref","#/components/schemas/ContainerStateRunning"),
-    input("properties","running","type","object"),
-    input("properties","waiting","nullable",true),
-    input("properties","waiting","allOf",0,"$ref","#/components/schemas/ContainerStateWaiting"),
-    input("properties","waiting","type","object").
-schema("ClaimSource") :-
-    input("type","object"),
-    input("properties","resourceClaimTemplateName","nullable",true),
-    input("properties","resourceClaimTemplateName","type","string"),
-    input("properties","resourceClaimName","nullable",true),
-    input("properties","resourceClaimName","type","string").
-schema("VolumeMount") :-
-    input("properties","readOnly","type","boolean"),
-    input("type","object"),
-    input("properties","name","type","string"),
-    input("required",0,"name"),
-    input("properties","subPathExpr","type","string"),
-    input("properties","mountPropagation","nullable",true),
-    input("properties","mountPropagation","type","string"),
-    input("properties","subPath","type","string"),
-    input("properties","mountPath","type","string"),
-    input("properties","recursiveReadOnly","nullable",true),
-    input("properties","recursiveReadOnly","type","string"),
-    input("required",1,"mountPath").
-schema("Toleration") :-
-    input("type","object"),
-    input("properties","key","type","string"),
-    input("properties","value","type","string"),
-    input("properties","tolerationSeconds","nullable",true),
-    input("properties","tolerationSeconds","maximum","int(\"9223372036854775807\")"),
-    input("properties","tolerationSeconds","minimum","int(\"-9223372036854775808\")"),
-    input("properties","tolerationSeconds","type","integer"),
-    input("properties","effect","$ref","#/components/schemas/TaintEffect"),
-    input("properties","operator","$ref","#/components/schemas/TolerationOperator").
 schema("SeccompProfile") :-
     input("type","object"),
     input("properties","localhostProfile","nullable",true),
@@ -845,6 +880,10 @@ schema("ISCSIVolumeSource") :-
     input("required",2,"lun"),
     input("required",1,"iqn"),
     input("required",0,"targetPortal").
+schema("EphemeralContainer") :-
+    input("type","object"),
+    input("allOf",0,"$ref","#/components/schemas/EphemeralContainerCommon"),
+    input("properties","targetContainerName","type","string").
 schema("GRPCAction") :-
     input("type","object"),
     input("properties","service","nullable",true),
@@ -852,10 +891,6 @@ schema("GRPCAction") :-
     input("properties","port","format","int32"),
     input("properties","port","type","integer"),
     input("required",0,"port").
-schema("EphemeralContainer") :-
-    input("type","object"),
-    input("allOf",0,"$ref","#/components/schemas/EphemeralContainerCommon"),
-    input("properties","targetContainerName","type","string").
 schema("ConfigMapVolumeSource") :-
     input("type","object"),
     input("properties","optional","nullable",true),
@@ -891,194 +926,47 @@ schema("ContainerStatus") :-
     input("required",3,"image"),
     input("required",2,"restartCount"),
     input("required",1,"ready").
-schema("PortworxVolumeSource") :-
-    input("properties","readOnly","type","boolean"),
-    input("properties","fsType","type","string"),
-    input("properties","volumeID","type","string"),
-    input("required",0,"volumeID"),
-    input("type","object").
-schema("VsphereVirtualDiskVolumeSource") :-
-    input("properties","fsType","type","string"),
+schema("SecretVolumeSource") :-
     input("type","object"),
-    input("properties","storagePolicyID","type","string"),
-    input("properties","storagePolicyName","type","string"),
-    input("properties","volumePath","type","string"),
-    input("required",0,"volumePath").
-schema("Volume") :-
-    input("type","object"),
-    input("properties","name","type","string"),
-    input("allOf",1,"required",0,"name"),
-    input("allOf",0,"$ref","#/components/schemas/VolumeSource").
-schema("SleepAction") :-
-    input("type","object"),
-    input("properties","seconds","format","int64"),
-    input("properties","seconds","type","integer"),
-    input("required",0,"seconds").
-schema("ResourceList") :-
-    input("type","object"),
-    input("additionalProperties","$ref","#/components/schemas/Quantity").
-schema("ObjectFieldSelector") :-
-    input("type","object"),
-    input("properties","apiVersion","type","string"),
-    input("properties","fieldPath","type","string"),
-    input("required",0,"fieldPath").
-schema("PodReadinessGate") :-
-    input("type","object"),
-    input("properties","conditionType","$ref","#/components/schemas/PodConditionType"),
-    input("required",0,"conditionType").
-schema("Pod0") :-
-    input("type","object"),
-    input("properties","kind","type","string"),
-    input("properties","apiVersion","type","string"),
-    input("allOf",1,"required",3,"spec"),
-    input("allOf",1,"required",2,"metadata"),
-    input("allOf",1,"required",1,"kind"),
-    input("allOf",1,"required",0,"apiVersion"),
-    input("allOf",0,"$ref","#/components/schemas/Pod"),
-    input("properties","spec","properties","containers","default",0,"ports",0,"containerPort","int(\"8080\")"),
-    input("properties","spec","properties","containers","default",0,"image","apachepulsar/pulsar:latest"),
-    input("properties","spec","properties","containers","default",0,"name","pulsar-admin"),
-    input("properties","spec","properties","containers","items",0,"properties","ports","default",0,"containerPort","int(\"8080\")"),
-    input("properties","spec","properties","containers","items",0,"properties","ports","items",0,"properties","containerPort","enum",0,"int(\"8080\")"),
-    input("properties","spec","properties","containers","items",0,"properties","ports","items",0,"properties","containerPort","type","integer"),
-    input("properties","spec","properties","containers","items",0,"properties","ports","items",0,"required",0,"containerPort"),
-    input("properties","spec","properties","containers","items",0,"properties","ports","items",0,"type","object"),
-    input("properties","spec","properties","containers","items",0,"properties","ports","type","array"),
-    input("properties","spec","properties","containers","items",0,"properties","image","enum",0,"apachepulsar/pulsar:latest"),
-    input("properties","spec","properties","containers","items",0,"properties","image","type","string"),
-    input("properties","spec","properties","containers","items",0,"properties","name","enum",0,"pulsar-admin"),
-    input("properties","spec","properties","containers","items",0,"properties","name","type","string"),
-    input("properties","spec","properties","containers","items",0,"required",2,"ports"),
-    input("properties","spec","properties","containers","items",0,"required",1,"image"),
-    input("properties","spec","properties","containers","items",0,"required",0,"name"),
-    input("properties","spec","properties","containers","items",0,"type","object"),
-    input("properties","spec","properties","containers","type","array"),
-    input("properties","spec","required",0,"containers"),
-    input("properties","spec","type","object"),
-    input("properties","metadata","properties","name","enum",0,"pulsar-admin"),
-    input("properties","metadata","properties","name","type","string"),
-    input("properties","metadata","required",0,"name"),
-    input("properties","metadata","type","object"),
-    input("properties","kind","enum",0,"Pod"),
-    input("properties","apiVersion","enum",0,"v1").
-schema("Lifecycle") :-
-    input("type","object"),
-    input("properties","preStop","nullable",true),
-    input("properties","preStop","allOf",0,"$ref","#/components/schemas/LifecycleHandler"),
-    input("properties","preStop","type","object"),
-    input("properties","postStart","nullable",true),
-    input("properties","postStart","allOf",0,"$ref","#/components/schemas/LifecycleHandler"),
-    input("properties","postStart","type","object").
-schema("HostAlias") :-
-    input("type","object"),
-    input("properties","hostnames","items","type","string"),
-    input("properties","hostnames","type","array"),
-    input("properties","ip","type","string").
-schema("FlexVolumeSource") :-
-    input("properties","readOnly","type","boolean"),
-    input("properties","fsType","type","string"),
-    input("type","object"),
-    input("properties","driver","type","string"),
-    input("required",0,"driver"),
-    input("properties","secretRef","nullable",true),
-    input("properties","secretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("properties","secretRef","type","object"),
-    input("properties","options","additionalProperties","type","string"),
-    input("properties","options","type","object").
-schema("CSIVolumeSource") :-
-    input("properties","readOnly","type","boolean"),
-    input("properties","fsType","type","string"),
-    input("type","object"),
-    input("properties","readOnly","nullable",true),
-    input("properties","fsType","nullable",true),
-    input("properties","nodePublishSecretRef","nullable",true),
-    input("properties","nodePublishSecretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("properties","nodePublishSecretRef","type","object"),
-    input("properties","volumeAttributes","additionalProperties","type","string"),
-    input("properties","volumeAttributes","type","object"),
-    input("properties","driver","type","string"),
-    input("required",0,"driver").
-schema("EnvFromSource") :-
-    input("type","object"),
-    input("properties","secretRef","nullable",true),
-    input("properties","secretRef","type","object"),
-    input("properties","secretRef","allOf",0,"$ref","#/components/schemas/SecretEnvSource"),
-    input("properties","configMapRef","nullable",true),
-    input("properties","configMapRef","allOf",0,"$ref","#/components/schemas/ConfigMapEnvSource"),
-    input("properties","configMapRef","type","object"),
-    input("properties","prefix","type","string").
-schema("ContainerStateRunning") :-
-    input("type","object"),
-    input("properties","startedAt","$ref","#/components/schemas/Time").
-schema("SecretEnvSource") :-
-    input("type","object"),
+    input("properties","secretName","type","string"),
     input("properties","optional","nullable",true),
     input("properties","optional","type","boolean"),
-    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference").
-schema("ConfigMapEnvSource") :-
-    input("type","object"),
-    input("properties","optional","nullable",true),
-    input("properties","optional","type","boolean"),
-    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference").
+    input("properties","items","items","$ref","#/components/schemas/KeyToPath"),
+    input("properties","items","type","array"),
+    input("properties","defaultMode","nullable",true),
+    input("properties","defaultMode","maximum","int(\"2147483647\")"),
+    input("properties","defaultMode","minimum","int(\"-2147483648\")"),
+    input("properties","defaultMode","type","integer").
 schema("VolumeResourceRequirements") :-
     input("type","object"),
     input("properties","requests","$ref","#/components/schemas/ResourceList"),
     input("properties","limits","$ref","#/components/schemas/ResourceList").
-schema("TypeMeta") :-
+schema("TypedLocalObjectReference") :-
     input("type","object"),
     input("properties","kind","type","string"),
-    input("properties","apiVersion","type","string").
-schema("PersistentVolumeClaimSpec") :-
+    input("properties","name","type","string"),
+    input("properties","apiGroup","nullable",true),
+    input("properties","apiGroup","type","string"),
+    input("required",1,"name"),
+    input("required",0,"kind").
+schema("PersistentVolumeClaimTemplate") :-
     input("type","object"),
-    input("properties","volumeAttributesClassName","nullable",true),
-    input("properties","volumeAttributesClassName","type","string"),
-    input("properties","dataSourceRef","nullable",true),
-    input("properties","dataSourceRef","allOf",0,"$ref","#/components/schemas/TypedObjectReference"),
-    input("properties","dataSourceRef","type","object"),
-    input("properties","dataSource","nullable",true),
-    input("properties","dataSource","allOf",0,"$ref","#/components/schemas/TypedLocalObjectReference"),
-    input("properties","dataSource","type","object"),
-    input("properties","volumeMode","nullable",true),
-    input("properties","volumeMode","type","string"),
-    input("properties","storageClassName","nullable",true),
-    input("properties","storageClassName","type","string"),
-    input("properties","volumeName","type","string"),
-    input("properties","resources","$ref","#/components/schemas/VolumeResourceRequirements"),
-    input("properties","selector","nullable",true),
-    input("properties","selector","allOf",0,"$ref","#/components/schemas/LabelSelector"),
-    input("properties","selector","type","object"),
-    input("properties","accessModes","items","$ref","#/components/schemas/PersistentVolumeAccessMode"),
-    input("properties","accessModes","type","array").
-schema("PodCondition") :-
+    input("properties","spec","$ref","#/components/schemas/PersistentVolumeClaimSpec"),
+    input("properties","metadata","$ref","#/components/schemas/ObjectMeta"),
+    input("required",0,"spec").
+schema("NodeAffinity") :-
     input("type","object"),
-    input("required",0,"type"),
-    input("properties","message","type","string"),
-    input("properties","reason","type","string"),
-    input("properties","lastTransitionTime","$ref","#/components/schemas/Time"),
-    input("properties","lastProbeTime","$ref","#/components/schemas/Time"),
-    input("properties","status","$ref","#/components/schemas/ConditionStatus"),
-    input("properties","type","$ref","#/components/schemas/PodConditionType"),
-    input("required",1,"status").
-schema("NFSVolumeSource") :-
-    input("properties","readOnly","type","boolean"),
-    input("type","object"),
-    input("properties","path","type","string"),
-    input("required",1,"path"),
-    input("properties","server","type","string"),
-    input("required",0,"server").
+    input("properties","preferredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/PreferredSchedulingTerm"),
+    input("properties","preferredDuringSchedulingIgnoredDuringExecution","type","array"),
+    input("properties","requiredDuringSchedulingIgnoredDuringExecution","nullable",true),
+    input("properties","requiredDuringSchedulingIgnoredDuringExecution","allOf",0,"$ref","#/components/schemas/NodeSelector"),
+    input("properties","requiredDuringSchedulingIgnoredDuringExecution","type","object").
 schema("Instance") :-
     input("type","object"),
     input("properties","objects","properties","obj0","$ref","#/components/schemas/Pod0"),
     input("properties","objects","required",0,"obj0"),
     input("properties","objects","type","object"),
     input("required",0,"objects").
-schema("GlusterfsVolumeSource") :-
-    input("properties","readOnly","type","boolean"),
-    input("type","object"),
-    input("properties","path","type","string"),
-    input("properties","endpoints","type","string"),
-    input("required",1,"path"),
-    input("required",0,"endpoints").
 schema("EphemeralContainerCommon") :-
     input("type","object"),
     input("properties","name","type","string"),
@@ -1125,32 +1013,17 @@ schema("EphemeralContainerCommon") :-
     input("properties","command","type","array"),
     input("properties","image","type","string"),
     input("required",0,"name").
-schema("SecretVolumeSource") :-
+schema("GitRepoVolumeSource") :-
     input("type","object"),
-    input("properties","secretName","type","string"),
-    input("properties","optional","nullable",true),
-    input("properties","optional","type","boolean"),
-    input("properties","items","items","$ref","#/components/schemas/KeyToPath"),
-    input("properties","items","type","array"),
-    input("properties","defaultMode","nullable",true),
-    input("properties","defaultMode","maximum","int(\"2147483647\")"),
-    input("properties","defaultMode","minimum","int(\"-2147483648\")"),
-    input("properties","defaultMode","type","integer").
-schema("RBDVolumeSource") :-
-    input("properties","readOnly","type","boolean"),
-    input("properties","fsType","type","string"),
+    input("properties","directory","type","string"),
+    input("properties","revision","type","string"),
+    input("properties","repository","type","string"),
+    input("required",0,"repository").
+schema("EphemeralVolumeSource") :-
     input("type","object"),
-    input("properties","secretRef","nullable",true),
-    input("properties","secretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("properties","secretRef","type","object"),
-    input("properties","user","type","string"),
-    input("properties","monitors","items","type","string"),
-    input("properties","monitors","type","array"),
-    input("required",0,"monitors"),
-    input("properties","image","type","string"),
-    input("properties","keyring","type","string"),
-    input("properties","pool","type","string"),
-    input("required",1,"image").
+    input("properties","volumeClaimTemplate","nullable",true),
+    input("properties","volumeClaimTemplate","allOf",0,"$ref","#/components/schemas/PersistentVolumeClaimTemplate"),
+    input("properties","volumeClaimTemplate","type","object").
 schema("PodSecurityContext") :-
     input("type","object"),
     input("properties","appArmorProfile","nullable",true),
@@ -1186,25 +1059,43 @@ schema("PodSecurityContext") :-
     input("properties","seLinuxOptions","nullable",true),
     input("properties","seLinuxOptions","allOf",0,"$ref","#/components/schemas/SELinuxOptions"),
     input("properties","seLinuxOptions","type","object").
-schema("DownwardAPIVolumeFile") :-
+schema("QuobyteVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
     input("type","object"),
-    input("properties","path","type","string"),
-    input("required",0,"path"),
-    input("properties","mode","nullable",true),
-    input("properties","mode","maximum","int(\"2147483647\")"),
-    input("properties","mode","minimum","int(\"-2147483648\")"),
-    input("properties","mode","type","integer"),
-    input("properties","resourceFieldRef","nullable",true),
-    input("properties","resourceFieldRef","allOf",0,"$ref","#/components/schemas/ResourceFieldSelector"),
-    input("properties","resourceFieldRef","type","object"),
-    input("properties","fieldRef","nullable",true),
-    input("properties","fieldRef","allOf",0,"$ref","#/components/schemas/ObjectFieldSelector"),
-    input("properties","fieldRef","type","object").
-schema("EphemeralVolumeSource") :-
+    input("properties","user","type","string"),
+    input("properties","tenant","type","string"),
+    input("properties","group","type","string"),
+    input("properties","volume","type","string"),
+    input("properties","registry","type","string"),
+    input("required",1,"volume"),
+    input("required",0,"registry").
+schema("PodCondition") :-
     input("type","object"),
-    input("properties","volumeClaimTemplate","nullable",true),
-    input("properties","volumeClaimTemplate","allOf",0,"$ref","#/components/schemas/PersistentVolumeClaimTemplate"),
-    input("properties","volumeClaimTemplate","type","object").
+    input("required",0,"type"),
+    input("properties","message","type","string"),
+    input("properties","reason","type","string"),
+    input("properties","lastTransitionTime","$ref","#/components/schemas/Time"),
+    input("properties","lastProbeTime","$ref","#/components/schemas/Time"),
+    input("properties","status","$ref","#/components/schemas/ConditionStatus"),
+    input("properties","type","$ref","#/components/schemas/PodConditionType"),
+    input("required",1,"status").
+schema("DownwardAPIProjection") :-
+    input("type","object"),
+    input("properties","items","type","array"),
+    input("properties","items","items","$ref","#/components/schemas/DownwardAPIVolumeFile").
+schema("CSIVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
+    input("properties","fsType","type","string"),
+    input("type","object"),
+    input("properties","readOnly","nullable",true),
+    input("properties","fsType","nullable",true),
+    input("properties","nodePublishSecretRef","nullable",true),
+    input("properties","nodePublishSecretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
+    input("properties","nodePublishSecretRef","type","object"),
+    input("properties","volumeAttributes","additionalProperties","type","string"),
+    input("properties","volumeAttributes","type","object"),
+    input("properties","driver","type","string"),
+    input("required",0,"driver").
 schema("Container") :-
     input("type","object"),
     input("properties","name","type","string"),
@@ -1251,90 +1142,118 @@ schema("Container") :-
     input("properties","command","type","array"),
     input("properties","image","type","string"),
     input("required",0,"name").
-schema("CinderVolumeSource") :-
+schema("CephFSVolumeSource") :-
     input("properties","readOnly","type","boolean"),
-    input("properties","fsType","type","string"),
-    input("properties","volumeID","type","string"),
-    input("required",0,"volumeID"),
     input("type","object"),
     input("properties","secretRef","nullable",true),
     input("properties","secretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("properties","secretRef","type","object").
-schema("AzureFileVolumeSource") :-
+    input("properties","secretRef","type","object"),
+    input("properties","secretFile","type","string"),
+    input("properties","user","type","string"),
+    input("properties","path","type","string"),
+    input("properties","monitors","items","type","string"),
+    input("properties","monitors","type","array"),
+    input("required",0,"monitors").
+schema("WindowsSecurityContextOptions") :-
+    input("type","object"),
+    input("properties","hostProcess","nullable",true),
+    input("properties","hostProcess","type","boolean"),
+    input("properties","runAsUserName","nullable",true),
+    input("properties","runAsUserName","type","string"),
+    input("properties","gmsaCredentialSpec","nullable",true),
+    input("properties","gmsaCredentialSpec","type","string"),
+    input("properties","gmsaCredentialSpecName","nullable",true),
+    input("properties","gmsaCredentialSpecName","type","string").
+schema("Probe") :-
+    input("type","object"),
+    input("properties","terminationGracePeriodSeconds","nullable",true),
+    input("properties","terminationGracePeriodSeconds","maximum","int(\"9223372036854775807\")"),
+    input("properties","terminationGracePeriodSeconds","minimum","int(\"-9223372036854775808\")"),
+    input("properties","terminationGracePeriodSeconds","type","integer"),
+    input("allOf",0,"$ref","#/components/schemas/ProbeHandler"),
+    input("properties","failureThreshold","format","int32"),
+    input("properties","failureThreshold","type","integer"),
+    input("properties","successThreshold","format","int32"),
+    input("properties","successThreshold","type","integer"),
+    input("properties","periodSeconds","format","int32"),
+    input("properties","periodSeconds","type","integer"),
+    input("properties","timeoutSeconds","format","int32"),
+    input("properties","timeoutSeconds","type","integer"),
+    input("properties","initialDelaySeconds","format","int32"),
+    input("properties","initialDelaySeconds","type","integer").
+schema("ResourceRequirements") :-
+    input("type","object"),
+    input("properties","claims","items","$ref","#/components/schemas/ResourceClaim"),
+    input("properties","claims","type","array"),
+    input("properties","requests","$ref","#/components/schemas/ResourceList"),
+    input("properties","limits","$ref","#/components/schemas/ResourceList").
+schema("PodResourceClaim") :-
+    input("type","object"),
+    input("properties","name","type","string"),
+    input("required",0,"name"),
+    input("properties","source","$ref","#/components/schemas/ClaimSource").
+schema("Pod0") :-
+    input("type","object"),
+    input("properties","kind","type","string"),
+    input("properties","apiVersion","type","string"),
+    input("allOf",1,"required",3,"spec"),
+    input("allOf",1,"required",2,"metadata"),
+    input("allOf",1,"required",1,"kind"),
+    input("allOf",1,"required",0,"apiVersion"),
+    input("allOf",0,"$ref","#/components/schemas/Pod"),
+    input("properties","spec","properties","containers","default",0,"command",2,"echo Hello,
+    World!"),
+    input("properties","spec","properties","containers","default",0,"command",1,"-c"),
+    input("properties","spec","properties","containers","default",0,"command",0,"/bin/sh"),
+    input("properties","spec","properties","containers","default",0,"image","nginx"),
+    input("properties","spec","properties","containers","default",0,"name","example-container"),
+    input("properties","spec","properties","containers","items",0,"properties","command","default",2,"echo Hello,
+    World!"),
+    input("properties","spec","properties","containers","items",0,"properties","command","default",1,"-c"),
+    input("properties","spec","properties","containers","items",0,"properties","command","default",0,"/bin/sh"),
+    input("properties","spec","properties","containers","items",0,"properties","command","enum",0,2,"echo Hello,
+    World!"),
+    input("properties","spec","properties","containers","items",0,"properties","command","enum",0,1,"-c"),
+    input("properties","spec","properties","containers","items",0,"properties","command","enum",0,0,"/bin/sh"),
+    input("properties","spec","properties","containers","items",0,"properties","command","items",2,"enum",0,"echo Hello,
+    World!"),
+    input("properties","spec","properties","containers","items",0,"properties","command","items",2,"type","string"),
+    input("properties","spec","properties","containers","items",0,"properties","command","items",1,"enum",0,"-c"),
+    input("properties","spec","properties","containers","items",0,"properties","command","items",1,"type","string"),
+    input("properties","spec","properties","containers","items",0,"properties","command","items",0,"enum",0,"/bin/sh"),
+    input("properties","spec","properties","containers","items",0,"properties","command","items",0,"type","string"),
+    input("properties","spec","properties","containers","items",0,"properties","command","type","array"),
+    input("properties","spec","properties","containers","items",0,"properties","image","enum",0,"nginx"),
+    input("properties","spec","properties","containers","items",0,"properties","image","type","string"),
+    input("properties","spec","properties","containers","items",0,"properties","name","enum",0,"example-container"),
+    input("properties","spec","properties","containers","items",0,"properties","name","type","string"),
+    input("properties","spec","properties","containers","items",0,"required",2,"command"),
+    input("properties","spec","properties","containers","items",0,"required",1,"image"),
+    input("properties","spec","properties","containers","items",0,"required",0,"name"),
+    input("properties","spec","properties","containers","items",0,"type","object"),
+    input("properties","spec","properties","containers","type","array"),
+    input("properties","spec","required",0,"containers"),
+    input("properties","spec","type","object"),
+    input("properties","metadata","properties","name","enum",0,"example-pod"),
+    input("properties","metadata","properties","name","type","string"),
+    input("properties","metadata","required",0,"name"),
+    input("properties","metadata","type","object"),
+    input("properties","kind","enum",0,"Pod"),
+    input("properties","apiVersion","enum",0,"v1").
+schema("VolumeMount") :-
     input("properties","readOnly","type","boolean"),
     input("type","object"),
-    input("properties","shareName","type","string"),
-    input("properties","secretName","type","string"),
-    input("required",1,"shareName"),
-    input("required",0,"secretName").
-schema("VolumeProjection") :-
-    input("type","object"),
-    input("properties","clusterTrustBundle","nullable",true),
-    input("properties","clusterTrustBundle","allOf",0,"$ref","#/components/schemas/ClusterTrustBundleProjection"),
-    input("properties","clusterTrustBundle","type","object"),
-    input("properties","serviceAccountToken","nullable",true),
-    input("properties","serviceAccountToken","allOf",0,"$ref","#/components/schemas/ServiceAccountTokenProjection"),
-    input("properties","serviceAccountToken","type","object"),
-    input("properties","configMap","nullable",true),
-    input("properties","configMap","allOf",0,"$ref","#/components/schemas/ConfigMapProjection"),
-    input("properties","configMap","type","object"),
-    input("properties","downwardAPI","nullable",true),
-    input("properties","downwardAPI","allOf",0,"$ref","#/components/schemas/DownwardAPIProjection"),
-    input("properties","downwardAPI","type","object"),
-    input("properties","secret","nullable",true),
-    input("properties","secret","allOf",0,"$ref","#/components/schemas/SecretProjection"),
-    input("properties","secret","type","object").
-schema("PodAntiAffinity") :-
-    input("type","object"),
-    input("properties","preferredDuringSchedulingIgnoredDuringExecution","type","array"),
-    input("properties","preferredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/WeightedPodAffinityTerm"),
-    input("properties","requiredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/PodAffinityTerm"),
-    input("properties","requiredDuringSchedulingIgnoredDuringExecution","type","array").
-schema("PodResourceClaimStatus") :-
-    input("type","object"),
-    input("properties","resourceClaimName","nullable",true),
-    input("properties","resourceClaimName","type","string"),
     input("properties","name","type","string"),
-    input("required",0,"name").
-schema("ObjectMeta") :-
-    input("type","object"),
-    input("properties","name","type","string"),
-    input("properties","managedFields","items","$ref","#/components/schemas/ManagedFieldsEntry"),
-    input("properties","managedFields","type","array"),
-    input("properties","finalizers","items","type","string"),
-    input("properties","finalizers","type","array"),
-    input("properties","ownerReferences","items","$ref","#/components/schemas/OwnerReference"),
-    input("properties","ownerReferences","type","array"),
-    input("properties","annotations","additionalProperties","type","string"),
-    input("properties","annotations","type","object"),
-    input("properties","labels","additionalProperties","type","string"),
-    input("properties","labels","type","object"),
-    input("properties","deletionGracePeriodSeconds","nullable",true),
-    input("properties","deletionGracePeriodSeconds","maximum","int(\"9223372036854775807\")"),
-    input("properties","deletionGracePeriodSeconds","minimum","int(\"-9223372036854775808\")"),
-    input("properties","deletionGracePeriodSeconds","type","integer"),
-    input("properties","deletionTimestamp","nullable",true),
-    input("properties","deletionTimestamp","allOf",0,"$ref","#/components/schemas/Time"),
-    input("properties","creationTimestamp","$ref","#/components/schemas/Time"),
-    input("properties","generation","format","int64"),
-    input("properties","generation","type","integer"),
-    input("properties","resourceVersion","type","string"),
-    input("properties","uid","$ref","#/components/schemas/UID"),
-    input("properties","selfLink","type","string"),
-    input("properties","namespace","type","string"),
-    input("properties","generateName","type","string").
-schema("PodAffinity") :-
-    input("type","object"),
-    input("properties","preferredDuringSchedulingIgnoredDuringExecution","type","array"),
-    input("properties","preferredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/WeightedPodAffinityTerm"),
-    input("properties","requiredDuringSchedulingIgnoredDuringExecution","items","$ref","#/components/schemas/PodAffinityTerm"),
-    input("properties","requiredDuringSchedulingIgnoredDuringExecution","type","array").
-schema("TCPSocketAction") :-
-    input("type","object"),
-    input("required",0,"port"),
-    input("properties","host","type","string"),
-    input("properties","port","$ref","#/components/schemas/IntOrString").
-schema("ScaleIOVolumeSource") :-
+    input("required",0,"name"),
+    input("properties","subPathExpr","type","string"),
+    input("properties","mountPropagation","nullable",true),
+    input("properties","mountPropagation","type","string"),
+    input("properties","subPath","type","string"),
+    input("properties","mountPath","type","string"),
+    input("properties","recursiveReadOnly","nullable",true),
+    input("properties","recursiveReadOnly","type","string"),
+    input("required",1,"mountPath").
+schema("StorageOSVolumeSource") :-
     input("properties","readOnly","type","boolean"),
     input("properties","fsType","type","string"),
     input("type","object"),
@@ -1342,16 +1261,17 @@ schema("ScaleIOVolumeSource") :-
     input("properties","secretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
     input("properties","secretRef","type","object"),
     input("properties","volumeName","type","string"),
-    input("properties","storageMode","type","string"),
-    input("properties","storagePool","type","string"),
-    input("properties","protectionDomain","type","string"),
-    input("properties","sslEnabled","type","boolean"),
-    input("properties","system","type","string"),
-    input("properties","gateway","type","string"),
-    input("required",1,"system"),
-    input("required",0,"gateway").
-schema("ProbeHandler") :-
+    input("properties","volumeNamespace","type","string").
+schema("EmptyDirVolumeSource") :-
     input("type","object"),
+    input("properties","sizeLimit","nullable",true),
+    input("properties","sizeLimit","allOf",0,"$ref","#/components/schemas/Quantity"),
+    input("properties","medium","$ref","#/components/schemas/StorageMedium").
+schema("LifecycleHandler") :-
+    input("type","object"),
+    input("properties","sleep","nullable",true),
+    input("properties","sleep","allOf",0,"$ref","#/components/schemas/SleepAction"),
+    input("properties","sleep","type","object"),
     input("properties","tcpSocket","nullable",true),
     input("properties","tcpSocket","allOf",0,"$ref","#/components/schemas/TCPSocketAction"),
     input("properties","tcpSocket","type","object"),
@@ -1360,53 +1280,146 @@ schema("ProbeHandler") :-
     input("properties","httpGet","type","object"),
     input("properties","exec","nullable",true),
     input("properties","exec","allOf",0,"$ref","#/components/schemas/ExecAction"),
-    input("properties","exec","type","object"),
-    input("properties","grpc","nullable",true),
-    input("properties","grpc","allOf",0,"$ref","#/components/schemas/GRPCAction"),
-    input("properties","grpc","type","object").
-schema("LocalObjectReference") :-
+    input("properties","exec","type","object").
+schema("HostAlias") :-
     input("type","object"),
-    input("properties","name","type","string").
-schema("HostPathVolumeSource") :-
-    input("type","object"),
-    input("properties","path","type","string"),
-    input("required",0,"path"),
-    input("properties","type","nullable",true),
-    input("properties","type","type","string").
-schema("GCEPersistentDiskVolumeSource") :-
+    input("properties","hostnames","items","type","string"),
+    input("properties","hostnames","type","array"),
+    input("properties","ip","type","string").
+schema("FlexVolumeSource") :-
     input("properties","readOnly","type","boolean"),
-    input("properties","partition","format","int32"),
-    input("properties","partition","type","integer"),
     input("properties","fsType","type","string"),
     input("type","object"),
-    input("properties","pdName","type","string"),
-    input("required",0,"pdName").
-schema("ContainerStateWaiting") :-
+    input("properties","driver","type","string"),
+    input("required",0,"driver"),
+    input("properties","secretRef","nullable",true),
+    input("properties","secretRef","allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
+    input("properties","secretRef","type","object"),
+    input("properties","options","additionalProperties","type","string"),
+    input("properties","options","type","object").
+schema("ObjectFieldSelector") :-
     input("type","object"),
-    input("properties","message","type","string"),
-    input("properties","reason","type","string").
-schema("EnvVar") :-
+    input("properties","apiVersion","type","string"),
+    input("properties","fieldPath","type","string"),
+    input("required",0,"fieldPath").
+schema("ContainerState") :-
+    input("type","object"),
+    input("properties","terminated","nullable",true),
+    input("properties","terminated","allOf",0,"$ref","#/components/schemas/ContainerStateTerminated"),
+    input("properties","terminated","type","object"),
+    input("properties","running","nullable",true),
+    input("properties","running","allOf",0,"$ref","#/components/schemas/ContainerStateRunning"),
+    input("properties","running","type","object"),
+    input("properties","waiting","nullable",true),
+    input("properties","waiting","allOf",0,"$ref","#/components/schemas/ContainerStateWaiting"),
+    input("properties","waiting","type","object").
+schema("ClusterTrustBundleProjection") :-
+    input("type","object"),
+    input("properties","path","type","string"),
+    input("properties","optional","nullable",true),
+    input("properties","optional","type","boolean"),
+    input("properties","labelSelector","nullable",true),
+    input("properties","labelSelector","allOf",0,"$ref","#/components/schemas/LabelSelector"),
+    input("properties","labelSelector","type","object"),
+    input("properties","signerName","nullable",true),
+    input("properties","signerName","type","string"),
+    input("properties","name","nullable",true),
+    input("properties","name","type","string"),
+    input("required",0,"path").
+schema("AzureFileVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
+    input("type","object"),
+    input("properties","shareName","type","string"),
+    input("properties","secretName","type","string"),
+    input("required",1,"shareName"),
+    input("required",0,"secretName").
+schema("VsphereVirtualDiskVolumeSource") :-
+    input("properties","fsType","type","string"),
+    input("type","object"),
+    input("properties","storagePolicyID","type","string"),
+    input("properties","storagePolicyName","type","string"),
+    input("properties","volumePath","type","string"),
+    input("required",0,"volumePath").
+schema("PodOS") :-
+    input("type","object"),
+    input("required",0,"name"),
+    input("properties","name","$ref","#/components/schemas/OSName").
+schema("SleepAction") :-
+    input("type","object"),
+    input("properties","seconds","format","int64"),
+    input("properties","seconds","type","integer"),
+    input("required",0,"seconds").
+schema("Volume") :-
+    input("type","object"),
+    input("properties","name","type","string"),
+    input("allOf",1,"required",0,"name"),
+    input("allOf",0,"$ref","#/components/schemas/VolumeSource").
+schema("ResourceList") :-
+    input("type","object"),
+    input("additionalProperties","$ref","#/components/schemas/Quantity").
+schema("PortworxVolumeSource") :-
+    input("properties","readOnly","type","boolean"),
+    input("properties","fsType","type","string"),
+    input("properties","volumeID","type","string"),
+    input("required",0,"volumeID"),
+    input("type","object").
+schema("Sysctl") :-
     input("type","object"),
     input("properties","name","type","string"),
     input("required",0,"name"),
-    input("properties","valueFrom","nullable",true),
-    input("properties","valueFrom","allOf",0,"$ref","#/components/schemas/EnvVarSource"),
-    input("properties","valueFrom","type","object"),
-    input("properties","value","type","string").
-schema("SecretProjection") :-
+    input("properties","value","type","string"),
+    input("required",1,"value").
+schema("HTTPHeader") :-
+    input("type","object"),
+    input("properties","name","type","string"),
+    input("required",0,"name"),
+    input("properties","value","type","string"),
+    input("required",1,"value").
+schema("PhotonPersistentDiskVolumeSource") :-
+    input("properties","fsType","type","string"),
+    input("type","object"),
+    input("properties","pdID","type","string"),
+    input("required",0,"pdID").
+schema("NodeSelectorRequirement") :-
+    input("type","object"),
+    input("properties","key","type","string"),
+    input("required",0,"key"),
+    input("properties","values","items","type","string"),
+    input("properties","values","type","array"),
+    input("required",1,"operator"),
+    input("properties","operator","$ref","#/components/schemas/NodeSelectorOperator").
+schema("LabelSelector") :-
+    input("type","object"),
+    input("properties","matchExpressions","items","$ref","#/components/schemas/LabelSelectorRequirement"),
+    input("properties","matchExpressions","type","array"),
+    input("properties","matchLabels","additionalProperties","type","string"),
+    input("properties","matchLabels","type","object").
+schema("EnvFromSource") :-
+    input("type","object"),
+    input("properties","secretRef","nullable",true),
+    input("properties","secretRef","type","object"),
+    input("properties","secretRef","allOf",0,"$ref","#/components/schemas/SecretEnvSource"),
+    input("properties","configMapRef","nullable",true),
+    input("properties","configMapRef","allOf",0,"$ref","#/components/schemas/ConfigMapEnvSource"),
+    input("properties","configMapRef","type","object"),
+    input("properties","prefix","type","string").
+schema("IntOrString").
+schema("Quantity").
+schema("Time").
+schema("FieldsV1").
+schema("ContainerStateRunning") :-
+    input("type","object"),
+    input("properties","startedAt","$ref","#/components/schemas/Time").
+schema("SecretEnvSource") :-
     input("type","object"),
     input("properties","optional","nullable",true),
     input("properties","optional","type","boolean"),
-    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("properties","items","items","$ref","#/components/schemas/KeyToPath"),
-    input("properties","items","type","array").
-schema("ConfigMapProjection") :-
+    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference").
+schema("ConfigMapEnvSource") :-
     input("type","object"),
     input("properties","optional","nullable",true),
     input("properties","optional","type","boolean"),
-    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference"),
-    input("properties","items","items","$ref","#/components/schemas/KeyToPath"),
-    input("properties","items","type","array").
+    input("allOf",0,"$ref","#/components/schemas/LocalObjectReference").
 schema("Capabilities") :-
     input("type","object"),
     input("properties","drop","items","$ref","#/components/schemas/Capability"),
