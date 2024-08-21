@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pulsar-admin
+spec:
+  containers:
+    - image: apachepulsar/pulsar:2.8.0
+      name: pulsar-admin
+      ports:
+        - containerPort: 8080
+
