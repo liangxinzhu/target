@@ -511,19 +511,28 @@ info: {
 	apiVersion?: "v1"
 	kind?:       "Pod"
 	metadata?: {
-		name: "simple-pod"
+		name: "pulsar-admin"
 		...
 	}
-
-	// UPDATE_ME
 	spec?: {
 		containers: [{
-			image: "my-image"
-			name:  "my-container"
+			image: "apachepulsar/pulsar:latest"
+			name:  "pulsar-admin"
+			ports: [{
+				containerPort: 8080 & int
+				...
+			}] | *[{
+				containerPort: 8080
+				...
+			}]
 			...
 		}] | *[{
-			image: "my-image"
-			name:  "my-container"
+			image: "apachepulsar/pulsar:latest"
+			name:  "pulsar-admin"
+			ports: [{
+				containerPort: 8080
+				...
+			}]
 			...
 		}]
 		...

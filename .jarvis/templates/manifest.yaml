@@ -1,9 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: simple-pod
+  name: pulsar-admin
 spec:
   containers:
-    - image: my-image
-      name: my-container
+    - image: apachepulsar/pulsar:latest
+      name: pulsar-admin
+      ports:
+        - containerPort: 8080
 

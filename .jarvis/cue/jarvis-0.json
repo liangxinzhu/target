@@ -1863,7 +1863,7 @@
                         "properties": {
                             "name": {
                                 "enum": [
-                                    "simple-pod"
+                                    "pulsar-admin"
                                 ],
                                 "type": "string"
                             }
@@ -1874,13 +1874,17 @@
                         "type": "object"
                     },
                     "spec": {
-                        "description": "UPDATE_ME",
                         "properties": {
                             "containers": {
                                 "default": [
                                     {
-                                        "image": "my-image",
-                                        "name": "my-container"
+                                        "image": "apachepulsar/pulsar:latest",
+                                        "name": "pulsar-admin",
+                                        "ports": [
+                                            {
+                                                "containerPort": 8080
+                                            }
+                                        ]
                                     }
                                 ],
                                 "items": [
@@ -1888,20 +1892,45 @@
                                         "properties": {
                                             "image": {
                                                 "enum": [
-                                                    "my-image"
+                                                    "apachepulsar/pulsar:latest"
                                                 ],
                                                 "type": "string"
                                             },
                                             "name": {
                                                 "enum": [
-                                                    "my-container"
+                                                    "pulsar-admin"
                                                 ],
                                                 "type": "string"
+                                            },
+                                            "ports": {
+                                                "default": [
+                                                    {
+                                                        "containerPort": 8080
+                                                    }
+                                                ],
+                                                "items": [
+                                                    {
+                                                        "properties": {
+                                                            "containerPort": {
+                                                                "enum": [
+                                                                    8080
+                                                                ],
+                                                                "type": "integer"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "containerPort"
+                                                        ],
+                                                        "type": "object"
+                                                    }
+                                                ],
+                                                "type": "array"
                                             }
                                         },
                                         "required": [
                                             "name",
-                                            "image"
+                                            "image",
+                                            "ports"
                                         ],
                                         "type": "object"
                                     }
