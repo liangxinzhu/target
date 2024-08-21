@@ -6,6 +6,4 @@ spec:
   containers:
     - image: apachepulsar/pulsar:latest
       name: pulsar-admin
-      ports:
-        - containerPort: 8080
 
