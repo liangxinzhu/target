@@ -107,14 +107,20 @@ info: {
 	}
 	spec?: {
 		ports: [{
-			port:     8082 & int
-			protocol: "TCP"
+			port:       80 & int
+			protocol:   "TCP"
+			targetPort: 8082 & int
 			...
 		}] | *[{
-			port:     8082
-			protocol: "TCP"
+			port:       80
+			protocol:   "TCP"
+			targetPort: 8082
 			...
 		}]
+		selector: {
+			app: "argocd"
+			...
+		}
 		...
 	}
 	...
