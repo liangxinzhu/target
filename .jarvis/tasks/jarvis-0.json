@@ -1873,7 +1873,7 @@
                             "name": {
                                 "type": "string",
                                 "enum": [
-                                    "example-pod"
+                                    "simple-pod"
                                 ]
                             }
                         }
@@ -1898,13 +1898,13 @@
                                             "name": {
                                                 "type": "string",
                                                 "enum": [
-                                                    "example-container"
+                                                    "simple-container"
                                                 ]
                                             },
                                             "image": {
                                                 "type": "string",
                                                 "enum": [
-                                                    "nginx"
+                                                    "busybox"
                                                 ]
                                             },
                                             "command": {
@@ -1913,33 +1913,25 @@
                                                     {
                                                         "type": "string",
                                                         "enum": [
-                                                            "/bin/sh"
+                                                            "sleep"
                                                         ]
                                                     },
                                                     {
                                                         "type": "string",
                                                         "enum": [
-                                                            "-c"
-                                                        ]
-                                                    },
-                                                    {
-                                                        "type": "string",
-                                                        "enum": [
-                                                            "echo Hello, World!"
+                                                            "3600"
                                                         ]
                                                     }
                                                 ],
                                                 "enum": [
                                                     [
-                                                        "/bin/sh",
-                                                        "-c",
-                                                        "echo Hello, World!"
+                                                        "sleep",
+                                                        "3600"
                                                     ]
                                                 ],
                                                 "default": [
-                                                    "/bin/sh",
-                                                    "-c",
-                                                    "echo Hello, World!"
+                                                    "sleep",
+                                                    "3600"
                                                 ]
                                             }
                                         }
@@ -1947,12 +1939,11 @@
                                 ],
                                 "default": [
                                     {
-                                        "name": "example-container",
-                                        "image": "nginx",
+                                        "name": "simple-container",
+                                        "image": "busybox",
                                         "command": [
-                                            "/bin/sh",
-                                            "-c",
-                                            "echo Hello, World!"
+                                            "sleep",
+                                            "3600"
                                         ]
                                     }
                                 ]

@@ -852,7 +852,7 @@
   input("properties", "metadata", "type", "object").
   input("properties", "metadata", "required", 0, "name").
   input("properties", "metadata", "properties", "name", "type", "string").
-  input("properties", "metadata", "properties", "name", "enum", 0, "example-pod").
+  input("properties", "metadata", "properties", "name", "enum", 0, "simple-pod").
   input("properties", "spec", "type", "object").
   input("properties", "spec", "required", 0, "containers").
   input("properties", "spec", "properties", "containers", "type", "array").
@@ -861,27 +861,22 @@
   input("properties", "spec", "properties", "containers", "items", 0, "required", 1, "image").
   input("properties", "spec", "properties", "containers", "items", 0, "required", 2, "command").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "type", "string").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "enum", 0, "example-container").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "enum", 0, "simple-container").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "type", "string").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "enum", 0, "nginx").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "enum", 0, "busybox").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "type", "array").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 0, "type", "string").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 0, "enum", 0, "/bin/sh").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 0, "enum", 0, "sleep").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 1, "type", "string").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 1, "enum", 0, "-c").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 2, "type", "string").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 2, "enum", 0, "echo Hello, World!").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 0, "/bin/sh").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 1, "-c").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 2, "echo Hello, World!").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 0, "/bin/sh").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 1, "-c").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 2, "echo Hello, World!").
-  input("properties", "spec", "properties", "containers", "default", 0, "name", "example-container").
-  input("properties", "spec", "properties", "containers", "default", 0, "image", "nginx").
-  input("properties", "spec", "properties", "containers", "default", 0, "command", 0, "/bin/sh").
-  input("properties", "spec", "properties", "containers", "default", 0, "command", 1, "-c").
-  input("properties", "spec", "properties", "containers", "default", 0, "command", 2, "echo Hello, World!").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 1, "enum", 0, "3600").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 0, "sleep").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 1, "3600").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 0, "sleep").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 1, "3600").
+  input("properties", "spec", "properties", "containers", "default", 0, "name", "simple-container").
+  input("properties", "spec", "properties", "containers", "default", 0, "image", "busybox").
+  input("properties", "spec", "properties", "containers", "default", 0, "command", 0, "sleep").
+  input("properties", "spec", "properties", "containers", "default", 0, "command", 1, "3600").
   input("allOf", 0, "$ref", "#/components/schemas/Pod").
   input("allOf", 1, "required", 0, "apiVersion").
   input("allOf", 1, "required", 1, "kind").
@@ -2071,7 +2066,7 @@ input4("type").
 input5("string").
 input4("enum").
 input5(0).
-input6("example-pod").
+input6("simple-pod").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6))).
 input4("containers").
 input3("containers").
@@ -2095,10 +2090,10 @@ input9("string").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8), const(input9))).
 input8("enum").
 input9(0).
-input10("example-container").
+input10("simple-container").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8), const(input9), const(input10))).
 input7("image").
-input10("nginx").
+input10("busybox").
 input7("command").
 input9("array").
 input8("items").
@@ -2107,31 +2102,25 @@ input11("string").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8), const(input9), const(input10), const(input11))).
 input10("enum").
 input11(0).
-input12("/bin/sh").
+input12("sleep").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8), const(input9), const(input10), const(input11), const(input12))).
 input9(1).
-input12("-c").
-input9(2).
-input12("echo Hello, World!").
+input12("3600").
 input10(0).
-input11("/bin/sh").
+input11("sleep").
 input10(1).
-input11("-c").
-input10(2).
-input11("echo Hello, World!").
+input11("3600").
 input8("default").
-input10("/bin/sh").
-input10("-c").
-input10("echo Hello, World!").
+input10("sleep").
+input10("3600").
 input4("default").
 input6("name").
-input7("example-container").
+input7("simple-container").
 input6("image").
-input7("nginx").
+input7("busybox").
 input6("command").
-input8("/bin/sh").
-input8("-c").
-input8("echo Hello, World!").
+input8("sleep").
+input8("3600").
 input3("#/components/schemas/Pod").
 input4("apiVersion").
 input3(1).
@@ -2412,463 +2401,463 @@ input1("runAsUserName").
 input1("hostProcess").
 
 #modeh(schema(const(schema0))).
-schema0("PodAffinityTerm").
+schema0("TolerationOperator").
 
 #modeh(schema(const(schema1))).
-schema1("AzureDiskVolumeSource").
+schema1("HTTPHeader").
 
 #modeh(schema(const(schema2))).
-schema2("SecretProjection").
+schema2("TCPSocketAction").
 
 #modeh(schema(const(schema3))).
-schema3("CinderVolumeSource").
+schema3("VsphereVirtualDiskVolumeSource").
 
 #modeh(schema(const(schema4))).
-schema4("OSName").
+schema4("ContainerStateTerminated").
 
 #modeh(schema(const(schema5))).
-schema5("TopologySpreadConstraint").
+schema5("UID").
 
 #modeh(schema(const(schema6))).
-schema6("Sysctl").
+schema6("ObjectFieldSelector").
 
 #modeh(schema(const(schema7))).
-schema7("GCEPersistentDiskVolumeSource").
+schema7("LifecycleHandler").
 
 #modeh(schema(const(schema8))).
-schema8("ResourceRequirements").
+schema8("WindowsSecurityContextOptions").
 
 #modeh(schema(const(schema9))).
-schema9("NodeSelectorOperator").
+schema9("ObjectMeta").
 
 #modeh(schema(const(schema10))).
-schema10("ClusterTrustBundleProjection").
+schema10("PodReadinessGate").
 
 #modeh(schema(const(schema11))).
-schema11("ContainerState").
+schema11("ConfigMapProjection").
 
 #modeh(schema(const(schema12))).
-schema12("ResourceResizeRestartPolicy").
+schema12("ConfigMapEnvSource").
 
 #modeh(schema(const(schema13))).
-schema13("LabelSelector").
+schema13("NodeSelector").
 
 #modeh(schema(const(schema14))).
-schema14("VolumeMount").
+schema14("PodAntiAffinity").
 
 #modeh(schema(const(schema15))).
-schema15("PodCondition").
+schema15("LabelSelectorRequirement").
 
 #modeh(schema(const(schema16))).
-schema16("Instance").
+schema16("Pod0").
 
 #modeh(schema(const(schema17))).
-schema17("PodResourceClaimStatus").
+schema17("ResourceClaim").
 
 #modeh(schema(const(schema18))).
-schema18("TypedLocalObjectReference").
+schema18("Quantity").
 
 #modeh(schema(const(schema19))).
-schema19("UnsatisfiableConstraintAction").
+schema19("EphemeralVolumeSource").
 
 #modeh(schema(const(schema20))).
-schema20("GRPCAction").
+schema20("VolumeMount").
 
 #modeh(schema(const(schema21))).
-schema21("CephFSVolumeSource").
+schema21("SecretKeySelector").
 
 #modeh(schema(const(schema22))).
-schema22("VolumeSource").
+schema22("GlusterfsVolumeSource").
 
 #modeh(schema(const(schema23))).
-schema23("PersistentVolumeClaimTemplate").
+schema23("NodeAffinity").
 
 #modeh(schema(const(schema24))).
-schema24("PersistentVolumeAccessMode").
+schema24("Toleration").
 
 #modeh(schema(const(schema25))).
-schema25("IntOrString").
+schema25("Probe").
 
 #modeh(schema(const(schema26))).
-schema26("ExecAction").
+schema26("Container").
 
 #modeh(schema(const(schema27))).
-schema27("PodResizeStatus").
+schema27("RestartPolicy").
 
 #modeh(schema(const(schema28))).
-schema28("NodeSelector").
+schema28("PreferredSchedulingTerm").
 
 #modeh(schema(const(schema29))).
-schema29("SecurityContext").
+schema29("SecretVolumeSource").
 
 #modeh(schema(const(schema30))).
-schema30("Quantity").
+schema30("Time").
 
 #modeh(schema(const(schema31))).
-schema31("SecretKeySelector").
+schema31("PhotonPersistentDiskVolumeSource").
 
 #modeh(schema(const(schema32))).
-schema32("ObjectFieldSelector").
+schema32("ISCSIVolumeSource").
 
 #modeh(schema(const(schema33))).
-schema33("ContainerResizePolicy").
+schema33("CephFSVolumeSource").
 
 #modeh(schema(const(schema34))).
-schema34("AWSElasticBlockStoreVolumeSource").
+schema34("ClaimSource").
 
 #modeh(schema(const(schema35))).
-schema35("Container").
+schema35("EphemeralContainerCommon").
 
 #modeh(schema(const(schema36))).
-schema36("WindowsSecurityContextOptions").
+schema36("SeccompProfile").
 
 #modeh(schema(const(schema37))).
-schema37("ISCSIVolumeSource").
+schema37("ProjectedVolumeSource").
 
 #modeh(schema(const(schema38))).
-schema38("PodAntiAffinity").
+schema38("TopologySpreadConstraint").
 
 #modeh(schema(const(schema39))).
-schema39("VolumeResourceRequirements").
+schema39("EnvFromSource").
 
 #modeh(schema(const(schema40))).
-schema40("FlockerVolumeSource").
+schema40("PodResizeStatus").
 
 #modeh(schema(const(schema41))).
-schema41("ManagedFieldsOperationType").
+schema41("UnsatisfiableConstraintAction").
 
 #modeh(schema(const(schema42))).
-schema42("PersistentVolumeClaimVolumeSource").
+schema42("ConditionStatus").
 
 #modeh(schema(const(schema43))).
-schema43("PodOS").
+schema43("ServiceAccountTokenProjection").
 
 #modeh(schema(const(schema44))).
-schema44("ProbeHandler").
+schema44("Pod").
 
 #modeh(schema(const(schema45))).
-schema45("ConditionStatus").
+schema45("GCEPersistentDiskVolumeSource").
 
 #modeh(schema(const(schema46))).
-schema46("StorageMedium").
+schema46("PodIP").
 
 #modeh(schema(const(schema47))).
-schema47("VolumeProjection").
+schema47("HostPathVolumeSource").
 
 #modeh(schema(const(schema48))).
-schema48("TerminationMessagePolicy").
+schema48("VolumeSource").
 
 #modeh(schema(const(schema49))).
-schema49("LifecycleHandler").
+schema49("NodeSelectorTerm").
 
 #modeh(schema(const(schema50))).
-schema50("NodeSelectorTerm").
+schema50("DownwardAPIProjection").
 
 #modeh(schema(const(schema51))).
-schema51("PortworxVolumeSource").
+schema51("Sysctl").
 
 #modeh(schema(const(schema52))).
-schema52("VsphereVirtualDiskVolumeSource").
+schema52("LabelSelectorOperator").
 
 #modeh(schema(const(schema53))).
-schema53("ConfigMapEnvSource").
+schema53("AzureFileVolumeSource").
 
 #modeh(schema(const(schema54))).
-schema54("FlexVolumeSource").
+schema54("ContainerStateWaiting").
 
 #modeh(schema(const(schema55))).
-schema55("Toleration").
+schema55("GRPCAction").
 
 #modeh(schema(const(schema56))).
-schema56("LabelSelectorOperator").
+schema56("QuobyteVolumeSource").
 
 #modeh(schema(const(schema57))).
-schema57("HTTPGetAction").
+schema57("PodAffinity").
 
 #modeh(schema(const(schema58))).
-schema58("RestartPolicy").
+schema58("PullPolicy").
 
 #modeh(schema(const(schema59))).
-schema59("PodSpec").
+schema59("EmptyDirVolumeSource").
 
 #modeh(schema(const(schema60))).
-schema60("StorageOSVolumeSource").
+schema60("PersistentVolumeClaimSpec").
 
 #modeh(schema(const(schema61))).
-schema61("ConfigMapProjection").
+schema61("DownwardAPIVolumeFile").
 
 #modeh(schema(const(schema62))).
-schema62("Lifecycle").
+schema62("WeightedPodAffinityTerm").
 
 #modeh(schema(const(schema63))).
-schema63("OwnerReference").
+schema63("GitRepoVolumeSource").
 
 #modeh(schema(const(schema64))).
-schema64("Capabilities").
+schema64("LabelSelector").
 
 #modeh(schema(const(schema65))).
-schema65("SELinuxOptions").
+schema65("Protocol").
 
 #modeh(schema(const(schema66))).
-schema66("FieldsV1").
+schema66("AzureDiskVolumeSource").
 
 #modeh(schema(const(schema67))).
-schema67("URIScheme").
+schema67("HTTPGetAction").
 
 #modeh(schema(const(schema68))).
-schema68("ContainerPort").
+schema68("ManagedFieldsOperationType").
 
 #modeh(schema(const(schema69))).
-schema69("Pod").
+schema69("FlexVolumeSource").
 
 #modeh(schema(const(schema70))).
-schema70("ResourceList").
+schema70("SecurityContext").
 
 #modeh(schema(const(schema71))).
-schema71("TolerationOperator").
+schema71("ManagedFieldsEntry").
 
 #modeh(schema(const(schema72))).
-schema72("DownwardAPIVolumeSource").
+schema72("EphemeralContainer").
 
 #modeh(schema(const(schema73))).
-schema73("DownwardAPIVolumeFile").
+schema73("KeyToPath").
 
 #modeh(schema(const(schema74))).
-schema74("PhotonPersistentDiskVolumeSource").
+schema74("PodPhase").
 
 #modeh(schema(const(schema75))).
-schema75("Pod0").
+schema75("ResourceRequirements").
 
 #modeh(schema(const(schema76))).
-schema76("ContainerStateRunning").
+schema76("SecretEnvSource").
 
 #modeh(schema(const(schema77))).
-schema77("HostPathVolumeSource").
+schema77("ContainerStatus").
 
 #modeh(schema(const(schema78))).
-schema78("ContainerStateTerminated").
+schema78("ResourceList").
 
 #modeh(schema(const(schema79))).
-schema79("PodSchedulingGate").
+schema79("ContainerResizePolicy").
 
 #modeh(schema(const(schema80))).
-schema80("SecretVolumeSource").
+schema80("PodDNSConfig").
 
 #modeh(schema(const(schema81))).
-schema81("PodDNSConfigOption").
+schema81("AppArmorProfile").
 
 #modeh(schema(const(schema82))).
-schema82("TypedObjectReference").
+schema82("ResourceResizeRestartPolicy").
 
 #modeh(schema(const(schema83))).
-schema83("VolumeMountStatus").
+schema83("FCVolumeSource").
 
 #modeh(schema(const(schema84))).
-schema84("AzureFileVolumeSource").
+schema84("PodAffinityTerm").
 
 #modeh(schema(const(schema85))).
-schema85("ResourceClaim").
+schema85("PodStatus").
 
 #modeh(schema(const(schema86))).
-schema86("NodeAffinity").
+schema86("Capability").
 
 #modeh(schema(const(schema87))).
-schema87("ConfigMapKeySelector").
+schema87("EnvVarSource").
 
 #modeh(schema(const(schema88))).
-schema88("EnvFromSource").
+schema88("ExecAction").
 
 #modeh(schema(const(schema89))).
-schema89("EnvVarSource").
+schema89("FieldsV1").
 
 #modeh(schema(const(schema90))).
-schema90("NFSVolumeSource").
+schema90("ResourceFieldSelector").
 
 #modeh(schema(const(schema91))).
-schema91("ScaleIOVolumeSource").
+schema91("ConfigMapVolumeSource").
 
 #modeh(schema(const(schema92))).
-schema92("ConfigMapVolumeSource").
+schema92("EnvVar").
 
 #modeh(schema(const(schema93))).
-schema93("UID").
+schema93("HostAlias").
 
 #modeh(schema(const(schema94))).
-schema94("LocalObjectReference").
+schema94("PodSpec").
 
 #modeh(schema(const(schema95))).
-schema95("GitRepoVolumeSource").
+schema95("CinderVolumeSource").
 
 #modeh(schema(const(schema96))).
-schema96("ResourceName").
+schema96("IntOrString").
 
 #modeh(schema(const(schema97))).
-schema97("Affinity").
+schema97("VolumeMountStatus").
 
 #modeh(schema(const(schema98))).
-schema98("Protocol").
+schema98("URIScheme").
 
 #modeh(schema(const(schema99))).
-schema99("AppArmorProfile").
+schema99("ContainerState").
 
 #modeh(schema(const(schema100))).
-schema100("SeccompProfileType").
+schema100("DNSPolicy").
 
 #modeh(schema(const(schema101))).
-schema101("DNSPolicy").
+schema101("ClusterTrustBundleProjection").
 
 #modeh(schema(const(schema102))).
-schema102("DownwardAPIProjection").
+schema102("DownwardAPIVolumeSource").
 
 #modeh(schema(const(schema103))).
-schema103("EphemeralVolumeSource").
+schema103("Capabilities").
 
 #modeh(schema(const(schema104))).
-schema104("SecretEnvSource").
+schema104("OwnerReference").
 
 #modeh(schema(const(schema105))).
-schema105("TaintEffect").
+schema105("PodCondition").
 
 #modeh(schema(const(schema106))).
-schema106("LabelSelectorRequirement").
+schema106("PortworxVolumeSource").
 
 #modeh(schema(const(schema107))).
-schema107("PodQOSClass").
+schema107("ResourceName").
 
 #modeh(schema(const(schema108))).
-schema108("PodIP").
+schema108("RBDVolumeSource").
 
 #modeh(schema(const(schema109))).
-schema109("PersistentVolumeClaimSpec").
+schema109("TaintEffect").
 
 #modeh(schema(const(schema110))).
-schema110("ObjectMeta").
+schema110("SeccompProfileType").
 
 #modeh(schema(const(schema111))).
-schema111("PodSecurityContext").
+schema111("ProbeHandler").
 
 #modeh(schema(const(schema112))).
-schema112("PreferredSchedulingTerm").
+schema112("PodResourceClaim").
 
 #modeh(schema(const(schema113))).
-schema113("SleepAction").
+schema113("VolumeProjection").
 
 #modeh(schema(const(schema114))).
-schema114("EnvVar").
+schema114("SecretProjection").
 
 #modeh(schema(const(schema115))).
-schema115("Probe").
+schema115("HostIP").
 
 #modeh(schema(const(schema116))).
-schema116("FCVolumeSource").
+schema116("VolumeResourceRequirements").
 
 #modeh(schema(const(schema117))).
-schema117("ManagedFieldsEntry").
+schema117("PersistentVolumeClaimTemplate").
 
 #modeh(schema(const(schema118))).
-schema118("Capability").
+schema118("ContainerStateRunning").
 
 #modeh(schema(const(schema119))).
-schema119("PodPhase").
+schema119("Lifecycle").
 
 #modeh(schema(const(schema120))).
-schema120("ProjectedVolumeSource").
+schema120("OSName").
 
 #modeh(schema(const(schema121))).
-schema121("PodStatus").
+schema121("FlockerVolumeSource").
 
 #modeh(schema(const(schema122))).
-schema122("AppArmorProfileType").
+schema122("PodQOSClass").
 
 #modeh(schema(const(schema123))).
-schema123("ContainerStateWaiting").
+schema123("AppArmorProfileType").
 
 #modeh(schema(const(schema124))).
 schema124("NodeSelectorRequirement").
 
 #modeh(schema(const(schema125))).
-schema125("EphemeralContainer").
+schema125("VolumeDevice").
 
 #modeh(schema(const(schema126))).
-schema126("RBDVolumeSource").
+schema126("PodOS").
 
 #modeh(schema(const(schema127))).
-schema127("SeccompProfile").
+schema127("PodSchedulingGate").
 
 #modeh(schema(const(schema128))).
-schema128("QuobyteVolumeSource").
+schema128("TypedObjectReference").
 
 #modeh(schema(const(schema129))).
-schema129("KeyToPath").
+schema129("ConfigMapKeySelector").
 
 #modeh(schema(const(schema130))).
-schema130("VolumeDevice").
+schema130("CSIVolumeSource").
 
 #modeh(schema(const(schema131))).
-schema131("TypeMeta").
+schema131("TerminationMessagePolicy").
 
 #modeh(schema(const(schema132))).
-schema132("ClaimSource").
+schema132("PersistentVolumeClaimVolumeSource").
 
 #modeh(schema(const(schema133))).
-schema133("GlusterfsVolumeSource").
+schema133("SELinuxOptions").
 
 #modeh(schema(const(schema134))).
-schema134("PodAffinity").
+schema134("AWSElasticBlockStoreVolumeSource").
 
 #modeh(schema(const(schema135))).
-schema135("PodConditionType").
+schema135("StorageMedium").
 
 #modeh(schema(const(schema136))).
-schema136("ServiceAccountTokenProjection").
+schema136("NFSVolumeSource").
 
 #modeh(schema(const(schema137))).
-schema137("Volume").
+schema137("PodConditionType").
 
 #modeh(schema(const(schema138))).
-schema138("HostAlias").
+schema138("PodSecurityContext").
 
 #modeh(schema(const(schema139))).
-schema139("PullPolicy").
+schema139("Volume").
 
 #modeh(schema(const(schema140))).
-schema140("PodResourceClaim").
+schema140("PodResourceClaimStatus").
 
 #modeh(schema(const(schema141))).
-schema141("EmptyDirVolumeSource").
+schema141("ScaleIOVolumeSource").
 
 #modeh(schema(const(schema142))).
-schema142("PodDNSConfig").
+schema142("ContainerPort").
 
 #modeh(schema(const(schema143))).
-schema143("CSIVolumeSource").
+schema143("Instance").
 
 #modeh(schema(const(schema144))).
-schema144("PodReadinessGate").
+schema144("PodDNSConfigOption").
 
 #modeh(schema(const(schema145))).
-schema145("HostIP").
+schema145("StorageOSVolumeSource").
 
 #modeh(schema(const(schema146))).
-schema146("ContainerStatus").
+schema146("TypeMeta").
 
 #modeh(schema(const(schema147))).
-schema147("Time").
+schema147("TypedLocalObjectReference").
 
 #modeh(schema(const(schema148))).
-schema148("WeightedPodAffinityTerm").
+schema148("PersistentVolumeAccessMode").
 
 #modeh(schema(const(schema149))).
-schema149("TCPSocketAction").
+schema149("Affinity").
 
 #modeh(schema(const(schema150))).
-schema150("HTTPHeader").
+schema150("LocalObjectReference").
 
 #modeh(schema(const(schema151))).
-schema151("ResourceFieldSelector").
+schema151("NodeSelectorOperator").
 
 #modeh(schema(const(schema152))).
-schema152("EphemeralContainerCommon").
+schema152("SleepAction").
 
 
 #bias('user(eg(id0)).').
@@ -2884,7 +2873,7 @@ schema152("EphemeralContainerCommon").
 #bias('user(eg(id0), input("properties", "metadata", "type", "object")).').
 #bias('user(eg(id0), input("properties", "metadata", "required", 0, "name")).').
 #bias('user(eg(id0), input("properties", "metadata", "properties", "name", "type", "string")).').
-#bias('user(eg(id0), input("properties", "metadata", "properties", "name", "enum", 0, "example-pod")).').
+#bias('user(eg(id0), input("properties", "metadata", "properties", "name", "enum", 0, "simple-pod")).').
 #bias('user(eg(id0), input("properties", "spec", "type", "object")).').
 #bias('user(eg(id0), input("properties", "spec", "required", 0, "containers")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "type", "array")).').
@@ -2894,26 +2883,21 @@ schema152("EphemeralContainerCommon").
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "required", 2, "name")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "type", "array")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 0, "type", "string")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 0, "enum", 0, "/bin/sh")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 0, "enum", 0, "sleep")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 1, "type", "string")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 1, "enum", 0, "-c")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 2, "type", "string")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 2, "enum", 0, "echo Hello, World!")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 0, "/bin/sh")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 1, "-c")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 2, "echo Hello, World!")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 0, "/bin/sh")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 1, "-c")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 2, "echo Hello, World!")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "items", 1, "enum", 0, "3600")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 0, "sleep")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "enum", 0, 1, "3600")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 0, "sleep")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "command", "default", 1, "3600")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "type", "string")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "enum", 0, "nginx")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "enum", 0, "busybox")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "type", "string")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "enum", 0, "example-container")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "command", 0, "/bin/sh")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "command", 1, "-c")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "command", 2, "echo Hello, World!")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "image", "nginx")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "name", "example-container")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "enum", 0, "simple-container")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "command", 0, "sleep")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "command", 1, "3600")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "image", "busybox")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "name", "simple-container")).').
 
 % #bias("penalty(|(N - 30)**4| + 1, rule) :- N = #count{X: in_body(X)}.").
 

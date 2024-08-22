@@ -1863,7 +1863,7 @@
                         "properties": {
                             "name": {
                                 "enum": [
-                                    "example-pod"
+                                    "simple-pod"
                                 ],
                                 "type": "string"
                             }
@@ -1879,12 +1879,11 @@
                                 "default": [
                                     {
                                         "command": [
-                                            "/bin/sh",
-                                            "-c",
-                                            "echo Hello, World!"
+                                            "sleep",
+                                            "3600"
                                         ],
-                                        "image": "nginx",
-                                        "name": "example-container"
+                                        "image": "busybox",
+                                        "name": "simple-container"
                                     }
                                 ],
                                 "items": [
@@ -1892,33 +1891,25 @@
                                         "properties": {
                                             "command": {
                                                 "default": [
-                                                    "/bin/sh",
-                                                    "-c",
-                                                    "echo Hello, World!"
+                                                    "sleep",
+                                                    "3600"
                                                 ],
                                                 "enum": [
                                                     {
-                                                        "0": "/bin/sh",
-                                                        "1": "-c",
-                                                        "2": "echo Hello, World!"
+                                                        "0": "sleep",
+                                                        "1": "3600"
                                                     }
                                                 ],
                                                 "items": [
                                                     {
                                                         "enum": [
-                                                            "/bin/sh"
+                                                            "sleep"
                                                         ],
                                                         "type": "string"
                                                     },
                                                     {
                                                         "enum": [
-                                                            "-c"
-                                                        ],
-                                                        "type": "string"
-                                                    },
-                                                    {
-                                                        "enum": [
-                                                            "echo Hello, World!"
+                                                            "3600"
                                                         ],
                                                         "type": "string"
                                                     }
@@ -1927,13 +1918,13 @@
                                             },
                                             "image": {
                                                 "enum": [
-                                                    "nginx"
+                                                    "busybox"
                                                 ],
                                                 "type": "string"
                                             },
                                             "name": {
                                                 "enum": [
-                                                    "example-container"
+                                                    "simple-container"
                                                 ],
                                                 "type": "string"
                                             }

@@ -511,24 +511,23 @@ info: {
 	apiVersion?: "v1"
 	kind?:       "Pod"
 	metadata?: {
-		name: "example-pod"
+		name: "simple-pod"
 		...
 	}
 	spec?: {
 		containers: [{
 			command: {
-				"0": "/bin/sh"
-				"1": "-c"
-				"2": "echo Hello, World!"
+				"0": "sleep"
+				"1": "3600"
 				...
-			} & ["/bin/sh", "-c", "echo Hello, World!"] | *["/bin/sh", "-c", "echo Hello, World!"]
-			image: "nginx"
-			name:  "example-container"
+			} & ["sleep", "3600"] | *["sleep", "3600"]
+			image: "busybox"
+			name:  "simple-container"
 			...
 		}] | *[{
-			command: ["/bin/sh", "-c", "echo Hello, World!"]
-			image: "nginx"
-			name:  "example-container"
+			command: ["sleep", "3600"]
+			image: "busybox"
+			name:  "simple-container"
 			...
 		}]
 		...
