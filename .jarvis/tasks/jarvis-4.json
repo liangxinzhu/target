@@ -329,7 +329,7 @@
                             "name": {
                                 "type": "string",
                                 "enum": [
-                                    "my-service"
+                                    "argocd-metrics"
                                 ]
                             }
                         }
@@ -350,7 +350,7 @@
                                     "app": {
                                         "type": "string",
                                         "enum": [
-                                            "MyApp"
+                                            "argocd-server"
                                         ]
                                     }
                                 }
@@ -375,13 +375,13 @@
                                             "port": {
                                                 "type": "integer",
                                                 "enum": [
-                                                    80
+                                                    8082
                                                 ]
                                             },
                                             "targetPort": {
                                                 "type": "integer",
                                                 "enum": [
-                                                    9376
+                                                    8082
                                                 ]
                                             }
                                         }
@@ -390,8 +390,8 @@
                                 "default": [
                                     {
                                         "protocol": "TCP",
-                                        "port": 80,
-                                        "targetPort": 9376
+                                        "port": 8082,
+                                        "targetPort": 8082
                                     }
                                 ]
                             }

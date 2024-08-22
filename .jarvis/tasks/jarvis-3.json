@@ -329,7 +329,7 @@
                             "name": {
                                 "type": "string",
                                 "enum": [
-                                    "my-service"
+                                    "argocd-metrics"
                                 ]
                             }
                         }
@@ -337,10 +337,50 @@
                     "spec": {
                         "type": "object",
                         "required": [
-                            "selector",
-                            "ports"
+                            "ports",
+                            "selector"
                         ],
                         "properties": {
+                            "ports": {
+                                "type": "array",
+                                "items": [
+                                    {
+                                        "type": "object",
+                                        "required": [
+                                            "port",
+                                            "targetPort",
+                                            "protocol"
+                                        ],
+                                        "properties": {
+                                            "port": {
+                                                "type": "integer",
+                                                "enum": [
+                                                    8082
+                                                ]
+                                            },
+                                            "targetPort": {
+                                                "type": "integer",
+                                                "enum": [
+                                                    8082
+                                                ]
+                                            },
+                                            "protocol": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "TCP"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "default": [
+                                    {
+                                        "port": 8082,
+                                        "targetPort": 8082,
+                                        "protocol": "TCP"
+                                    }
+                                ]
+                            },
                             "selector": {
                                 "type": "object",
                                 "required": [
@@ -350,50 +390,10 @@
                                     "app": {
                                         "type": "string",
                                         "enum": [
-                                            "MyApp"
+                                            "argocd"
                                         ]
                                     }
                                 }
-                            },
-                            "ports": {
-                                "type": "array",
-                                "items": [
-                                    {
-                                        "type": "object",
-                                        "required": [
-                                            "protocol",
-                                            "port",
-                                            "targetPort"
-                                        ],
-                                        "properties": {
-                                            "protocol": {
-                                                "type": "string",
-                                                "enum": [
-                                                    "TCP"
-                                                ]
-                                            },
-                                            "port": {
-                                                "type": "integer",
-                                                "enum": [
-                                                    80
-                                                ]
-                                            },
-                                            "targetPort": {
-                                                "type": "integer",
-                                                "enum": [
-                                                    9376
-                                                ]
-                                            }
-                                        }
-                                    }
-                                ],
-                                "default": [
-                                    {
-                                        "protocol": "TCP",
-                                        "port": 80,
-                                        "targetPort": 9376
-                                    }
-                                ]
                             }
                         }
                     }

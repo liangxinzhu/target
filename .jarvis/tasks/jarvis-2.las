@@ -157,28 +157,19 @@
   input("properties", "metadata", "type", "object").
   input("properties", "metadata", "required", 0, "name").
   input("properties", "metadata", "properties", "name", "type", "string").
-  input("properties", "metadata", "properties", "name", "enum", 0, "my-service").
+  input("properties", "metadata", "properties", "name", "enum", 0, "argocd-metrics").
   input("properties", "spec", "type", "object").
-  input("properties", "spec", "required", 0, "selector").
-  input("properties", "spec", "required", 1, "ports").
-  input("properties", "spec", "properties", "selector", "type", "object").
-  input("properties", "spec", "properties", "selector", "required", 0, "app").
-  input("properties", "spec", "properties", "selector", "properties", "app", "type", "string").
-  input("properties", "spec", "properties", "selector", "properties", "app", "enum", 0, "MyApp").
+  input("properties", "spec", "required", 0, "ports").
   input("properties", "spec", "properties", "ports", "type", "array").
   input("properties", "spec", "properties", "ports", "items", 0, "type", "object").
-  input("properties", "spec", "properties", "ports", "items", 0, "required", 0, "protocol").
-  input("properties", "spec", "properties", "ports", "items", 0, "required", 1, "port").
-  input("properties", "spec", "properties", "ports", "items", 0, "required", 2, "targetPort").
+  input("properties", "spec", "properties", "ports", "items", 0, "required", 0, "port").
+  input("properties", "spec", "properties", "ports", "items", 0, "required", 1, "protocol").
+  input("properties", "spec", "properties", "ports", "items", 0, "properties", "port", "type", "integer").
+  input("properties", "spec", "properties", "ports", "items", 0, "properties", "port", "enum", 0, "int(\"8082\")").
   input("properties", "spec", "properties", "ports", "items", 0, "properties", "protocol", "type", "string").
   input("properties", "spec", "properties", "ports", "items", 0, "properties", "protocol", "enum", 0, "TCP").
-  input("properties", "spec", "properties", "ports", "items", 0, "properties", "port", "type", "integer").
-  input("properties", "spec", "properties", "ports", "items", 0, "properties", "port", "enum", 0, "int(\"80\")").
-  input("properties", "spec", "properties", "ports", "items", 0, "properties", "targetPort", "type", "integer").
-  input("properties", "spec", "properties", "ports", "items", 0, "properties", "targetPort", "enum", 0, "int(\"9376\")").
+  input("properties", "spec", "properties", "ports", "default", 0, "port", "int(\"8082\")").
   input("properties", "spec", "properties", "ports", "default", 0, "protocol", "TCP").
-  input("properties", "spec", "properties", "ports", "default", 0, "port", "int(\"80\")").
-  input("properties", "spec", "properties", "ports", "default", 0, "targetPort", "int(\"9376\")").
   input("allOf", 0, "$ref", "#/components/schemas/Service").
   input("allOf", 1, "required", 0, "apiVersion").
   input("allOf", 1, "required", 1, "kind").
@@ -403,57 +394,41 @@ input4("type").
 input5("string").
 input4("enum").
 input5(0).
-input6("my-service").
+input6("argocd-metrics").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6))).
-input4("selector").
-input3(1).
 input4("ports").
-input3("selector").
-input5("object").
-input4("required").
-input6("app").
-input4("properties").
-input5("app").
-input6("type").
-input7("string").
-#modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7))).
-input6("enum").
-input7(0).
-input8("MyApp").
-#modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8))).
 input3("ports").
 input5("array").
 input4("items").
+input6("type").
 input7("object").
+#modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7))).
 input6("required").
-input8("protocol").
-input7(1).
+input7(0).
 input8("port").
-input7(2).
-input8("targetPort").
+#modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8))).
+input7(1).
+input8("protocol").
 input6("properties").
-input7("protocol").
+input7("port").
 input8("type").
-input9("string").
+input9("integer").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8), const(input9))).
 input8("enum").
 input9(0).
-input10("TCP").
+input10("int(\"8082\")").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8), const(input9), const(input10))).
-input7("port").
-input9("integer").
-input10("int(\"80\")").
-input7("targetPort").
-input10("int(\"9376\")").
+input7("protocol").
+input9("string").
+input10("TCP").
 input4("default").
+input6("port").
+input7("int(\"8082\")").
 input6("protocol").
 input7("TCP").
-input6("port").
-input7("int(\"80\")").
-input6("targetPort").
-input7("int(\"9376\")").
 input3("#/components/schemas/Service").
 input4("apiVersion").
+input3(1).
 input4("kind").
 input3(2).
 input4("metadata").
@@ -589,28 +564,19 @@ schema26("ServiceStatus").
 #bias('user(eg(id0), input("properties", "metadata", "type", "object")).').
 #bias('user(eg(id0), input("properties", "metadata", "required", 0, "name")).').
 #bias('user(eg(id0), input("properties", "metadata", "properties", "name", "type", "string")).').
-#bias('user(eg(id0), input("properties", "metadata", "properties", "name", "enum", 0, "my-service")).').
+#bias('user(eg(id0), input("properties", "metadata", "properties", "name", "enum", 0, "argocd-metrics")).').
 #bias('user(eg(id0), input("properties", "spec", "type", "object")).').
 #bias('user(eg(id0), input("properties", "spec", "required", 0, "ports")).').
-#bias('user(eg(id0), input("properties", "spec", "required", 1, "selector")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "ports", "type", "array")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "type", "object")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "required", 0, "port")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "required", 1, "protocol")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "required", 2, "targetPort")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "properties", "port", "type", "integer")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "properties", "port", "enum", 0, "int(\"80\")")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "properties", "port", "enum", 0, "int(\"8082\")")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "properties", "protocol", "type", "string")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "properties", "protocol", "enum", 0, "TCP")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "properties", "targetPort", "type", "integer")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "ports", "items", 0, "properties", "targetPort", "enum", 0, "int(\"9376\")")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "ports", "default", 0, "port", "int(\"80\")")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "ports", "default", 0, "port", "int(\"8082\")")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "ports", "default", 0, "protocol", "TCP")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "ports", "default", 0, "targetPort", "int(\"9376\")")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "selector", "type", "object")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "selector", "required", 0, "app")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "selector", "properties", "app", "type", "string")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "selector", "properties", "app", "enum", 0, "MyApp")).').
 
 % #bias("penalty(|(N - 30)**4| + 1, rule) :- N = #count{X: in_body(X)}.").
 
