@@ -319,7 +319,7 @@
                         "properties": {
                             "name": {
                                 "enum": [
-                                    "my-service"
+                                    "argocd-metrics"
                                 ],
                                 "type": "string"
                             }
@@ -335,8 +335,7 @@
                                 "default": [
                                     {
                                         "port": 80,
-                                        "protocol": "TCP",
-                                        "targetPort": 9376
+                                        "targetPort": 8082
                                     }
                                 ],
                                 "items": [
@@ -348,21 +347,14 @@
                                                 ],
                                                 "type": "integer"
                                             },
-                                            "protocol": {
-                                                "enum": [
-                                                    "TCP"
-                                                ],
-                                                "type": "string"
-                                            },
                                             "targetPort": {
                                                 "enum": [
-                                                    9376
+                                                    8082
                                                 ],
                                                 "type": "integer"
                                             }
                                         },
                                         "required": [
-                                            "protocol",
                                             "port",
                                             "targetPort"
                                         ],
@@ -375,7 +367,7 @@
                                 "properties": {
                                     "app": {
                                         "enum": [
-                                            "MyApp"
+                                            "argocd"
                                         ],
                                         "type": "string"
                                     }
