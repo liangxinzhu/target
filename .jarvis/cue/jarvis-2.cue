@@ -102,30 +102,19 @@ info: {
 	apiVersion?: "v1"
 	kind?:       "Service"
 	metadata?: {
-		labels: {
-			app: "my-app"
-			...
-		}
-		name: "my-service"
+		name: "argocd-metrics"
 		...
 	}
 	spec?: {
 		ports: [{
-			port:       80 & int
-			protocol:   "TCP"
-			targetPort: 8080 & int
+			port:     8082 & int
+			protocol: "TCP"
 			...
 		}] | *[{
-			port:       80
-			protocol:   "TCP"
-			targetPort: 8080
+			port:     8082
+			protocol: "TCP"
 			...
 		}]
-		selector: {
-			app: "my-app"
-			...
-		}
-		type: "ClusterIP"
 		...
 	}
 	...
