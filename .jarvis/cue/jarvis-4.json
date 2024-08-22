@@ -317,30 +317,15 @@
                     },
                     "metadata": {
                         "properties": {
-                            "labels": {
-                                "properties": {
-                                    "app": {
-                                        "enum": [
-                                            "my-app"
-                                        ],
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "app"
-                                ],
-                                "type": "object"
-                            },
                             "name": {
                                 "enum": [
-                                    "my-service"
+                                    "argocd-metrics"
                                 ],
                                 "type": "string"
                             }
                         },
                         "required": [
-                            "name",
-                            "labels"
+                            "name"
                         ],
                         "type": "object"
                     },
@@ -349,9 +334,9 @@
                             "ports": {
                                 "default": [
                                     {
-                                        "port": 80,
+                                        "port": 8082,
                                         "protocol": "TCP",
-                                        "targetPort": 8080
+                                        "targetPort": 8082
                                     }
                                 ],
                                 "items": [
@@ -359,7 +344,7 @@
                                         "properties": {
                                             "port": {
                                                 "enum": [
-                                                    80
+                                                    8082
                                                 ],
                                                 "type": "integer"
                                             },
@@ -371,15 +356,15 @@
                                             },
                                             "targetPort": {
                                                 "enum": [
-                                                    8080
+                                                    8082
                                                 ],
                                                 "type": "integer"
                                             }
                                         },
                                         "required": [
-                                            "protocol",
                                             "port",
-                                            "targetPort"
+                                            "targetPort",
+                                            "protocol"
                                         ],
                                         "type": "object"
                                     }
@@ -390,7 +375,7 @@
                                 "properties": {
                                     "app": {
                                         "enum": [
-                                            "my-app"
+                                            "argocd-server"
                                         ],
                                         "type": "string"
                                     }
@@ -399,18 +384,11 @@
                                     "app"
                                 ],
                                 "type": "object"
-                            },
-                            "type": {
-                                "enum": [
-                                    "ClusterIP"
-                                ],
-                                "type": "string"
                             }
                         },
                         "required": [
-                            "selector",
                             "ports",
-                            "type"
+                            "selector"
                         ],
                         "type": "object"
                     }
