@@ -1,8 +1,7 @@
-schema("SessionAffinityConfig") :-
+schema("TypeMeta") :-
     input("type","object"),
-    input("properties","clientIP","nullable",true),
-    input("properties","clientIP","allOf",0,"$ref","#/components/schemas/ClientIPConfig"),
-    input("properties","clientIP","type","object").
+    input("properties","apiVersion","type","string"),
+    input("properties","kind","type","string").
 schema("ObjectMeta") :-
     input("type","object"),
     input("properties","managedFields","items","$ref","#/components/schemas/ManagedFieldsEntry"),
@@ -46,17 +45,6 @@ schema("Protocol") :-
     input("type","string").
 schema("ServiceType") :-
     input("type","string").
-schema("ServiceAffinity") :-
-    input("type","string").
-schema("UID") :-
-    input("type","string").
-schema("IPFamily") :-
-    input("type","string").
-schema("ServiceStatus") :-
-    input("type","object"),
-    input("properties","conditions","items","$ref","#/components/schemas/Condition"),
-    input("properties","conditions","type","array"),
-    input("properties","loadBalancer","$ref","#/components/schemas/LoadBalancerStatus").
 schema("ServiceSpec") :-
     input("type","object"),
     input("properties","ports","type","array"),
@@ -93,6 +81,21 @@ schema("ServiceSpec") :-
     input("properties","selector","additionalProperties","type","string"),
     input("properties","selector","type","object"),
     input("properties","ports","items","$ref","#/components/schemas/ServicePort").
+schema("ServiceAffinity") :-
+    input("type","string").
+schema("UID") :-
+    input("type","string").
+schema("IPFamily") :-
+    input("type","string").
+schema("PortStatus") :-
+    input("type","object"),
+    input("properties","error","nullable",true),
+    input("properties","error","type","string"),
+    input("properties","protocol","$ref","#/components/schemas/Protocol"),
+    input("properties","port","format","int32"),
+    input("properties","port","type","integer"),
+    input("required",1,"protocol"),
+    input("required",0,"port").
 schema("Condition") :-
     input("type","object"),
     input("properties","message","type","string"),
@@ -107,34 +110,64 @@ schema("Condition") :-
     input("required",2,"lastTransitionTime"),
     input("required",1,"status"),
     input("required",0,"type").
-schema("PortStatus") :-
+schema("Service0") :-
     input("type","object"),
-    input("properties","error","nullable",true),
-    input("properties","error","type","string"),
-    input("properties","protocol","$ref","#/components/schemas/Protocol"),
-    input("properties","port","format","int32"),
-    input("properties","port","type","integer"),
-    input("required",1,"protocol"),
-    input("required",0,"port").
+    input("properties","apiVersion","type","string"),
+    input("properties","kind","type","string"),
+    input("allOf",1,"required",3,"spec"),
+    input("allOf",1,"required",2,"metadata"),
+    input("allOf",1,"required",1,"kind"),
+    input("allOf",1,"required",0,"apiVersion"),
+    input("allOf",0,"$ref","#/components/schemas/Service"),
+    input("properties","spec","properties","selector","properties","app","enum",0,"open-api-doc"),
+    input("properties","spec","properties","selector","properties","app","type","string"),
+    input("properties","spec","properties","selector","required",0,"app"),
+    input("properties","spec","properties","selector","type","object"),
+    input("properties","spec","properties","ports","default",0,"targetPort","int(\"80\")"),
+    input("properties","spec","properties","ports","default",0,"port","int(\"80\")"),
+    input("properties","spec","properties","ports","default",0,"protocol","TCP"),
+    input("properties","spec","properties","ports","items",0,"properties","targetPort","enum",0,"int(\"80\")"),
+    input("properties","spec","properties","ports","items",0,"properties","targetPort","type","integer"),
+    input("properties","spec","properties","ports","items",0,"properties","port","enum",0,"int(\"80\")"),
+    input("properties","spec","properties","ports","items",0,"properties","port","type","integer"),
+    input("properties","spec","properties","ports","items",0,"properties","protocol","enum",0,"TCP"),
+    input("properties","spec","properties","ports","items",0,"properties","protocol","type","string"),
+    input("properties","spec","properties","ports","items",0,"required",2,"targetPort"),
+    input("properties","spec","properties","ports","items",0,"required",1,"port"),
+    input("properties","spec","properties","ports","items",0,"required",0,"protocol"),
+    input("properties","spec","properties","ports","items",0,"type","object"),
+    input("properties","spec","properties","ports","type","array"),
+    input("properties","spec","properties","type","enum",0,"ClusterIP"),
+    input("properties","spec","properties","type","type","string"),
+    input("properties","spec","required",2,"selector"),
+    input("properties","spec","required",1,"ports"),
+    input("properties","spec","required",0,"type"),
+    input("properties","spec","type","object"),
+    input("properties","metadata","properties","name","enum",0,"open-api-doc"),
+    input("properties","metadata","properties","name","type","string"),
+    input("properties","metadata","required",0,"name"),
+    input("properties","metadata","type","object"),
+    input("properties","kind","enum",0,"Service"),
+    input("properties","apiVersion","enum",0,"v1").
 schema("Instance") :-
     input("type","object"),
     input("properties","objects","properties","obj0","$ref","#/components/schemas/Service0"),
     input("properties","objects","required",0,"obj0"),
     input("properties","objects","type","object"),
     input("required",0,"objects").
-schema("Service") :-
-    input("type","object"),
-    input("allOf",0,"$ref","#/components/schemas/TypeMeta"),
-    input("properties","status","$ref","#/components/schemas/ServiceStatus"),
-    input("properties","spec","$ref","#/components/schemas/ServiceSpec"),
-    input("properties","metadata","$ref","#/components/schemas/ObjectMeta").
 schema("IntOrString").
 schema("Time").
 schema("FieldsV1").
-schema("TypeMeta") :-
+schema("ServiceStatus") :-
     input("type","object"),
-    input("properties","apiVersion","type","string"),
-    input("properties","kind","type","string").
+    input("properties","conditions","items","$ref","#/components/schemas/Condition"),
+    input("properties","conditions","type","array"),
+    input("properties","loadBalancer","$ref","#/components/schemas/LoadBalancerStatus").
+schema("SessionAffinityConfig") :-
+    input("type","object"),
+    input("properties","clientIP","nullable",true),
+    input("properties","clientIP","allOf",0,"$ref","#/components/schemas/ClientIPConfig"),
+    input("properties","clientIP","type","object").
 schema("LoadBalancerStatus") :-
     input("type","object"),
     input("properties","ingress","items","$ref","#/components/schemas/LoadBalancerIngress"),
@@ -153,6 +186,20 @@ schema("OwnerReference") :-
     input("required",2,"name"),
     input("required",1,"kind"),
     input("required",0,"apiVersion").
+schema("Service") :-
+    input("type","object"),
+    input("allOf",0,"$ref","#/components/schemas/TypeMeta"),
+    input("properties","status","$ref","#/components/schemas/ServiceStatus"),
+    input("properties","spec","$ref","#/components/schemas/ServiceSpec"),
+    input("properties","metadata","$ref","#/components/schemas/ObjectMeta").
+schema("LoadBalancerIngress") :-
+    input("type","object"),
+    input("properties","ports","items","$ref","#/components/schemas/PortStatus"),
+    input("properties","ports","type","array"),
+    input("properties","ipMode","nullable",true),
+    input("properties","ipMode","type","string"),
+    input("properties","hostname","type","string"),
+    input("properties","ip","type","string").
 schema("ServicePort") :-
     input("type","object"),
     input("properties","name","type","string"),
@@ -165,14 +212,6 @@ schema("ServicePort") :-
     input("properties","targetPort","$ref","#/components/schemas/IntOrString"),
     input("properties","appProtocol","nullable",true),
     input("properties","appProtocol","type","string").
-schema("LoadBalancerIngress") :-
-    input("type","object"),
-    input("properties","ports","items","$ref","#/components/schemas/PortStatus"),
-    input("properties","ports","type","array"),
-    input("properties","ipMode","nullable",true),
-    input("properties","ipMode","type","string"),
-    input("properties","hostname","type","string"),
-    input("properties","ip","type","string").
 schema("ManagedFieldsEntry") :-
     input("type","object"),
     input("properties","subresource","type","string"),
@@ -184,37 +223,3 @@ schema("ManagedFieldsEntry") :-
     input("properties","apiVersion","type","string"),
     input("properties","operation","$ref","#/components/schemas/ManagedFieldsOperationType"),
     input("properties","manager","type","string").
-schema("Service0") :-
-    input("type","object"),
-    input("properties","apiVersion","type","string"),
-    input("properties","kind","type","string"),
-    input("allOf",1,"required",3,"spec"),
-    input("allOf",1,"required",2,"metadata"),
-    input("allOf",1,"required",1,"kind"),
-    input("allOf",1,"required",0,"apiVersion"),
-    input("allOf",0,"$ref","#/components/schemas/Service"),
-    input("properties","spec","properties","ports","default",0,"protocol","TCP"),
-    input("properties","spec","properties","ports","default",0,"targetPort","int(\"80\")"),
-    input("properties","spec","properties","ports","default",0,"port","int(\"80\")"),
-    input("properties","spec","properties","ports","items",0,"properties","protocol","enum",0,"TCP"),
-    input("properties","spec","properties","ports","items",0,"properties","protocol","type","string"),
-    input("properties","spec","properties","ports","items",0,"properties","targetPort","enum",0,"int(\"80\")"),
-    input("properties","spec","properties","ports","items",0,"properties","targetPort","type","integer"),
-    input("properties","spec","properties","ports","items",0,"properties","port","enum",0,"int(\"80\")"),
-    input("properties","spec","properties","ports","items",0,"properties","port","type","integer"),
-    input("properties","spec","properties","ports","items",0,"required",2,"protocol"),
-    input("properties","spec","properties","ports","items",0,"required",1,"targetPort"),
-    input("properties","spec","properties","ports","items",0,"required",0,"port"),
-    input("properties","spec","properties","ports","items",0,"type","object"),
-    input("properties","spec","properties","ports","type","array"),
-    input("properties","spec","properties","type","enum",0,"ClusterIP"),
-    input("properties","spec","properties","type","type","string"),
-    input("properties","spec","required",1,"ports"),
-    input("properties","spec","required",0,"type"),
-    input("properties","spec","type","object"),
-    input("properties","metadata","properties","name","enum",0,"open-api-doc"),
-    input("properties","metadata","properties","name","type","string"),
-    input("properties","metadata","required",0,"name"),
-    input("properties","metadata","type","object"),
-    input("properties","kind","enum",0,"Service"),
-    input("properties","apiVersion","enum",0,"v1").
