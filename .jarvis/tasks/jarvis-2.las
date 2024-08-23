@@ -861,17 +861,17 @@
   input("properties", "spec", "properties", "containers", "items", 0, "required", 1, "image").
   input("properties", "spec", "properties", "containers", "items", 0, "required", 2, "ports").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "type", "string").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "enum", 0, "pulsar-admin-container").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "enum", 0, "pulsar-admin").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "type", "string").
-  input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "enum", 0, "apachepulsar/pulsar:2.8.0").
+  input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "enum", 0, "apachepulsar/pulsar:latest").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "type", "array").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "items", 0, "type", "object").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "items", 0, "required", 0, "containerPort").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "items", 0, "properties", "containerPort", "type", "integer").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "items", 0, "properties", "containerPort", "enum", 0, "int(\"8080\")").
   input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "default", 0, "containerPort", "int(\"8080\")").
-  input("properties", "spec", "properties", "containers", "default", 0, "name", "pulsar-admin-container").
-  input("properties", "spec", "properties", "containers", "default", 0, "image", "apachepulsar/pulsar:2.8.0").
+  input("properties", "spec", "properties", "containers", "default", 0, "name", "pulsar-admin").
+  input("properties", "spec", "properties", "containers", "default", 0, "image", "apachepulsar/pulsar:latest").
   input("properties", "spec", "properties", "containers", "default", 0, "ports", 0, "containerPort", "int(\"8080\")").
   input("allOf", 0, "$ref", "#/components/schemas/Pod").
   input("allOf", 1, "required", 0, "apiVersion").
@@ -2086,10 +2086,10 @@ input9("string").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8), const(input9))).
 input8("enum").
 input9(0).
-input10("pulsar-admin-container").
+input10("pulsar-admin").
 #modeb(input(const(input0), const(input1), const(input2), const(input3), const(input4), const(input5), const(input6), const(input7), const(input8), const(input9), const(input10))).
 input7("image").
-input10("apachepulsar/pulsar:2.8.0").
+input10("apachepulsar/pulsar:latest").
 input7("ports").
 input9("array").
 input8("items").
@@ -2114,9 +2114,9 @@ input10("containerPort").
 input11("int(\"8080\")").
 input4("default").
 input6("name").
-input7("pulsar-admin-container").
+input7("pulsar-admin").
 input6("image").
-input7("apachepulsar/pulsar:2.8.0").
+input7("apachepulsar/pulsar:latest").
 input6("ports").
 input8("containerPort").
 input9("int(\"8080\")").
@@ -2881,17 +2881,17 @@ schema152("PodCondition").
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "required", 1, "name")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "required", 2, "ports")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "type", "string")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "enum", 0, "apachepulsar/pulsar:2.8.0")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "image", "enum", 0, "apachepulsar/pulsar:latest")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "type", "string")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "enum", 0, "pulsar-admin-container")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "name", "enum", 0, "pulsar-admin")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "type", "array")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "items", 0, "type", "object")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "items", 0, "required", 0, "containerPort")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "items", 0, "properties", "containerPort", "type", "integer")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "items", 0, "properties", "containerPort", "enum", 0, "int(\"8080\")")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "items", 0, "properties", "ports", "default", 0, "containerPort", "int(\"8080\")")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "image", "apachepulsar/pulsar:2.8.0")).').
-#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "name", "pulsar-admin-container")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "image", "apachepulsar/pulsar:latest")).').
+#bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "name", "pulsar-admin")).').
 #bias('user(eg(id0), input("properties", "spec", "properties", "containers", "default", 0, "ports", 0, "containerPort", "int(\"8080\")")).').
 
 % #bias("penalty(|(N - 30)**4| + 1, rule) :- N = #count{X: in_body(X)}.").

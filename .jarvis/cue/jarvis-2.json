@@ -1878,8 +1878,8 @@
                             "containers": {
                                 "default": [
                                     {
-                                        "image": "apachepulsar/pulsar:2.8.0",
-                                        "name": "pulsar-admin-container",
+                                        "image": "apachepulsar/pulsar:latest",
+                                        "name": "pulsar-admin",
                                         "ports": [
                                             {
                                                 "containerPort": 8080
@@ -1892,13 +1892,13 @@
                                         "properties": {
                                             "image": {
                                                 "enum": [
-                                                    "apachepulsar/pulsar:2.8.0"
+                                                    "apachepulsar/pulsar:latest"
                                                 ],
                                                 "type": "string"
                                             },
                                             "name": {
                                                 "enum": [
-                                                    "pulsar-admin-container"
+                                                    "pulsar-admin"
                                                 ],
                                                 "type": "string"
                                             },

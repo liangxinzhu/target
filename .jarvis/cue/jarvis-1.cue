@@ -511,12 +511,16 @@ info: {
 	apiVersion?: "v1"
 	kind?:       "Pod"
 	metadata?: {
+		labels: {
+			app: "pulsar-admin"
+			...
+		}
 		name: "pulsar-admin"
 		...
 	}
 	spec?: {
 		containers: [{
-			image: "apachepulsar/pulsar:latest"
+			image: "apachepulsar/pulsar-all:latest"
 			name:  "pulsar-admin"
 			ports: [{
 				containerPort: 8080 & int
@@ -527,7 +531,7 @@ info: {
 			}]
 			...
 		}] | *[{
-			image: "apachepulsar/pulsar:latest"
+			image: "apachepulsar/pulsar-all:latest"
 			name:  "pulsar-admin"
 			ports: [{
 				containerPort: 8080
