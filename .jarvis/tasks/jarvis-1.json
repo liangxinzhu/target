@@ -21,29 +21,30 @@
             "Condition": {
                 "type": "object",
                 "required": [
-                    "lastTransitionTime",
-                    "message",
-                    "reason",
+                    "type",
                     "status",
-                    "type"
+                    "lastTransitionTime",
+                    "reason",
+                    "message"
                 ],
                 "properties": {
-                    "lastTransitionTime": {
-                        "$ref": "#/components/schemas/Time"
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "observedGeneration": {
-                        "type": "integer"
-                    },
-                    "reason": {
+                    "type": {
                         "type": "string"
                     },
                     "status": {
                         "$ref": "#/components/schemas/ConditionStatus"
                     },
-                    "type": {
+                    "observedGeneration": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "lastTransitionTime": {
+                        "$ref": "#/components/schemas/Time"
+                    },
+                    "reason": {
+                        "type": "string"
+                    },
+                    "message": {
                         "type": "string"
                     }
                 }
@@ -89,10 +90,10 @@
             "LoadBalancerIngress": {
                 "type": "object",
                 "properties": {
-                    "hostname": {
+                    "ip": {
                         "type": "string"
                     },
-                    "ip": {
+                    "hostname": {
                         "type": "string"
                     },
                     "ipMode": {
@@ -121,8 +122,22 @@
             "ManagedFieldsEntry": {
                 "type": "object",
                 "properties": {
+                    "manager": {
+                        "type": "string"
+                    },
+                    "operation": {
+                        "$ref": "#/components/schemas/ManagedFieldsOperationType"
+                    },
                     "apiVersion": {
                         "type": "string"
+                    },
+                    "time": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Time"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "fieldsType": {
                         "type": "string"
@@ -135,22 +150,8 @@
                         ],
                         "nullable": true
                     },
-                    "manager": {
-                        "type": "string"
-                    },
-                    "operation": {
-                        "$ref": "#/components/schemas/ManagedFieldsOperationType"
-                    },
                     "subresource": {
                         "type": "string"
-                    },
-                    "time": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Time"
-                            }
-                        ],
-                        "nullable": true
                     }
                 }
             },
@@ -160,20 +161,30 @@
             "ObjectMeta": {
                 "type": "object",
                 "properties": {
-                    "annotations": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "string"
-                        }
+                    "name": {
+                        "type": "string"
+                    },
+                    "generateName": {
+                        "type": "string"
+                    },
+                    "namespace": {
+                        "type": "string"
+                    },
+                    "selfLink": {
+                        "type": "string"
+                    },
+                    "uid": {
+                        "$ref": "#/components/schemas/UID"
+                    },
+                    "resourceVersion": {
+                        "type": "string"
+                    },
+                    "generation": {
+                        "type": "integer",
+                        "format": "int64"
                     },
                     "creationTimestamp": {
                         "$ref": "#/components/schemas/Time"
-                    },
-                    "deletionGracePeriodSeconds": {
-                        "type": "integer",
-                        "minimum": -9223372036854775808,
-                        "maximum": 9223372036854775807,
-                        "nullable": true
                     },
                     "deletionTimestamp": {
                         "allOf": [
@@ -183,21 +194,33 @@
                         ],
                         "nullable": true
                     },
-                    "finalizers": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "generateName": {
-                        "type": "string"
-                    },
-                    "generation": {
-                        "type": "integer"
+                    "deletionGracePeriodSeconds": {
+                        "type": "integer",
+                        "minimum": -9223372036854775808,
+                        "maximum": 9223372036854775807,
+                        "nullable": true
                     },
                     "labels": {
                         "type": "object",
                         "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "annotations": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "ownerReferences": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OwnerReference"
+                        }
+                    },
+                    "finalizers": {
+                        "type": "array",
+                        "items": {
                             "type": "string"
                         }
                     },
@@ -206,27 +229,6 @@
                         "items": {
                             "$ref": "#/components/schemas/ManagedFieldsEntry"
                         }
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "namespace": {
-                        "type": "string"
-                    },
-                    "ownerReferences": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/OwnerReference"
-                        }
-                    },
-                    "resourceVersion": {
-                        "type": "string"
-                    },
-                    "selfLink": {
-                        "type": "string"
-                    },
-                    "uid": {
-                        "$ref": "#/components/schemas/UID"
                     }
                 }
             },
@@ -242,14 +244,6 @@
                     "apiVersion": {
                         "type": "string"
                     },
-                    "blockOwnerDeletion": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
-                    "controller": {
-                        "type": "boolean",
-                        "nullable": true
-                    },
                     "kind": {
                         "type": "string"
                     },
@@ -258,6 +252,14 @@
                     },
                     "uid": {
                         "$ref": "#/components/schemas/UID"
+                    },
+                    "controller": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "blockOwnerDeletion": {
+                        "type": "boolean",
+                        "nullable": true
                     }
                 }
             },
@@ -268,15 +270,16 @@
                     "protocol"
                 ],
                 "properties": {
-                    "error": {
-                        "type": "string",
-                        "nullable": true
-                    },
                     "port": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "protocol": {
                         "$ref": "#/components/schemas/Protocol"
+                    },
+                    "error": {
+                        "type": "string",
+                        "nullable": true
                     }
                 }
             },
@@ -334,11 +337,17 @@
                     "spec": {
                         "type": "object",
                         "required": [
+                            "type",
                             "ports",
-                            "selector",
-                            "type"
+                            "selector"
                         ],
                         "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "ClusterIP"
+                                ]
+                            },
                             "ports": {
                                 "type": "array",
                                 "items": [
@@ -346,11 +355,17 @@
                                         "type": "object",
                                         "required": [
                                             "port",
-                                            "protocol",
-                                            "targetPort"
+                                            "targetPort",
+                                            "protocol"
                                         ],
                                         "properties": {
                                             "port": {
+                                                "type": "integer",
+                                                "enum": [
+                                                    80
+                                                ]
+                                            },
+                                            "targetPort": {
                                                 "type": "integer",
                                                 "enum": [
                                                     80
@@ -361,12 +376,6 @@
                                                 "enum": [
                                                     "TCP"
                                                 ]
-                                            },
-                                            "targetPort": {
-                                                "type": "integer",
-                                                "enum": [
-                                                    80
-                                                ]
                                             }
                                         }
                                     }
@@ -374,8 +383,8 @@
                                 "default": [
                                     {
                                         "port": 80,
-                                        "protocol": "TCP",
-                                        "targetPort": 80
+                                        "targetPort": 80,
+                                        "protocol": "TCP"
                                     }
                                 ]
                             },
@@ -392,12 +401,6 @@
                                         ]
                                     }
                                 }
-                            },
-                            "type": {
-                                "type": "string",
-                                "enum": [
-                                    "ClusterIP"
-                                ]
                             }
                         }
                     }
@@ -428,33 +431,43 @@
                     "port"
                 ],
                 "properties": {
-                    "appProtocol": {
-                        "type": "string",
-                        "nullable": true
-                    },
                     "name": {
                         "type": "string"
-                    },
-                    "nodePort": {
-                        "type": "integer"
-                    },
-                    "port": {
-                        "type": "integer"
                     },
                     "protocol": {
                         "$ref": "#/components/schemas/Protocol"
                     },
+                    "appProtocol": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "port": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
                     "targetPort": {
                         "$ref": "#/components/schemas/IntOrString"
+                    },
+                    "nodePort": {
+                        "type": "integer",
+                        "format": "int32"
                     }
                 }
             },
             "ServiceSpec": {
                 "type": "object",
                 "properties": {
-                    "allocateLoadBalancerNodePorts": {
-                        "type": "boolean",
-                        "nullable": true
+                    "ports": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ServicePort"
+                        }
+                    },
+                    "selector": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
                     },
                     "clusterIP": {
                         "type": "string"
@@ -465,7 +478,22 @@
                             "type": "string"
                         }
                     },
+                    "type": {
+                        "$ref": "#/components/schemas/ServiceType"
+                    },
                     "externalIPs": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "sessionAffinity": {
+                        "$ref": "#/components/schemas/ServiceAffinity"
+                    },
+                    "loadBalancerIP": {
+                        "type": "string"
+                    },
+                    "loadBalancerSourceRanges": {
                         "type": "array",
                         "items": {
                             "type": "string"
@@ -478,10 +506,19 @@
                         "$ref": "#/components/schemas/ServiceExternalTrafficPolicy"
                     },
                     "healthCheckNodePort": {
-                        "type": "integer"
+                        "type": "integer",
+                        "format": "int32"
                     },
-                    "internalTrafficPolicy": {
-                        "type": "string",
+                    "publishNotReadyAddresses": {
+                        "type": "boolean"
+                    },
+                    "sessionAffinityConfig": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SessionAffinityConfig"
+                            }
+                        ],
                         "nullable": true
                     },
                     "ipFamilies": {
@@ -494,66 +531,35 @@
                         "type": "string",
                         "nullable": true
                     },
+                    "allocateLoadBalancerNodePorts": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
                     "loadBalancerClass": {
                         "type": "string",
                         "nullable": true
                     },
-                    "loadBalancerIP": {
-                        "type": "string"
-                    },
-                    "loadBalancerSourceRanges": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "ports": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ServicePort"
-                        }
-                    },
-                    "publishNotReadyAddresses": {
-                        "type": "boolean"
-                    },
-                    "selector": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "string"
-                        }
-                    },
-                    "sessionAffinity": {
-                        "$ref": "#/components/schemas/ServiceAffinity"
-                    },
-                    "sessionAffinityConfig": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/SessionAffinityConfig"
-                            }
-                        ],
+                    "internalTrafficPolicy": {
+                        "type": "string",
                         "nullable": true
                     },
                     "trafficDistribution": {
                         "type": "string",
                         "nullable": true
-                    },
-                    "type": {
-                        "$ref": "#/components/schemas/ServiceType"
                     }
                 }
             },
             "ServiceStatus": {
                 "type": "object",
                 "properties": {
+                    "loadBalancer": {
+                        "$ref": "#/components/schemas/LoadBalancerStatus"
+                    },
                     "conditions": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/Condition"
                         }
-                    },
-                    "loadBalancer": {
-                        "$ref": "#/components/schemas/LoadBalancerStatus"
                     }
                 }
             },
@@ -578,10 +584,10 @@
             "TypeMeta": {
                 "type": "object",
                 "properties": {
-                    "apiVersion": {
+                    "kind": {
                         "type": "string"
                     },
-                    "kind": {
+                    "apiVersion": {
                         "type": "string"
                     }
                 }

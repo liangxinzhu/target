@@ -102,10 +102,6 @@ info: {
 	apiVersion?: "v1"
 	kind?:       "Service"
 	metadata?: {
-		labels: {
-			app: "open-api-doc"
-			...
-		}
 		name: "open-api-doc"
 		...
 	}
