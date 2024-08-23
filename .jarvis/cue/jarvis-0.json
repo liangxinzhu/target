@@ -1863,7 +1863,7 @@
                         "properties": {
                             "name": {
                                 "enum": [
-                                    "example-pod"
+                                    "pulsar-admin"
                                 ],
                                 "type": "string"
                             }
@@ -1878,70 +1878,59 @@
                             "containers": {
                                 "default": [
                                     {
-                                        "command": [
-                                            "/bin/sh",
-                                            "-c",
-                                            "echo Hello, World!"
-                                        ],
-                                        "image": "nginx",
-                                        "name": "example-container"
+                                        "image": "apachepulsar/pulsar:2.8.0",
+                                        "name": "pulsar-admin-container",
+                                        "ports": [
+                                            {
+                                                "containerPort": 8080
+                                            }
+                                        ]
                                     }
                                 ],
                                 "items": [
                                     {
                                         "properties": {
-                                            "command": {
-                                                "default": [
-                                                    "/bin/sh",
-                                                    "-c",
-                                                    "echo Hello, World!"
-                                                ],
-                                                "enum": [
-                                                    {
-                                                        "0": "/bin/sh",
-                                                        "1": "-c",
-                                                        "2": "echo Hello, World!"
-                                                    }
-                                                ],
-                                                "items": [
-                                                    {
-                                                        "enum": [
-                                                            "/bin/sh"
-                                                        ],
-                                                        "type": "string"
-                                                    },
-                                                    {
-                                                        "enum": [
-                                                            "-c"
-                                                        ],
-                                                        "type": "string"
-                                                    },
-                                                    {
-                                                        "enum": [
-                                                            "echo Hello, World!"
-                                                        ],
-                                                        "type": "string"
-                                                    }
-                                                ],
-                                                "type": "array"
-                                            },
                                             "image": {
                                                 "enum": [
-                                                    "nginx"
+                                                    "apachepulsar/pulsar:2.8.0"
                                                 ],
                                                 "type": "string"
                                             },
                                             "name": {
                                                 "enum": [
-                                                    "example-container"
+                                                    "pulsar-admin-container"
                                                 ],
                                                 "type": "string"
+                                            },
+                                            "ports": {
+                                                "default": [
+                                                    {
+                                                        "containerPort": 8080
+                                                    }
+                                                ],
+                                                "items": [
+                                                    {
+                                                        "properties": {
+                                                            "containerPort": {
+                                                                "enum": [
+                                                                    8080
+                                                                ],
+                                                                "type": "integer"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "containerPort"
+                                                        ],
+                                                        "type": "object"
+                                                    }
+                                                ],
+                                                "type": "array"
                                             }
                                         },
                                         "required": [
                                             "name",
                                             "image",
-                                            "command"
+                                            "ports"
                                         ],
                                         "type": "object"
                                     }
