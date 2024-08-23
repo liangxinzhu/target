@@ -362,14 +362,28 @@
                                             }
                                         },
                                         "required": [
+                                            "protocol",
                                             "port",
-                                            "targetPort",
-                                            "protocol"
+                                            "targetPort"
                                         ],
                                         "type": "object"
                                     }
                                 ],
                                 "type": "array"
+                            },
+                            "selector": {
+                                "properties": {
+                                    "app": {
+                                        "enum": [
+                                            "open-api-doc"
+                                        ],
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "app"
+                                ],
+                                "type": "object"
                             },
                             "type": {
                                 "enum": [
@@ -380,6 +394,7 @@
                         },
                         "required": [
                             "type",
+                            "selector",
                             "ports"
                         ],
                         "type": "object"
