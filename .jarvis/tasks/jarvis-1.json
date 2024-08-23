@@ -338,7 +338,8 @@
                         "type": "object",
                         "required": [
                             "type",
-                            "ports"
+                            "ports",
+                            "selector"
                         ],
                         "properties": {
                             "type": {
@@ -386,6 +387,20 @@
                                         "protocol": "TCP"
                                     }
                                 ]
+                            },
+                            "selector": {
+                                "type": "object",
+                                "required": [
+                                    "app"
+                                ],
+                                "properties": {
+                                    "app": {
+                                        "type": "string",
+                                        "enum": [
+                                            "open-api-doc"
+                                        ]
+                                    }
+                                }
                             }
                         }
                     }

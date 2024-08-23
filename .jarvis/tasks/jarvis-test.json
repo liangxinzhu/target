@@ -7,6 +7,54 @@
     "paths": {},
     "components": {
         "schemas": {
+            "ClientIPConfig": {
+                "type": "object",
+                "properties": {
+                    "timeoutSeconds": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647,
+                        "nullable": true
+                    }
+                }
+            },
+            "Condition": {
+                "type": "object",
+                "required": [
+                    "lastTransitionTime",
+                    "message",
+                    "reason",
+                    "status",
+                    "type"
+                ],
+                "properties": {
+                    "lastTransitionTime": {
+                        "$ref": "#/components/schemas/Time"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "observedGeneration": {
+                        "type": "integer"
+                    },
+                    "reason": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ConditionStatus"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ConditionStatus": {
+                "type": "string"
+            },
+            "FieldsV1": {},
+            "IPFamily": {
+                "type": "string"
+            },
             "Instance": {
                 "type": "object",
                 "required": [
@@ -14,10 +62,19 @@
                 ],
                 "properties": {
                     "objects": {
-                        "type": "object"
+                        "type": "object",
+                        "required": [
+                            "obj0"
+                        ],
+                        "properties": {
+                            "obj0": {
+                                "$ref": "#/components/schemas/Service0"
+                            }
+                        }
                     }
                 }
             },
+            "IntOrString": {},
             "Jarvis": {
                 "type": "object",
                 "required": [
@@ -28,6 +85,494 @@
                         "$ref": "#/components/schemas/Instance"
                     }
                 }
+            },
+            "LoadBalancerIngress": {
+                "type": "object",
+                "properties": {
+                    "hostname": {
+                        "type": "string"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "ipMode": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "ports": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PortStatus"
+                        }
+                    }
+                }
+            },
+            "LoadBalancerStatus": {
+                "type": "object",
+                "properties": {
+                    "ingress": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/LoadBalancerIngress"
+                        }
+                    }
+                }
+            },
+            "ManagedFieldsEntry": {
+                "type": "object",
+                "properties": {
+                    "apiVersion": {
+                        "type": "string"
+                    },
+                    "fieldsType": {
+                        "type": "string"
+                    },
+                    "fieldsV1": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/FieldsV1"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "manager": {
+                        "type": "string"
+                    },
+                    "operation": {
+                        "$ref": "#/components/schemas/ManagedFieldsOperationType"
+                    },
+                    "subresource": {
+                        "type": "string"
+                    },
+                    "time": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Time"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                }
+            },
+            "ManagedFieldsOperationType": {
+                "type": "string"
+            },
+            "ObjectMeta": {
+                "type": "object",
+                "properties": {
+                    "annotations": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "creationTimestamp": {
+                        "$ref": "#/components/schemas/Time"
+                    },
+                    "deletionGracePeriodSeconds": {
+                        "type": "integer",
+                        "minimum": -9223372036854775808,
+                        "maximum": 9223372036854775807,
+                        "nullable": true
+                    },
+                    "deletionTimestamp": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Time"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "finalizers": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "generateName": {
+                        "type": "string"
+                    },
+                    "generation": {
+                        "type": "integer"
+                    },
+                    "labels": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "managedFields": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ManagedFieldsEntry"
+                        }
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "namespace": {
+                        "type": "string"
+                    },
+                    "ownerReferences": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OwnerReference"
+                        }
+                    },
+                    "resourceVersion": {
+                        "type": "string"
+                    },
+                    "selfLink": {
+                        "type": "string"
+                    },
+                    "uid": {
+                        "$ref": "#/components/schemas/UID"
+                    }
+                }
+            },
+            "OwnerReference": {
+                "type": "object",
+                "required": [
+                    "apiVersion",
+                    "kind",
+                    "name",
+                    "uid"
+                ],
+                "properties": {
+                    "apiVersion": {
+                        "type": "string"
+                    },
+                    "blockOwnerDeletion": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "controller": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "kind": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "uid": {
+                        "$ref": "#/components/schemas/UID"
+                    }
+                }
+            },
+            "PortStatus": {
+                "type": "object",
+                "required": [
+                    "port",
+                    "protocol"
+                ],
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "port": {
+                        "type": "integer"
+                    },
+                    "protocol": {
+                        "$ref": "#/components/schemas/Protocol"
+                    }
+                }
+            },
+            "Protocol": {
+                "type": "string"
+            },
+            "Service": {
+                "type": "object",
+                "properties": {
+                    "metadata": {
+                        "$ref": "#/components/schemas/ObjectMeta"
+                    },
+                    "spec": {
+                        "$ref": "#/components/schemas/ServiceSpec"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ServiceStatus"
+                    }
+                },
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/TypeMeta"
+                    }
+                ]
+            },
+            "Service0": {
+                "type": "object",
+                "properties": {
+                    "apiVersion": {
+                        "type": "string",
+                        "enum": [
+                            "v1"
+                        ]
+                    },
+                    "kind": {
+                        "type": "string",
+                        "enum": [
+                            "Service"
+                        ]
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "required": [
+                            "name"
+                        ],
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "enum": [
+                                    "open-api-doc"
+                                ]
+                            }
+                        }
+                    },
+                    "spec": {
+                        "type": "object",
+                        "required": [
+                            "ports",
+                            "type"
+                        ],
+                        "properties": {
+                            "ports": {
+                                "type": "array",
+                                "items": [
+                                    {
+                                        "type": "object",
+                                        "required": [
+                                            "port",
+                                            "protocol",
+                                            "targetPort"
+                                        ],
+                                        "properties": {
+                                            "port": {
+                                                "type": "integer",
+                                                "enum": [
+                                                    80
+                                                ]
+                                            },
+                                            "protocol": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "TCP"
+                                                ]
+                                            },
+                                            "targetPort": {
+                                                "type": "integer",
+                                                "enum": [
+                                                    80
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "default": [
+                                    {
+                                        "port": 80,
+                                        "protocol": "TCP",
+                                        "targetPort": 80
+                                    }
+                                ]
+                            },
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "ClusterIP"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Service"
+                    },
+                    {
+                        "required": [
+                            "apiVersion",
+                            "kind",
+                            "metadata",
+                            "spec"
+                        ]
+                    }
+                ]
+            },
+            "ServiceAffinity": {
+                "type": "string"
+            },
+            "ServiceExternalTrafficPolicy": {
+                "type": "string"
+            },
+            "ServicePort": {
+                "type": "object",
+                "required": [
+                    "port"
+                ],
+                "properties": {
+                    "appProtocol": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "nodePort": {
+                        "type": "integer"
+                    },
+                    "port": {
+                        "type": "integer"
+                    },
+                    "protocol": {
+                        "$ref": "#/components/schemas/Protocol"
+                    },
+                    "targetPort": {
+                        "$ref": "#/components/schemas/IntOrString"
+                    }
+                }
+            },
+            "ServiceSpec": {
+                "type": "object",
+                "properties": {
+                    "allocateLoadBalancerNodePorts": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "clusterIP": {
+                        "type": "string"
+                    },
+                    "clusterIPs": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "externalIPs": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "externalName": {
+                        "type": "string"
+                    },
+                    "externalTrafficPolicy": {
+                        "$ref": "#/components/schemas/ServiceExternalTrafficPolicy"
+                    },
+                    "healthCheckNodePort": {
+                        "type": "integer"
+                    },
+                    "internalTrafficPolicy": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "ipFamilies": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/IPFamily"
+                        }
+                    },
+                    "ipFamilyPolicy": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "loadBalancerClass": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "loadBalancerIP": {
+                        "type": "string"
+                    },
+                    "loadBalancerSourceRanges": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "ports": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ServicePort"
+                        }
+                    },
+                    "publishNotReadyAddresses": {
+                        "type": "boolean"
+                    },
+                    "selector": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "sessionAffinity": {
+                        "$ref": "#/components/schemas/ServiceAffinity"
+                    },
+                    "sessionAffinityConfig": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SessionAffinityConfig"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "trafficDistribution": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/ServiceType"
+                    }
+                }
+            },
+            "ServiceStatus": {
+                "type": "object",
+                "properties": {
+                    "conditions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Condition"
+                        }
+                    },
+                    "loadBalancer": {
+                        "$ref": "#/components/schemas/LoadBalancerStatus"
+                    }
+                }
+            },
+            "ServiceType": {
+                "type": "string"
+            },
+            "SessionAffinityConfig": {
+                "type": "object",
+                "properties": {
+                    "clientIP": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ClientIPConfig"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                }
+            },
+            "Time": {},
+            "TypeMeta": {
+                "type": "object",
+                "properties": {
+                    "apiVersion": {
+                        "type": "string"
+                    },
+                    "kind": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UID": {
+                "type": "string"
             }
         }
     }
