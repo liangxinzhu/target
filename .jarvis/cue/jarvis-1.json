@@ -371,6 +371,20 @@
                                 ],
                                 "type": "array"
                             },
+                            "selector": {
+                                "properties": {
+                                    "app": {
+                                        "enum": [
+                                            "open-api-doc"
+                                        ],
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "app"
+                                ],
+                                "type": "object"
+                            },
                             "type": {
                                 "enum": [
                                     "ClusterIP"
@@ -380,7 +394,8 @@
                         },
                         "required": [
                             "type",
-                            "ports"
+                            "ports",
+                            "selector"
                         ],
                         "type": "object"
                     }
