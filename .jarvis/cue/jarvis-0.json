@@ -249,6 +249,17 @@
                 },
                 "type": "object"
             },
+            "ClientIPConfig": {
+                "properties": {
+                    "timeoutSeconds": {
+                        "maximum": 2147483647,
+                        "minimum": -2147483648,
+                        "nullable": true,
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "ClusterTrustBundleProjection": {
                 "properties": {
                     "labelSelector": {
@@ -278,6 +289,37 @@
                 },
                 "required": [
                     "path"
+                ],
+                "type": "object"
+            },
+            "Condition": {
+                "properties": {
+                    "lastTransitionTime": {
+                        "$ref": "#/components/schemas/Time"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "observedGeneration": {
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "reason": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ConditionStatus"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "type",
+                    "status",
+                    "lastTransitionTime",
+                    "reason",
+                    "message"
                 ],
                 "type": "object"
             },
@@ -541,56 +583,217 @@
                 ],
                 "type": "object"
             },
-            "ContainerState": {
+            "DNSPolicy": {
+                "type": "string"
+            },
+            "Deployment": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/TypeMeta"
+                    }
+                ],
                 "properties": {
-                    "running": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ContainerStateRunning"
-                            }
-                        ],
-                        "nullable": true,
-                        "type": "object"
+                    "metadata": {
+                        "$ref": "#/components/schemas/ObjectMeta"
                     },
-                    "terminated": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ContainerStateTerminated"
-                            }
-                        ],
-                        "nullable": true,
-                        "type": "object"
+                    "spec": {
+                        "$ref": "#/components/schemas/DeploymentSpec"
                     },
-                    "waiting": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/ContainerStateWaiting"
-                            }
-                        ],
-                        "nullable": true,
-                        "type": "object"
+                    "status": {
+                        "$ref": "#/components/schemas/DeploymentStatus"
                     }
                 },
                 "type": "object"
             },
-            "ContainerStateRunning": {
-                "properties": {
-                    "startedAt": {
-                        "$ref": "#/components/schemas/Time"
+            "Deployment0": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Deployment"
+                    },
+                    {
+                        "required": [
+                            "apiVersion",
+                            "kind",
+                            "metadata",
+                            "spec"
+                        ]
                     }
-                },
-                "type": "object"
-            },
-            "ContainerStateTerminated": {
+                ],
                 "properties": {
-                    "containerID": {
+                    "apiVersion": {
+                        "enum": [
+                            "apps/v1"
+                        ],
                         "type": "string"
                     },
-                    "exitCode": {
-                        "format": "int32",
-                        "type": "integer"
+                    "kind": {
+                        "enum": [
+                            "Deployment"
+                        ],
+                        "type": "string"
                     },
-                    "finishedAt": {
+                    "metadata": {
+                        "properties": {
+                            "name": {
+                                "enum": [
+                                    "simple-deployment"
+                                ],
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "type": "object"
+                    },
+                    "spec": {
+                        "properties": {
+                            "replicas": {
+                                "enum": [
+                                    2
+                                ],
+                                "type": "integer"
+                            },
+                            "selector": {
+                                "properties": {
+                                    "matchLabels": {
+                                        "properties": {
+                                            "app": {
+                                                "enum": [
+                                                    "MyApp"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "app"
+                                        ],
+                                        "type": "object"
+                                    }
+                                },
+                                "required": [
+                                    "matchLabels"
+                                ],
+                                "type": "object"
+                            },
+                            "template": {
+                                "properties": {
+                                    "metadata": {
+                                        "properties": {
+                                            "labels": {
+                                                "properties": {
+                                                    "app": {
+                                                        "enum": [
+                                                            "MyApp"
+                                                        ],
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "app"
+                                                ],
+                                                "type": "object"
+                                            }
+                                        },
+                                        "required": [
+                                            "labels"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    "spec": {
+                                        "properties": {
+                                            "containers": {
+                                                "default": [
+                                                    {
+                                                        "image": "myapp:latest",
+                                                        "name": "myapp-container",
+                                                        "ports": [
+                                                            {
+                                                                "containerPort": 8080
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "items": [
+                                                    {
+                                                        "properties": {
+                                                            "image": {
+                                                                "enum": [
+                                                                    "myapp:latest"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "enum": [
+                                                                    "myapp-container"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "ports": {
+                                                                "default": [
+                                                                    {
+                                                                        "containerPort": 8080
+                                                                    }
+                                                                ],
+                                                                "items": [
+                                                                    {
+                                                                        "properties": {
+                                                                            "containerPort": {
+                                                                                "enum": [
+                                                                                    8080
+                                                                                ],
+                                                                                "type": "integer"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "containerPort"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    }
+                                                                ],
+                                                                "type": "array"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "name",
+                                                            "image",
+                                                            "ports"
+                                                        ],
+                                                        "type": "object"
+                                                    }
+                                                ],
+                                                "type": "array"
+                                            }
+                                        },
+                                        "required": [
+                                            "containers"
+                                        ],
+                                        "type": "object"
+                                    }
+                                },
+                                "required": [
+                                    "metadata",
+                                    "spec"
+                                ],
+                                "type": "object"
+                            }
+                        },
+                        "required": [
+                            "replicas",
+                            "selector",
+                            "template"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "DeploymentCondition": {
+                "properties": {
+                    "lastTransitionTime": {
+                        "$ref": "#/components/schemas/Time"
+                    },
+                    "lastUpdateTime": {
                         "$ref": "#/components/schemas/Time"
                     },
                     "message": {
@@ -599,90 +802,129 @@
                     "reason": {
                         "type": "string"
                     },
-                    "signal": {
-                        "format": "int32",
-                        "type": "integer"
+                    "status": {
+                        "$ref": "#/components/schemas/ConditionStatus"
                     },
-                    "startedAt": {
-                        "$ref": "#/components/schemas/Time"
+                    "type": {
+                        "$ref": "#/components/schemas/DeploymentConditionType"
                     }
                 },
                 "required": [
-                    "exitCode"
+                    "type",
+                    "status"
                 ],
                 "type": "object"
             },
-            "ContainerStateWaiting": {
-                "properties": {
-                    "message": {
-                        "type": "string"
-                    },
-                    "reason": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
+            "DeploymentConditionType": {
+                "type": "string"
             },
-            "ContainerStatus": {
+            "DeploymentSpec": {
                 "properties": {
-                    "allocatedResources": {
-                        "$ref": "#/components/schemas/ResourceList"
+                    "minReadySeconds": {
+                        "format": "int32",
+                        "type": "integer"
                     },
-                    "containerID": {
-                        "type": "string"
-                    },
-                    "image": {
-                        "type": "string"
-                    },
-                    "imageID": {
-                        "type": "string"
-                    },
-                    "lastState": {
-                        "$ref": "#/components/schemas/ContainerState"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "ready": {
+                    "paused": {
                         "type": "boolean"
                     },
-                    "resources": {
+                    "progressDeadlineSeconds": {
+                        "maximum": 2147483647,
+                        "minimum": -2147483648,
+                        "nullable": true,
+                        "type": "integer"
+                    },
+                    "replicas": {
+                        "maximum": 2147483647,
+                        "minimum": -2147483648,
+                        "nullable": true,
+                        "type": "integer"
+                    },
+                    "revisionHistoryLimit": {
+                        "maximum": 2147483647,
+                        "minimum": -2147483648,
+                        "nullable": true,
+                        "type": "integer"
+                    },
+                    "selector": {
                         "allOf": [
                             {
-                                "$ref": "#/components/schemas/ResourceRequirements"
+                                "$ref": "#/components/schemas/LabelSelector"
                             }
                         ],
                         "nullable": true,
                         "type": "object"
                     },
-                    "restartCount": {
+                    "strategy": {
+                        "$ref": "#/components/schemas/DeploymentStrategy"
+                    },
+                    "template": {
+                        "$ref": "#/components/schemas/PodTemplateSpec"
+                    }
+                },
+                "required": [
+                    "template"
+                ],
+                "type": "object"
+            },
+            "DeploymentStatus": {
+                "properties": {
+                    "availableReplicas": {
                         "format": "int32",
                         "type": "integer"
                     },
-                    "started": {
+                    "collisionCount": {
+                        "maximum": 2147483647,
+                        "minimum": -2147483648,
                         "nullable": true,
-                        "type": "boolean"
+                        "type": "integer"
                     },
-                    "state": {
-                        "$ref": "#/components/schemas/ContainerState"
-                    },
-                    "volumeMounts": {
+                    "conditions": {
                         "items": {
-                            "$ref": "#/components/schemas/VolumeMountStatus"
+                            "$ref": "#/components/schemas/DeploymentCondition"
                         },
                         "type": "array"
+                    },
+                    "observedGeneration": {
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "readyReplicas": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "replicas": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "unavailableReplicas": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "updatedReplicas": {
+                        "format": "int32",
+                        "type": "integer"
                     }
                 },
-                "required": [
-                    "name",
-                    "ready",
-                    "restartCount",
-                    "image",
-                    "imageID"
-                ],
                 "type": "object"
             },
-            "DNSPolicy": {
+            "DeploymentStrategy": {
+                "properties": {
+                    "rollingUpdate": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/RollingUpdateDeployment"
+                            }
+                        ],
+                        "nullable": true,
+                        "type": "object"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/DeploymentStrategyType"
+                    }
+                },
+                "type": "object"
+            },
+            "DeploymentStrategyType": {
                 "type": "string"
             },
             "DownwardAPIProjection": {
@@ -1227,14 +1469,6 @@
                 },
                 "type": "object"
             },
-            "HostIP": {
-                "properties": {
-                    "ip": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
             "HostPathVolumeSource": {
                 "properties": {
                     "path": {
@@ -1249,6 +1483,9 @@
                     "path"
                 ],
                 "type": "object"
+            },
+            "IPFamily": {
+                "type": "string"
             },
             "ISCSIVolumeSource": {
                 "properties": {
@@ -1309,11 +1546,15 @@
                     "objects": {
                         "properties": {
                             "obj0": {
-                                "$ref": "#/components/schemas/Pod0"
+                                "$ref": "#/components/schemas/Service0"
+                            },
+                            "obj1": {
+                                "$ref": "#/components/schemas/Deployment0"
                             }
                         },
                         "required": [
-                            "obj0"
+                            "obj0",
+                            "obj1"
                         ],
                         "type": "object"
                     }
@@ -1446,6 +1687,38 @@
                         ],
                         "nullable": true,
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "LoadBalancerIngress": {
+                "properties": {
+                    "hostname": {
+                        "type": "string"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "ipMode": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "ports": {
+                        "items": {
+                            "$ref": "#/components/schemas/PortStatus"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            },
+            "LoadBalancerStatus": {
+                "properties": {
+                    "ingress": {
+                        "items": {
+                            "$ref": "#/components/schemas/LoadBalancerIngress"
+                        },
+                        "type": "array"
                     }
                 },
                 "type": "object"
@@ -1813,150 +2086,6 @@
                 ],
                 "type": "object"
             },
-            "Pod": {
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/TypeMeta"
-                    }
-                ],
-                "properties": {
-                    "metadata": {
-                        "$ref": "#/components/schemas/ObjectMeta"
-                    },
-                    "spec": {
-                        "$ref": "#/components/schemas/PodSpec"
-                    },
-                    "status": {
-                        "$ref": "#/components/schemas/PodStatus"
-                    }
-                },
-                "type": "object"
-            },
-            "Pod0": {
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/Pod"
-                    },
-                    {
-                        "required": [
-                            "apiVersion",
-                            "kind",
-                            "metadata",
-                            "spec"
-                        ]
-                    }
-                ],
-                "properties": {
-                    "apiVersion": {
-                        "enum": [
-                            "v1"
-                        ],
-                        "type": "string"
-                    },
-                    "kind": {
-                        "enum": [
-                            "Pod"
-                        ],
-                        "type": "string"
-                    },
-                    "metadata": {
-                        "properties": {
-                            "name": {
-                                "enum": [
-                                    "example-pod"
-                                ],
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "name"
-                        ],
-                        "type": "object"
-                    },
-                    "spec": {
-                        "properties": {
-                            "containers": {
-                                "default": [
-                                    {
-                                        "command": [
-                                            "/bin/sh",
-                                            "-c",
-                                            "echo Hello, World!"
-                                        ],
-                                        "image": "nginx",
-                                        "name": "example-container"
-                                    }
-                                ],
-                                "items": [
-                                    {
-                                        "properties": {
-                                            "command": {
-                                                "default": [
-                                                    "/bin/sh",
-                                                    "-c",
-                                                    "echo Hello, World!"
-                                                ],
-                                                "enum": [
-                                                    {
-                                                        "0": "/bin/sh",
-                                                        "1": "-c",
-                                                        "2": "echo Hello, World!"
-                                                    }
-                                                ],
-                                                "items": [
-                                                    {
-                                                        "enum": [
-                                                            "/bin/sh"
-                                                        ],
-                                                        "type": "string"
-                                                    },
-                                                    {
-                                                        "enum": [
-                                                            "-c"
-                                                        ],
-                                                        "type": "string"
-                                                    },
-                                                    {
-                                                        "enum": [
-                                                            "echo Hello, World!"
-                                                        ],
-                                                        "type": "string"
-                                                    }
-                                                ],
-                                                "type": "array"
-                                            },
-                                            "image": {
-                                                "enum": [
-                                                    "nginx"
-                                                ],
-                                                "type": "string"
-                                            },
-                                            "name": {
-                                                "enum": [
-                                                    "example-container"
-                                                ],
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "name",
-                                            "image",
-                                            "command"
-                                        ],
-                                        "type": "object"
-                                    }
-                                ],
-                                "type": "array"
-                            }
-                        },
-                        "required": [
-                            "containers"
-                        ],
-                        "type": "object"
-                    }
-                },
-                "type": "object"
-            },
             "PodAffinity": {
                 "properties": {
                     "preferredDuringSchedulingIgnoredDuringExecution": {
@@ -2038,33 +2167,6 @@
                 },
                 "type": "object"
             },
-            "PodCondition": {
-                "properties": {
-                    "lastProbeTime": {
-                        "$ref": "#/components/schemas/Time"
-                    },
-                    "lastTransitionTime": {
-                        "$ref": "#/components/schemas/Time"
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "reason": {
-                        "type": "string"
-                    },
-                    "status": {
-                        "$ref": "#/components/schemas/ConditionStatus"
-                    },
-                    "type": {
-                        "$ref": "#/components/schemas/PodConditionType"
-                    }
-                },
-                "required": [
-                    "type",
-                    "status"
-                ],
-                "type": "object"
-            },
             "PodConditionType": {
                 "type": "string"
             },
@@ -2103,14 +2205,6 @@
                 },
                 "type": "object"
             },
-            "PodIP": {
-                "properties": {
-                    "ip": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
             "PodOS": {
                 "properties": {
                     "name": {
@@ -2121,12 +2215,6 @@
                     "name"
                 ],
                 "type": "object"
-            },
-            "PodPhase": {
-                "type": "string"
-            },
-            "PodQOSClass": {
-                "type": "string"
             },
             "PodReadinessGate": {
                 "properties": {
@@ -2139,9 +2227,6 @@
                 ],
                 "type": "object"
             },
-            "PodResizeStatus": {
-                "type": "string"
-            },
             "PodResourceClaim": {
                 "properties": {
                     "name": {
@@ -2149,21 +2234,6 @@
                     },
                     "source": {
                         "$ref": "#/components/schemas/ClaimSource"
-                    }
-                },
-                "required": [
-                    "name"
-                ],
-                "type": "object"
-            },
-            "PodResourceClaimStatus": {
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "resourceClaimName": {
-                        "nullable": true,
-                        "type": "string"
                     }
                 },
                 "required": [
@@ -2463,83 +2533,35 @@
                 ],
                 "type": "object"
             },
-            "PodStatus": {
+            "PodTemplateSpec": {
                 "properties": {
-                    "conditions": {
-                        "items": {
-                            "$ref": "#/components/schemas/PodCondition"
-                        },
-                        "type": "array"
+                    "metadata": {
+                        "$ref": "#/components/schemas/ObjectMeta"
                     },
-                    "containerStatuses": {
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerStatus"
-                        },
-                        "type": "array"
-                    },
-                    "ephemeralContainerStatuses": {
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerStatus"
-                        },
-                        "type": "array"
-                    },
-                    "hostIP": {
-                        "type": "string"
-                    },
-                    "hostIPs": {
-                        "items": {
-                            "$ref": "#/components/schemas/HostIP"
-                        },
-                        "type": "array"
-                    },
-                    "initContainerStatuses": {
-                        "items": {
-                            "$ref": "#/components/schemas/ContainerStatus"
-                        },
-                        "type": "array"
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "nominatedNodeName": {
-                        "type": "string"
-                    },
-                    "phase": {
-                        "$ref": "#/components/schemas/PodPhase"
-                    },
-                    "podIP": {
-                        "type": "string"
-                    },
-                    "podIPs": {
-                        "items": {
-                            "$ref": "#/components/schemas/PodIP"
-                        },
-                        "type": "array"
-                    },
-                    "qosClass": {
-                        "$ref": "#/components/schemas/PodQOSClass"
-                    },
-                    "reason": {
-                        "type": "string"
-                    },
-                    "resize": {
-                        "$ref": "#/components/schemas/PodResizeStatus"
-                    },
-                    "resourceClaimStatuses": {
-                        "items": {
-                            "$ref": "#/components/schemas/PodResourceClaimStatus"
-                        },
-                        "type": "array"
-                    },
-                    "startTime": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/Time"
-                            }
-                        ],
-                        "nullable": true
+                    "spec": {
+                        "$ref": "#/components/schemas/PodSpec"
                     }
                 },
+                "type": "object"
+            },
+            "PortStatus": {
+                "properties": {
+                    "error": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "port": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "protocol": {
+                        "$ref": "#/components/schemas/Protocol"
+                    }
+                },
+                "required": [
+                    "port",
+                    "protocol"
+                ],
                 "type": "object"
             },
             "PortworxVolumeSource": {
@@ -2805,6 +2827,27 @@
             "RestartPolicy": {
                 "type": "string"
             },
+            "RollingUpdateDeployment": {
+                "properties": {
+                    "maxSurge": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/IntOrString"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "maxUnavailable": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/IntOrString"
+                            }
+                        ],
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
             "SELinuxOptions": {
                 "properties": {
                     "level": {
@@ -3047,6 +3090,132 @@
                 },
                 "type": "object"
             },
+            "Service": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/TypeMeta"
+                    }
+                ],
+                "properties": {
+                    "metadata": {
+                        "$ref": "#/components/schemas/ObjectMeta"
+                    },
+                    "spec": {
+                        "$ref": "#/components/schemas/ServiceSpec"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ServiceStatus"
+                    }
+                },
+                "type": "object"
+            },
+            "Service0": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Service"
+                    },
+                    {
+                        "required": [
+                            "apiVersion",
+                            "kind",
+                            "metadata",
+                            "spec"
+                        ]
+                    }
+                ],
+                "properties": {
+                    "apiVersion": {
+                        "enum": [
+                            "v1"
+                        ],
+                        "type": "string"
+                    },
+                    "kind": {
+                        "enum": [
+                            "Service"
+                        ],
+                        "type": "string"
+                    },
+                    "metadata": {
+                        "properties": {
+                            "name": {
+                                "enum": [
+                                    "simple-service"
+                                ],
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "type": "object"
+                    },
+                    "spec": {
+                        "properties": {
+                            "ports": {
+                                "default": [
+                                    {
+                                        "port": 80,
+                                        "protocol": "TCP",
+                                        "targetPort": 8080
+                                    }
+                                ],
+                                "items": [
+                                    {
+                                        "properties": {
+                                            "port": {
+                                                "enum": [
+                                                    80
+                                                ],
+                                                "type": "integer"
+                                            },
+                                            "protocol": {
+                                                "enum": [
+                                                    "TCP"
+                                                ],
+                                                "type": "string"
+                                            },
+                                            "targetPort": {
+                                                "enum": [
+                                                    8080
+                                                ],
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "required": [
+                                            "protocol",
+                                            "port",
+                                            "targetPort"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ],
+                                "type": "array"
+                            },
+                            "selector": {
+                                "properties": {
+                                    "app": {
+                                        "enum": [
+                                            "MyApp"
+                                        ],
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "app"
+                                ],
+                                "type": "object"
+                            }
+                        },
+                        "required": [
+                            "selector",
+                            "ports"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "ServiceAccountTokenProjection": {
                 "properties": {
                     "audience": {
@@ -3065,6 +3234,167 @@
                 "required": [
                     "path"
                 ],
+                "type": "object"
+            },
+            "ServiceAffinity": {
+                "type": "string"
+            },
+            "ServiceExternalTrafficPolicy": {
+                "type": "string"
+            },
+            "ServicePort": {
+                "properties": {
+                    "appProtocol": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "nodePort": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "port": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "protocol": {
+                        "$ref": "#/components/schemas/Protocol"
+                    },
+                    "targetPort": {
+                        "$ref": "#/components/schemas/IntOrString"
+                    }
+                },
+                "required": [
+                    "port"
+                ],
+                "type": "object"
+            },
+            "ServiceSpec": {
+                "properties": {
+                    "allocateLoadBalancerNodePorts": {
+                        "nullable": true,
+                        "type": "boolean"
+                    },
+                    "clusterIP": {
+                        "type": "string"
+                    },
+                    "clusterIPs": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "externalIPs": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "externalName": {
+                        "type": "string"
+                    },
+                    "externalTrafficPolicy": {
+                        "$ref": "#/components/schemas/ServiceExternalTrafficPolicy"
+                    },
+                    "healthCheckNodePort": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "internalTrafficPolicy": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "ipFamilies": {
+                        "items": {
+                            "$ref": "#/components/schemas/IPFamily"
+                        },
+                        "type": "array"
+                    },
+                    "ipFamilyPolicy": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "loadBalancerClass": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "loadBalancerIP": {
+                        "type": "string"
+                    },
+                    "loadBalancerSourceRanges": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "ports": {
+                        "items": {
+                            "$ref": "#/components/schemas/ServicePort"
+                        },
+                        "type": "array"
+                    },
+                    "publishNotReadyAddresses": {
+                        "type": "boolean"
+                    },
+                    "selector": {
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "type": "object"
+                    },
+                    "sessionAffinity": {
+                        "$ref": "#/components/schemas/ServiceAffinity"
+                    },
+                    "sessionAffinityConfig": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SessionAffinityConfig"
+                            }
+                        ],
+                        "nullable": true,
+                        "type": "object"
+                    },
+                    "trafficDistribution": {
+                        "nullable": true,
+                        "type": "string"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/ServiceType"
+                    }
+                },
+                "type": "object"
+            },
+            "ServiceStatus": {
+                "properties": {
+                    "conditions": {
+                        "items": {
+                            "$ref": "#/components/schemas/Condition"
+                        },
+                        "type": "array"
+                    },
+                    "loadBalancer": {
+                        "$ref": "#/components/schemas/LoadBalancerStatus"
+                    }
+                },
+                "type": "object"
+            },
+            "ServiceType": {
+                "type": "string"
+            },
+            "SessionAffinityConfig": {
+                "properties": {
+                    "clientIP": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ClientIPConfig"
+                            }
+                        ],
+                        "nullable": true,
+                        "type": "object"
+                    }
+                },
                 "type": "object"
             },
             "SleepAction": {
@@ -3337,28 +3667,6 @@
                         "type": "string"
                     },
                     "subPathExpr": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "name",
-                    "mountPath"
-                ],
-                "type": "object"
-            },
-            "VolumeMountStatus": {
-                "properties": {
-                    "mountPath": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "readOnly": {
-                        "type": "boolean"
-                    },
-                    "recursiveReadOnly": {
-                        "nullable": true,
                         "type": "string"
                     }
                 },

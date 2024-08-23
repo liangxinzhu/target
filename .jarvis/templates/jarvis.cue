@@ -75,12 +75,25 @@ info: {
 	resourceClaimTemplateName?: null | string
 	...
 }
+#ClientIPConfig: {
+	timeoutSeconds?: null | int & <=2147483647 & >=-2147483648
+	...
+}
 #ClusterTrustBundleProjection: {
 	labelSelector?: null | #LabelSelector
 	name?:          null | string
 	optional?:      null | bool
 	path:           string
 	signerName?:    null | string
+	...
+}
+#Condition: {
+	lastTransitionTime:  #Time
+	message:             string
+	observedGeneration?: int
+	reason:              string
+	status:              #ConditionStatus
+	type:                string
 	...
 }
 #ConditionStatus: string
@@ -147,47 +160,110 @@ info: {
 	restartPolicy: #ResourceResizeRestartPolicy
 	...
 }
-#ContainerState: {
-	running?:    null | #ContainerStateRunning
-	terminated?: null | #ContainerStateTerminated
-	waiting?:    null | #ContainerStateWaiting
-	...
-}
-#ContainerStateRunning: {
-	startedAt?: #Time
-	...
-}
-#ContainerStateTerminated: {
-	containerID?: string
-	exitCode:     int
-	finishedAt?:  #Time
-	message?:     string
-	reason?:      string
-	signal?:      int
-	startedAt?:   #Time
-	...
-}
-#ContainerStateWaiting: {
-	message?: string
-	reason?:  string
-	...
-}
-#ContainerStatus: {
-	allocatedResources?: #ResourceList
-	containerID?:        string
-	image:               string
-	imageID:             string
-	lastState?:          #ContainerState
-	name:                string
-	ready:               bool
-	resources?:          null | #ResourceRequirements
-	restartCount:        int
-	started?:            null | bool
-	state?:              #ContainerState
-	volumeMounts?: [...#VolumeMountStatus]
-	...
-}
 #DNSPolicy: string
+#Deployment: #TypeMeta & {
+	metadata?: #ObjectMeta
+	spec?:     #DeploymentSpec
+	status?:   #DeploymentStatus
+	...
+}
+#Deployment0: #Deployment & {
+	apiVersion: _
+	kind:       _
+	metadata:   _
+	spec:       _
+	...
+} & {
+	apiVersion?: "apps/v1"
+	kind?:       "Deployment"
+	metadata?: {
+		name: "simple-deployment"
+		...
+	}
+	spec?: {
+		replicas: 2 & int
+		selector: {
+			matchLabels: {
+				app: "MyApp"
+				...
+			}
+			...
+		}
+		template: {
+			metadata: {
+				labels: {
+					app: "MyApp"
+					...
+				}
+				...
+			}
+			spec: {
+				containers: [{
+					image: "myapp:latest"
+					name:  "myapp-container"
+					ports: [{
+						containerPort: 8080 & int
+						...
+					}] | *[{
+						containerPort: 8080
+						...
+					}]
+					...
+				}] | *[{
+					image: "myapp:latest"
+					name:  "myapp-container"
+					ports: [{
+						containerPort: 8080
+						...
+					}]
+					...
+				}]
+				...
+			}
+			...
+		}
+		...
+	}
+	...
+}
+#DeploymentCondition: {
+	lastTransitionTime?: #Time
+	lastUpdateTime?:     #Time
+	message?:            string
+	reason?:             string
+	status:              #ConditionStatus
+	type:                #DeploymentConditionType
+	...
+}
+#DeploymentConditionType: string
+#DeploymentSpec: {
+	minReadySeconds?:         int
+	paused?:                  bool
+	progressDeadlineSeconds?: null | int & <=2147483647 & >=-2147483648
+	replicas?:                null | int & <=2147483647 & >=-2147483648
+	revisionHistoryLimit?:    null | int & <=2147483647 & >=-2147483648
+	selector?:                null | #LabelSelector
+	strategy?:                #DeploymentStrategy
+	template:                 #PodTemplateSpec
+	...
+}
+#DeploymentStatus: {
+	availableReplicas?: int
+	collisionCount?:    null | int & <=2147483647 & >=-2147483648
+	conditions?: [...#DeploymentCondition]
+	observedGeneration?:  int
+	readyReplicas?:       int
+	replicas?:            int
+	unavailableReplicas?: int
+	updatedReplicas?:     int
+	...
+}
+#DeploymentStrategy: {
+	rollingUpdate?: null | #RollingUpdateDeployment
+	type?:          #DeploymentStrategyType
+	...
+}
+#DeploymentStrategyType: string
 #DownwardAPIProjection: {
 	items?: [...#DownwardAPIVolumeFile]
 	...
@@ -331,15 +407,12 @@ info: {
 	ip?: string
 	...
 }
-#HostIP: {
-	ip?: string
-	...
-}
 #HostPathVolumeSource: {
 	path:  string
 	type?: null | string
 	...
 }
+#IPFamily: string
 #ISCSIVolumeSource: {
 	chapAuthDiscovery?: bool
 	chapAuthSession?:   bool
@@ -356,7 +429,8 @@ info: {
 }
 #Instance: {
 	objects: {
-		obj0: #Pod0
+		obj0: #Service0
+		obj1: #Deployment0
 		...
 	}
 	...
@@ -390,6 +464,17 @@ info: {
 	httpGet?:   null | #HTTPGetAction
 	sleep?:     null | #SleepAction
 	tcpSocket?: null | #TCPSocketAction
+	...
+}
+#LoadBalancerIngress: {
+	hostname?: string
+	ip?:       string
+	ipMode?:   null | string
+	ports?: [...#PortStatus]
+	...
+}
+#LoadBalancerStatus: {
+	ingress?: [...#LoadBalancerIngress]
 	...
 }
 #LocalObjectReference: {
@@ -495,46 +580,6 @@ info: {
 	pdID:    string
 	...
 }
-#Pod: #TypeMeta & {
-	metadata?: #ObjectMeta
-	spec?:     #PodSpec
-	status?:   #PodStatus
-	...
-}
-#Pod0: #Pod & {
-	apiVersion: _
-	kind:       _
-	metadata:   _
-	spec:       _
-	...
-} & {
-	apiVersion?: "v1"
-	kind?:       "Pod"
-	metadata?: {
-		name: "example-pod"
-		...
-	}
-	spec?: {
-		containers: [{
-			command: {
-				"0": "/bin/sh"
-				"1": "-c"
-				"2": "echo Hello, World!"
-				...
-			} & ["/bin/sh", "-c", "echo Hello, World!"] | *["/bin/sh", "-c", "echo Hello, World!"]
-			image: "nginx"
-			name:  "example-container"
-			...
-		}] | *[{
-			command: ["/bin/sh", "-c", "echo Hello, World!"]
-			image: "nginx"
-			name:  "example-container"
-			...
-		}]
-		...
-	}
-	...
-}
 #PodAffinity: {
 	preferredDuringSchedulingIgnoredDuringExecution?: [...#WeightedPodAffinityTerm]
 	requiredDuringSchedulingIgnoredDuringExecution?: [...#PodAffinityTerm]
@@ -554,15 +599,6 @@ info: {
 	requiredDuringSchedulingIgnoredDuringExecution?: [...#PodAffinityTerm]
 	...
 }
-#PodCondition: {
-	lastProbeTime?:      #Time
-	lastTransitionTime?: #Time
-	message?:            string
-	reason?:             string
-	status:              #ConditionStatus
-	type:                #PodConditionType
-	...
-}
 #PodConditionType: string
 #PodDNSConfig: {
 	nameservers?: [...string]
@@ -575,29 +611,17 @@ info: {
 	value?: null | string
 	...
 }
-#PodIP: {
-	ip?: string
-	...
-}
 #PodOS: {
 	name: #OSName
 	...
 }
-#PodPhase:    string
-#PodQOSClass: string
 #PodReadinessGate: {
 	conditionType: #PodConditionType
 	...
 }
-#PodResizeStatus: string
 #PodResourceClaim: {
 	name:    string
 	source?: #ClaimSource
-	...
-}
-#PodResourceClaimStatus: {
-	name:               string
-	resourceClaimName?: null | string
 	...
 }
 #PodSchedulingGate: {
@@ -660,23 +684,15 @@ info: {
 	volumes?: [...#Volume]
 	...
 }
-#PodStatus: {
-	conditions?: [...#PodCondition]
-	containerStatuses?: [...#ContainerStatus]
-	ephemeralContainerStatuses?: [...#ContainerStatus]
-	hostIP?: string
-	hostIPs?: [...#HostIP]
-	initContainerStatuses?: [...#ContainerStatus]
-	message?:           string
-	nominatedNodeName?: string
-	phase?:             #PodPhase
-	podIP?:             string
-	podIPs?: [...#PodIP]
-	qosClass?: #PodQOSClass
-	reason?:   string
-	resize?:   #PodResizeStatus
-	resourceClaimStatuses?: [...#PodResourceClaimStatus]
-	startTime?: null | #Time
+#PodTemplateSpec: {
+	metadata?: #ObjectMeta
+	spec?:     #PodSpec
+	...
+}
+#PortStatus: {
+	error?:   null | string
+	port:     int
+	protocol: #Protocol
 	...
 }
 #PortworxVolumeSource: {
@@ -754,6 +770,11 @@ info: {
 }
 #ResourceResizeRestartPolicy: string
 #RestartPolicy:               string
+#RollingUpdateDeployment: {
+	maxSurge?:       null | #IntOrString
+	maxUnavailable?: null | #IntOrString
+	...
+}
 #SELinuxOptions: {
 	level?: string
 	role?:  string
@@ -819,10 +840,93 @@ info: {
 	windowsOptions?:           null | #WindowsSecurityContextOptions
 	...
 }
+#Service: #TypeMeta & {
+	metadata?: #ObjectMeta
+	spec?:     #ServiceSpec
+	status?:   #ServiceStatus
+	...
+}
+#Service0: #Service & {
+	apiVersion: _
+	kind:       _
+	metadata:   _
+	spec:       _
+	...
+} & {
+	apiVersion?: "v1"
+	kind?:       "Service"
+	metadata?: {
+		name: "simple-service"
+		...
+	}
+	spec?: {
+		ports: [{
+			port:       80 & int
+			protocol:   "TCP"
+			targetPort: 8080 & int
+			...
+		}] | *[{
+			port:       80
+			protocol:   "TCP"
+			targetPort: 8080
+			...
+		}]
+		selector: {
+			app: "MyApp"
+			...
+		}
+		...
+	}
+	...
+}
 #ServiceAccountTokenProjection: {
 	audience?:          string
 	expirationSeconds?: null | int & <=9223372036854775807 & >=-9223372036854775808
 	path:               string
+	...
+}
+#ServiceAffinity:              string
+#ServiceExternalTrafficPolicy: string
+#ServicePort: {
+	appProtocol?: null | string
+	name?:        string
+	nodePort?:    int
+	port:         int
+	protocol?:    #Protocol
+	targetPort?:  #IntOrString
+	...
+}
+#ServiceSpec: {
+	allocateLoadBalancerNodePorts?: null | bool
+	clusterIP?:                     string
+	clusterIPs?: [...string]
+	externalIPs?: [...string]
+	externalName?:          string
+	externalTrafficPolicy?: #ServiceExternalTrafficPolicy
+	healthCheckNodePort?:   int
+	internalTrafficPolicy?: null | string
+	ipFamilies?: [...#IPFamily]
+	ipFamilyPolicy?:    null | string
+	loadBalancerClass?: null | string
+	loadBalancerIP?:    string
+	loadBalancerSourceRanges?: [...string]
+	ports?: [...#ServicePort]
+	publishNotReadyAddresses?: bool
+	selector?: [string]: string
+	sessionAffinity?:       #ServiceAffinity
+	sessionAffinityConfig?: null | #SessionAffinityConfig
+	trafficDistribution?:   null | string
+	type?:                  #ServiceType
+	...
+}
+#ServiceStatus: {
+	conditions?: [...#Condition]
+	loadBalancer?: #LoadBalancerStatus
+	...
+}
+#ServiceType: string
+#SessionAffinityConfig: {
+	clientIP?: null | #ClientIPConfig
 	...
 }
 #SleepAction: {
@@ -912,13 +1016,6 @@ info: {
 	recursiveReadOnly?: null | string
 	subPath?:           string
 	subPathExpr?:       string
-	...
-}
-#VolumeMountStatus: {
-	mountPath:          string
-	name:               string
-	readOnly?:          bool
-	recursiveReadOnly?: null | string
 	...
 }
 #VolumeProjection: {
