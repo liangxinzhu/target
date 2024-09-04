@@ -14,7 +14,341 @@
                 ],
                 "properties": {
                     "objects": {
-                        "type": "object"
+                        "type": "array",
+                        "items": [
+                            {
+                                "type": "object",
+                                "required": [
+                                    "apiVersion",
+                                    "kind",
+                                    "metadata",
+                                    "spec"
+                                ],
+                                "properties": {
+                                    "apiVersion": {
+                                        "type": "string",
+                                        "enum": [
+                                            "v1"
+                                        ]
+                                    },
+                                    "kind": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Service"
+                                        ]
+                                    },
+                                    "metadata": {
+                                        "type": "object",
+                                        "required": [
+                                            "name"
+                                        ],
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "my-service"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "spec": {
+                                        "type": "object",
+                                        "required": [
+                                            "ports",
+                                            "selector"
+                                        ],
+                                        "properties": {
+                                            "ports": {
+                                                "type": "array",
+                                                "items": [
+                                                    {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "port",
+                                                            "protocol",
+                                                            "targetPort"
+                                                        ],
+                                                        "properties": {
+                                                            "port": {
+                                                                "type": "integer",
+                                                                "enum": [
+                                                                    80
+                                                                ]
+                                                            },
+                                                            "protocol": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "TCP"
+                                                                ]
+                                                            },
+                                                            "targetPort": {
+                                                                "type": "integer",
+                                                                "enum": [
+                                                                    8080
+                                                                ]
+                                                            }
+                                                        }
+                                                    }
+                                                ],
+                                                "default": [
+                                                    {
+                                                        "port": 80,
+                                                        "protocol": "TCP",
+                                                        "targetPort": 8080
+                                                    }
+                                                ]
+                                            },
+                                            "selector": {
+                                                "type": "object",
+                                                "required": [
+                                                    "app"
+                                                ],
+                                                "properties": {
+                                                    "app": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "my-app"
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "required": [
+                                    "apiVersion",
+                                    "kind",
+                                    "metadata",
+                                    "spec"
+                                ],
+                                "properties": {
+                                    "apiVersion": {
+                                        "type": "string",
+                                        "enum": [
+                                            "apps/v1"
+                                        ]
+                                    },
+                                    "kind": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Deployment"
+                                        ]
+                                    },
+                                    "metadata": {
+                                        "type": "object",
+                                        "required": [
+                                            "name"
+                                        ],
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "my-deployment"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "spec": {
+                                        "type": "object",
+                                        "required": [
+                                            "replicas",
+                                            "selector",
+                                            "template"
+                                        ],
+                                        "properties": {
+                                            "replicas": {
+                                                "type": "integer",
+                                                "enum": [
+                                                    3
+                                                ]
+                                            },
+                                            "selector": {
+                                                "type": "object",
+                                                "required": [
+                                                    "matchLabels"
+                                                ],
+                                                "properties": {
+                                                    "matchLabels": {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "app"
+                                                        ],
+                                                        "properties": {
+                                                            "app": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                    "my-app"
+                                                                ]
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "template": {
+                                                "type": "object",
+                                                "required": [
+                                                    "metadata",
+                                                    "spec"
+                                                ],
+                                                "properties": {
+                                                    "metadata": {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "labels"
+                                                        ],
+                                                        "properties": {
+                                                            "labels": {
+                                                                "type": "object",
+                                                                "required": [
+                                                                    "app"
+                                                                ],
+                                                                "properties": {
+                                                                    "app": {
+                                                                        "type": "string",
+                                                                        "enum": [
+                                                                            "my-app"
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "spec": {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "containers"
+                                                        ],
+                                                        "properties": {
+                                                            "containers": {
+                                                                "type": "array",
+                                                                "items": [
+                                                                    {
+                                                                        "type": "object",
+                                                                        "required": [
+                                                                            "image",
+                                                                            "name",
+                                                                            "ports"
+                                                                        ],
+                                                                        "properties": {
+                                                                            "image": {
+                                                                                "type": "string",
+                                                                                "enum": [
+                                                                                    "nginx:1.14.2"
+                                                                                ]
+                                                                            },
+                                                                            "name": {
+                                                                                "type": "string",
+                                                                                "enum": [
+                                                                                    "my-container"
+                                                                                ]
+                                                                            },
+                                                                            "ports": {
+                                                                                "type": "array",
+                                                                                "items": [
+                                                                                    {
+                                                                                        "type": "object",
+                                                                                        "required": [
+                                                                                            "containerPort"
+                                                                                        ],
+                                                                                        "properties": {
+                                                                                            "containerPort": {
+                                                                                                "type": "integer",
+                                                                                                "enum": [
+                                                                                                    8080
+                                                                                                ]
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                ],
+                                                                                "default": [
+                                                                                    {
+                                                                                        "containerPort": 8080
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                "default": [
+                                                                    {
+                                                                        "image": "nginx:1.14.2",
+                                                                        "name": "my-container",
+                                                                        "ports": [
+                                                                            {
+                                                                                "containerPort": 8080
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        "default": [
+                            {
+                                "apiVersion": "v1",
+                                "kind": "Service",
+                                "metadata": {
+                                    "name": "my-service"
+                                },
+                                "spec": {
+                                    "ports": [
+                                        {
+                                            "port": 80,
+                                            "protocol": "TCP",
+                                            "targetPort": 8080
+                                        }
+                                    ],
+                                    "selector": {
+                                        "app": "my-app"
+                                    }
+                                }
+                            },
+                            {
+                                "apiVersion": "apps/v1",
+                                "kind": "Deployment",
+                                "metadata": {
+                                    "name": "my-deployment"
+                                },
+                                "spec": {
+                                    "replicas": 3,
+                                    "selector": {
+                                        "matchLabels": {
+                                            "app": "my-app"
+                                        }
+                                    },
+                                    "template": {
+                                        "metadata": {
+                                            "labels": {
+                                                "app": "my-app"
+                                            }
+                                        },
+                                        "spec": {
+                                            "containers": [
+                                                {
+                                                    "image": "nginx:1.14.2",
+                                                    "name": "my-container",
+                                                    "ports": [
+                                                        {
+                                                            "containerPort": 8080
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        ]
                     }
                 }
             },
